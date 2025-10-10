@@ -1,6 +1,6 @@
 {
   "name": "react-native-play-age-signals",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React Native Wrapper to Play Age Signals API",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",
