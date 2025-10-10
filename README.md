@@ -8,11 +8,11 @@
 
 A **React Native TurboModule** that provides a bridge to the **Google Play Age Signals API**, enabling Android apps to query **user supervision and age verification status** when available via Play Services.
 
-[!IMPORTANT]
-
-- The Play Age Signals SDK (`com.google.android.play:age-signals`) is currently in **beta** and **not yet fully implemented** by Google.
-- Calling `checkAgeSignals()` will currently throw: java.lang.UnsupportedOperationException: Not yet implemented
-- This library is ready and production-safe — it will begin returning real data **automatically** once Google enables the API in upcoming Play Services updates.
+> [!IMPORTANT]
+>
+> - The Play Age Signals SDK (`com.google.android.play:age-signals`) is currently in **beta** and **not yet fully implemented** by Google.
+> - Calling `checkAgeSignals()` will currently throw: java.lang.UnsupportedOperationException: Not yet implemented
+> - This library is ready and production-safe — it will begin returning real data **automatically** once Google enables the API in upcoming Play Services updates.
 
 ---
 
