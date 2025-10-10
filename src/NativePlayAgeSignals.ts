@@ -1,5 +1,6 @@
 // src/NativePlayAgeSignals.ts
-import { TurboModule, TurboModuleRegistry } from 'react-native';
+import type { TurboModule } from 'react-native';
+import { TurboModuleRegistry } from 'react-native';
 
 export interface PlayAgeSignalsResult {
   installId?: string | null;
@@ -15,6 +16,7 @@ export interface Spec extends TurboModule {
   getPlayAgeSignals(): Promise<PlayAgeSignalsResult>;
 }
 
-const PlayAgeSignalsModule = TurboModuleRegistry.getEnforcing<Spec>('PlayAgeSignals');
+const PlayAgeSignalsModule =
+  TurboModuleRegistry.getEnforcing<Spec>('PlayAgeSignals');
 
 export default PlayAgeSignalsModule;
