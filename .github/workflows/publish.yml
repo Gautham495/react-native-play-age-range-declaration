@@ -1,84 +1,105 @@
-name: Deploy (manual)
-
+name: Publish Package
 on:
   push:
     branches:
       - main
-
-permissions:
-  contents: write
-  packages: write
-
 jobs:
-  deploy:
+  publish:
     runs-on: ubuntu-latest
-
     steps:
-      # 🧭 Checkout
-      - name: Checkout
+      # Checkout repo
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ secrets.GH_TOKEN }}
 
-      # ⚙️ Setup Node.js (via .nvmrc)
-      - name: Setup Node.js
+      # Set up Node.js and Yarn
+      - name: Set up Node.js and Corepack
         uses: actions/setup-node@v4
         with:
-          node-version-file: .nvmrc
-          registry-url: 'https://registry.npmjs.org'
-          always-auth: true
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
 
-      # 🧶 Enable Corepack + Yarn 3
-      - name: Enable Corepack (Yarn 3)
-        run: corepack enable
-
-      # 💾 Cache Yarn
-      - name: Get Yarn cache dir
-        id: yarn_cache
-        run: echo "dir=$(yarn config get cacheFolder)" >> "$GITHUB_OUTPUT"
-
-      - name: Restore Yarn cache
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.yarn_cache.outputs.dir }}
-          key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            yarn-${{ runner.os }}-
-
-      # 🧩 Install deps (allow lockfile update)
-      - name: Install dependencies
+      # Fix Yarn configuration and install deps
+      - name: Setup Yarn and install dependencies
         run: |
-          echo "Installing dependencies (allowing lockfile updates)..."
-          yarn install --no-immutable
-        shell: bash
-
-      # ⚡️ Run Nitrogen codegen (before build)
-      - name: Run Nitrogen codegen
-        run: |
-          echo "Running Nitrogen codegen (if defined)..."
-          if yarn run nitrogen; then
-            echo "✅ Nitrogen codegen completed successfully."
-          else
-            echo "⚠️ Nitrogen step skipped or failed (safe to ignore)."
+          # Remove or backup the existing .yarnrc.yml to avoid path conflicts
+          if [ -f .yarnrc.yml ]; then
+            mv .yarnrc.yml .yarnrc.yml.backup
           fi
 
-      # 🏗️ Build package (bob build + tsc)
-      - name: Prepare package (build + typegen)
+          # Create a clean .yarnrc.yml for CI
+          cat > .yarnrc.yml << EOF
+          nodeLinker: node-modules
+          enableGlobalCache: false
+          EOF
+
+          # Enable corepack and setup yarn
+          corepack enable
+          corepack prepare yarn@stable --activate
+
+          # Install dependencies
+          yarn install --no-immutable
+
+      # Quality checks using the actual package.json scripts
+      - name: Quality check
+        run: |
+          # TypeScript type checking
+          yarn typecheck
+
+          # Lint check
+          yarn lint --fix
+
+          # Run tests
+          yarn test --passWithNoTests
+
+      # Build using create-react-native-library script
+      - name: Build package
         run: yarn prepare
 
-      # 🔑 Configure npm auth
-      - name: Configure npm auth
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+      # Verify build output (react-native-builder-bob output structure)
+      - name: Verify dist
+        run: |
+          ls -la lib/
+          # Check for the outputs from react-native-builder-bob
+          test -f lib/module/index.js && test -f lib/typescript/src/index.d.ts
 
-      - name: Verify npm auth
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm whoami
+      # Git identity for commits
+      - name: Configure Git
+        run: |
+          git config user.name "Gautham495"
+          git config user.email "kinggautham495@gmail.com"
 
-      # 📦 Publish to npm
+      # Manual version bump (most reliable)
+      - name: Bump version and tag
+        run: |
+          # Bump version using Node.js script
+          node -e "
+            const fs = require('fs');
+            const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+            const version = pkg.version.split('.');
+            version[2] = parseInt(version[2]) + 1;
+            pkg.version = version.join('.');
+            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+            console.log('New version:', pkg.version);
+          "
+
+          # Get the new version
+          VERSION=$(node -p "require('./package.json').version")
+          echo "Bumped to version: $VERSION"
+
+          # Commit version bump
+          git add package.json
+          git commit -m "chore: release v$VERSION [skip ci]"
+
+          # Create and push tag
+          git tag "v$VERSION"
+          git push origin main
+          git push origin "v$VERSION"
+
+      # Publish to npm
       - name: Publish to npm
+        run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --access public
