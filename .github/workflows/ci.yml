@@ -10,14 +10,9 @@ on:
     types:
       - checks_requested
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   lint:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -26,14 +21,13 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Lint files
-        run: yarn lint --fix
+        run: yarn lint
 
       - name: Typecheck files
         run: yarn typecheck
 
   test:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -46,7 +40,6 @@ jobs:
 
   build-library:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -59,16 +52,17 @@ jobs:
 
   build-android:
     runs-on: ubuntu-latest
-
     env:
       TURBO_CACHE_DIR: .turbo/android
-
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Setup
         uses: ./.github/actions/setup
+
+      - name: Generate nitrogen code
+        run: yarn nitrogen
 
       - name: Cache turborepo for Android
         uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
@@ -111,25 +105,24 @@ jobs:
 
       - name: Build example for Android
         env:
-          JAVA_OPTS: "-XX:MaxHeapSize=6g"
+          JAVA_OPTS: '-XX:MaxHeapSize=6g'
         run: |
           yarn turbo run build:android --cache-dir="${{ env.TURBO_CACHE_DIR }}"
 
   build-ios:
     runs-on: macos-latest
-
     env:
-      XCODE_VERSION: 16.3
+      XCODE_VERSION: 16.2
       TURBO_CACHE_DIR: .turbo/ios
-      RCT_USE_RN_DEP: 1
-      RCT_USE_PREBUILT_RNCORE: 1
-
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Setup
         uses: ./.github/actions/setup
+
+      - name: Generate nitrogen code
+        run: yarn nitrogen
 
       - name: Cache turborepo for iOS
         uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3

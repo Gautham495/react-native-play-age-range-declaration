@@ -23,7 +23,7 @@ Built using the **Nitro Modules** framework by [Margelo](https://nitro.margelo.c
 ## 📦 Installation
 
 ```bash
-npm install react-native-play-age-range-declaration
+npm install react-native-play-age-range-declaration react-native-nitro-modules
 ```
 
 ### ⚙️ Configuration
