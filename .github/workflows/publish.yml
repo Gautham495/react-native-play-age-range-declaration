@@ -1,35 +1,9 @@
 name: Deploy (manual)
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version or semver (e.g., 3.2.0 | patch | minor | major)'
-        required: true
-        type: string
-      tag:
-        description: 'npm dist-tag to publish under'
-        required: true
-        default: latest
-        type: choice
-        options:
-          - latest
-          - next
-      create_release:
-        description: 'Also create a GitHub Release from the tag'
-        required: false
-        default: false
-        type: boolean
-      git_user_name:
-        description: 'Git author name for release commit'
-        required: false
-        default: 'react-native-play-age-range-declaration bot'
-        type: string
-      git_user_email:
-        description: 'Git author email for release commit'
-        required: false
-        default: 'github-actions[bot]@users.noreply.github.com'
-        type: string
+  push:
+    branches:
+      - main
 
 permissions:
   contents: write
@@ -78,22 +52,6 @@ jobs:
           yarn install --no-immutable
         shell: bash
 
-      # ⚙️ Configure Git
-      - name: Configure Git user
-        run: |
-          git config user.name "${{ github.event.inputs.git_user_name }}"
-          git config user.email "${{ github.event.inputs.git_user_email }}"
-
-      # 🏷️ Bump version + tag commit
-      - name: Bump version and tag
-        id: bump
-        env:
-          INPUT_VERSION: ${{ github.event.inputs.version }}
-        run: |
-          npm version "$INPUT_VERSION" --tag-version-prefix="" -m "chore(release): %s"
-          NEW_VERSION=$(node -p "require('./package.json').version")
-          echo "version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
-
       # ⚡️ Run Nitrogen codegen (before build)
       - name: Run Nitrogen codegen
         run: |
@@ -135,14 +93,3 @@ jobs:
           else
             npm publish --tag "$TAG" --access public
           fi
-
-      # 🪄 Optional GitHub Release
-      - name: Create GitHub Release
-        if: ${{ github.event.inputs.create_release == 'true' }}
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ steps.bump.outputs.version }}
-          name: v${{ steps.bump.outputs.version }}
-          draft: false
-          prerelease: ${{ github.event.inputs.tag != 'latest' }}
-          generate_release_notes: true
