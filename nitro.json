@@ -1,0 +1,17 @@
+{
+  "cxxNamespace": ["playagerangedeclaration"],
+  "ios": {
+    "iosModuleName": "PlayAgeRangeDeclaration"
+  },
+  "android": {
+    "androidNamespace": ["playagerangedeclaration"],
+    "androidCxxLibName": "playagerangedeclaration"
+  },
+  "autolinking": {
+    "PlayAgeRangeDeclaration": {
+      "swift": "PlayAgeRangeDeclaration",
+      "kotlin": "PlayAgeRangeDeclaration"
+    }
+  },
+  "ignorePaths": ["node_modules"]
+}

@@ -1,0 +1,105 @@
+name: Publish Package
+on:
+  push:
+    branches:
+      - main
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout repo
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_TOKEN }}
+
+      # Set up Node.js and Yarn
+      - name: Set up Node.js and Corepack
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
+      # Fix Yarn configuration and install deps
+      - name: Setup Yarn and install dependencies
+        run: |
+          # Remove or backup the existing .yarnrc.yml to avoid path conflicts
+          if [ -f .yarnrc.yml ]; then
+            mv .yarnrc.yml .yarnrc.yml.backup
+          fi
+
+          # Create a clean .yarnrc.yml for CI
+          cat > .yarnrc.yml << EOF
+          nodeLinker: node-modules
+          enableGlobalCache: false
+          EOF
+
+          # Enable corepack and setup yarn
+          corepack enable
+          corepack prepare yarn@stable --activate
+
+          # Install dependencies
+          yarn install --no-immutable
+
+      # Quality checks using the actual package.json scripts
+      - name: Quality check
+        run: |
+          # TypeScript type checking
+          yarn typecheck
+
+          # Lint check
+          yarn lint --fix
+
+          # Run tests
+          yarn test --passWithNoTests
+
+      # Build using create-react-native-library script
+      - name: Build package
+        run: yarn prepare
+
+      # Verify build output (react-native-builder-bob output structure)
+      - name: Verify dist
+        run: |
+          ls -la lib/
+          # Check for the outputs from react-native-builder-bob
+          test -f lib/module/index.js && test -f lib/typescript/src/index.d.ts
+
+      # Git identity for commits
+      - name: Configure Git
+        run: |
+          git config user.name "Gautham495"
+          git config user.email "kinggautham495@gmail.com"
+
+      # Manual version bump (most reliable)
+      - name: Bump version and tag
+        run: |
+          # Bump version using Node.js script
+          node -e "
+            const fs = require('fs');
+            const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+            const version = pkg.version.split('.');
+            version[2] = parseInt(version[2]) + 1;
+            pkg.version = version.join('.');
+            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+            console.log('New version:', pkg.version);
+          "
+
+          # Get the new version
+          VERSION=$(node -p "require('./package.json').version")
+          echo "Bumped to version: $VERSION"
+
+          # Commit version bump
+          git add package.json
+          git commit -m "chore: release v$VERSION [skip ci]"
+
+          # Create and push tag
+          git tag "v$VERSION"
+          git push origin main
+          git push origin "v$VERSION"
+
+      # Publish to npm
+      - name: Publish to npm
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
