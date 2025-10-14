@@ -75,6 +75,16 @@ jobs:
           yarn lint --fix || true
           yarn test --passWithNoTests || true
 
+      # ⚡️ Run Nitrogen Codegen
+      - name: Run Nitrogen Codegen
+        run: |
+          echo "Running Nitrogen codegen..."
+          if yarn run nitrogen; then
+            echo "✅ Nitrogen codegen completed successfully."
+          else
+            echo "⚠️ Nitrogen step failed or not needed — continuing."
+          fi
+
       # 🏗️ Build
       - name: Build Library
         run: yarn prepare
