@@ -42,7 +42,7 @@ namespace margelo::nitro::playagerangedeclaration::bridge::swift {
     PlayAgeRangeDeclaration::HybridPlayAgeRangeDeclarationSpec_cxx swiftPart = PlayAgeRangeDeclaration::HybridPlayAgeRangeDeclarationSpec_cxx::fromUnsafe(swiftUnsafePointer);
     return std::make_shared<margelo::nitro::playagerangedeclaration::HybridPlayAgeRangeDeclarationSpecSwift>(swiftPart);
   }
-  void* NON_NULL get_std__shared_ptr_HybridPlayAgeRangeDeclarationSpec_(std__shared_ptr_HybridPlayAgeRangeDeclarationSpec_ cppType) noexcept {
+  void* NON_NULL get_std__shared_ptr_HybridPlayAgeRangeDeclarationSpec_(std__shared_ptr_HybridPlayAgeRangeDeclarationSpec_ cppType) {
     std::shared_ptr<margelo::nitro::playagerangedeclaration::HybridPlayAgeRangeDeclarationSpecSwift> swiftWrapper = std::dynamic_pointer_cast<margelo::nitro::playagerangedeclaration::HybridPlayAgeRangeDeclarationSpecSwift>(cppType);
     #ifdef NITRO_DEBUG
     if (swiftWrapper == nullptr) [[unlikely]] {

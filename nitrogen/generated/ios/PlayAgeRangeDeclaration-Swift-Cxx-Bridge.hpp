@@ -164,7 +164,7 @@ namespace margelo::nitro::playagerangedeclaration::bridge::swift {
    */
   using std__shared_ptr_HybridPlayAgeRangeDeclarationSpec_ = std::shared_ptr<HybridPlayAgeRangeDeclarationSpec>;
   std::shared_ptr<HybridPlayAgeRangeDeclarationSpec> create_std__shared_ptr_HybridPlayAgeRangeDeclarationSpec_(void* NON_NULL swiftUnsafePointer) noexcept;
-  void* NON_NULL get_std__shared_ptr_HybridPlayAgeRangeDeclarationSpec_(std__shared_ptr_HybridPlayAgeRangeDeclarationSpec_ cppType) noexcept;
+  void* NON_NULL get_std__shared_ptr_HybridPlayAgeRangeDeclarationSpec_(std__shared_ptr_HybridPlayAgeRangeDeclarationSpec_ cppType);
   
   // pragma MARK: std::weak_ptr<HybridPlayAgeRangeDeclarationSpec>
   using std__weak_ptr_HybridPlayAgeRangeDeclarationSpec_ = std::weak_ptr<HybridPlayAgeRangeDeclarationSpec>;
