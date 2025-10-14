@@ -66,10 +66,6 @@ jobs:
       - name: Prepare package (build + typegen)
         run: yarn prepare
 
-      # 🚀 Push release commit + tag
-      - name: Push commit and tags
-        run: git push --follow-tags
-
       # 🔑 Configure npm auth
       - name: Configure npm auth
         env:
@@ -85,11 +81,4 @@ jobs:
       - name: Publish to npm
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          TAG=${{ github.event.inputs.tag }}
-          echo "Publishing under tag '$TAG'..."
-          if [ "$TAG" = "latest" ]; then
-            npm publish --access public
-          else
-            npm publish --tag "$TAG" --access public
-          fi
+        run: npm publish --access public
