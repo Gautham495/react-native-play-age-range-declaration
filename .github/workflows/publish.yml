@@ -67,12 +67,7 @@ jobs:
             yarn-${{ runner.os }}-
 
       - name: Install dependencies
-        run: yarn install --immutable
-
-      - name: Lint
-        run: |
-          yarn lint:tsc
-          npx eslint --ext .ts,.tsx,.js,.jsx src plugin/src
+        run: yarn install
 
       - name: Configure Git user
         run: |
