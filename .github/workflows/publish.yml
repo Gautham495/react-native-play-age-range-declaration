@@ -1,134 +1,128 @@
-name: Publish Package
+name: Deploy (manual)
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version or semver (e.g., 3.2.0 | patch | minor | major)'
+        required: true
+        type: string
+      tag:
+        description: 'npm dist-tag to publish under'
+        required: true
+        default: latest
+        type: choice
+        options:
+          - latest
+          - next
+      create_release:
+        description: 'Also create a GitHub Release from the tag'
+        required: false
+        default: false
+        type: boolean
+      git_user_name:
+        description: 'Git author name for release commit'
+        required: false
+        default: 'react-native-play-age-range-declaration bot'
+        type: string
+      git_user_email:
+        description: 'Git author email for release commit'
+        required: false
+        default: 'github-actions[bot]@users.noreply.github.com'
+        type: string
+
+permissions:
+  contents: write
 
 jobs:
-  publish:
+  deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      packages: write
 
     steps:
-      # 🧭 Checkout
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GH_TOKEN }}
 
-      # ⚙️ Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: .nvmrc
-          registry-url: "https://registry.npmjs.org"
+          node-version: 20.x
+          registry-url: 'https://registry.npmjs.org'
+          always-auth: true
 
-      # 💾 Restore Yarn Cache
-      - name: Restore Yarn Cache
-        id: yarn-cache
+      - name: Enable Corepack (Yarn 3)
+        run: corepack enable
+
+      - name: Use Yarn 3 cache dir
+        id: yarn_cache
+        run: echo "dir=$(yarn config get cacheFolder)" >> "$GITHUB_OUTPUT"
+
+      - name: Restore Yarn cache
         uses: actions/cache@v4
         with:
-          path: |
-            **/node_modules
-            .yarn/install-state.gz
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}-${{ hashFiles('**/package.json', '!node_modules/**') }}
+          path: ${{ steps.yarn_cache.outputs.dir }}
+          key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
-            ${{ runner.os }}-yarn-
+            yarn-${{ runner.os }}-
 
-      # 🧶 Setup Yarn & Install
-      - name: Setup Yarn and Install Dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Lint
         run: |
-          echo "Setting up Yarn..."
-          if [ -f .yarnrc.yml ]; then mv .yarnrc.yml .yarnrc.yml.backup; fi
+          yarn lint:tsc
+          npx eslint --ext .ts,.tsx,.js,.jsx src plugin/src
 
-          cat > .yarnrc.yml << EOF
-          nodeLinker: node-modules
-          enableGlobalCache: false
-          EOF
-
-          corepack enable
-          corepack prepare yarn@stable --activate
-          yarn install --no-immutable
-        shell: bash
-
-      # 🧩 Cache Save
-      - name: Cache Yarn Dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
-        with:
-          path: |
-            **/node_modules
-            .yarn/install-state.gz
-          key: ${{ steps.yarn-cache.outputs.cache-primary-key }}
-
-      # 🧠 Quality Checks
-      - name: Typecheck + Lint + Test
+      - name: Configure Git user
         run: |
-          echo "Running typecheck, lint, and tests..."
-          yarn typecheck || true
-          yarn lint --fix || true
-          yarn test --passWithNoTests || true
+          git config user.name "${{ github.event.inputs.git_user_name }}"
+          git config user.email "${{ github.event.inputs.git_user_email }}"
 
-      # ⚡️ Run Nitrogen Codegen
-      - name: Run Nitrogen Codegen
+      - name: Bump version and tag
+        id: bump
+        env:
+          INPUT_VERSION: ${{ github.event.inputs.version }}
         run: |
-          echo "Running Nitrogen codegen..."
-          if yarn run nitrogen; then
-            echo "✅ Nitrogen codegen completed successfully."
-          else
-            echo "⚠️ Nitrogen step failed or not needed — continuing."
-          fi
+          # Yarn 3 uses corepack-managed npm; ensure git tagging commit is created
+          npm version "$INPUT_VERSION" --tag-version-prefix="" -m "chore(release): %s"
+          NEW_VERSION=$(node -p "require('./package.json').version")
+          echo "version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
 
-      # 🏗️ Build
-      - name: Build Library
+      - name: Prepare package (build + codegen)
         run: yarn prepare
 
-      # 🔍 Verify Dist
-      - name: Verify Build Output
+      - name: Push commit and tags
         run: |
-          echo "Verifying built files..."
-          ls -la lib/
-          test -f lib/module/index.js && test -f lib/typescript/src/index.d.ts
+          git push --follow-tags
 
-      # 🧾 Configure Git
-      - name: Configure Git Identity
-        run: |
-          git config user.name "Gautham495"
-          git config user.email "kinggautham495@gmail.com"
+      - name: Configure npm auth
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
 
-      # 🏷️ Version Bump + Tag
-      - name: Bump Version & Tag
-        run: |
-          echo "Bumping patch version..."
-          node -e "
-            const fs = require('fs');
-            const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-            const v = pkg.version.split('.'); v[2] = (+v[2] || 0) + 1;
-            pkg.version = v.join('.');
-            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
-            console.log('New version:', pkg.version);
-          "
-
-          VERSION=$(node -p "require('./package.json').version")
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-
-          git add package.json
-          git commit -m "chore: release v$VERSION [skip ci]" || true
-          git tag "v$VERSION"
-          git push origin main --tags
-
-      # 📦 Publish to npm
-      - name: Publish to npm
-        run: npm publish --access public
+      - name: Verify npm auth
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm whoami
 
-      # ✅ Post-publish confirmation
-      - name: Confirm Published Version
-        run: npm view react-native-play-age-range-declaration version
+      - name: Publish to npm
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ "${{ github.event.inputs.tag }}" = "latest" ]; then
+            npm publish
+          else
+            npm publish --tag ${{ github.event.inputs.tag }}
+          fi
+
+      - name: Create GitHub Release
+        if: ${{ github.event.inputs.create_release == 'true' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.bump.outputs.version }}
+          name: ${{ steps.bump.outputs.version }}
+          draft: false
+          prerelease: ${{ github.event.inputs.tag != 'latest' }}
+          generate_release_notes: true
