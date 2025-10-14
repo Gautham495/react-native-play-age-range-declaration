@@ -1,6 +1,6 @@
 {
   "name": "react-native-play-age-range-declaration",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "React Native Wrapper to Play Age Signals API & Apple Declared Age Range API",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",
