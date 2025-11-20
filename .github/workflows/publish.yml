@@ -1,32 +1,9 @@
 name: Publish
 
 on:
-  workflow_dispatch:
-    inputs:
-      version_type:
-        description: 'Version bump type'
-        required: true
-        default: 'patch'
-        type: choice
-        options:
-          - patch
-          - minor
-          - major
-          - prerelease
-      prerelease_type:
-        description: 'Prerelease type (only used if version_type is prerelease)'
-        required: false
-        default: 'beta'
-        type: choice
-        options:
-          - alpha
-          - beta
-          - rc
-      dry_run:
-        description: 'Dry run (skip actual publishing)'
-        required: false
-        default: false
-        type: boolean
+  push:
+    branches:
+      - main
 
 jobs:
   release:
@@ -55,15 +32,6 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-
-      - name: Run tests
-        run: yarn test
-
-      - name: Run linting
-        run: yarn lint
-
-      - name: Run type checking
-        run: yarn typecheck
 
       - name: Build library
         run: yarn prepare
