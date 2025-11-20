@@ -10124,16 +10124,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-nitro-modules@npm:^0.29.8":
-  version: 0.29.8
-  resolution: "react-native-nitro-modules@npm:0.29.8"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 54e9ddb7d9c28f39000e9ec06c1ae59fde9dc53454bade6697ae842c4996becd388cdfa1bb0cb504a6ddc25873e1409533a141f94d2f36153bdbf4bf51cf97b1
-  languageName: node
-  linkType: hard
-
 "react-native-nitro-modules@npm:^0.30.0":
   version: 0.30.0
   resolution: "react-native-nitro-modules@npm:0.30.0"
@@ -10141,6 +10131,16 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 454ceba8bb24998c072398b666dd6effc9c06bb0c07f0d922dd5517be9967594679efc8452e63743d17c857fdf12bf416e7fa19cdb9e6f538aa3f3904a9ac210
+  languageName: node
+  linkType: hard
+
+"react-native-nitro-modules@npm:^0.31.7":
+  version: 0.31.9
+  resolution: "react-native-nitro-modules@npm:0.31.9"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 54756e21e64b94bd59eb08139482ce170d1a8c3af69110e65ecaa3d5a4ad8863e9791570dcd51f6f586d4cf15c5a67891a0d148e088f2d42085156bf400409bf
   languageName: node
   linkType: hard
 
@@ -10163,7 +10163,7 @@ __metadata:
     react-native: 0.81.1
     react-native-builder-bob: ^0.40.13
     react-native-monorepo-config: ^0.1.9
-    react-native-nitro-modules: ^0.29.8
+    react-native-nitro-modules: ^0.31.7
   languageName: unknown
   linkType: soft
 
@@ -10192,14 +10192,14 @@ __metadata:
     react: 19.1.0
     react-native: 0.81.1
     react-native-builder-bob: ^0.40.13
-    react-native-nitro-modules: ^0.29.8
+    react-native-nitro-modules: ^0.31.7
     release-it: ^19.0.4
     turbo: ^2.5.6
     typescript: ^5.9.2
   peerDependencies:
     react: "*"
     react-native: "*"
-    react-native-nitro-modules: ^0.29.8
+    react-native-nitro-modules: ^0.31.7
   languageName: unknown
   linkType: soft
 
@@ -11653,7 +11653,7 @@ __metadata:
 
 "typescript@patch:typescript@^5.9.2#~builtin<compat/typescript>":
   version: 5.9.3
-  resolution: "typescript@patch:typescript@npm%3A5.9.3#~builtin<compat/typescript>::version=5.9.3&hash=29ae49"
+  resolution: "typescript@patch:typescript@npm%3A5.9.3#~builtin<compat/typescript>::version=5.9.3&hash=14eedb"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver

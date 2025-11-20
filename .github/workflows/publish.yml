@@ -1,105 +1,116 @@
-name: Publish Package
+name: Publish
+
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: 'Version bump type'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+          - prerelease
+      prerelease_type:
+        description: 'Prerelease type (only used if version_type is prerelease)'
+        required: false
+        default: 'beta'
+        type: choice
+        options:
+          - alpha
+          - beta
+          - rc
+      dry_run:
+        description: 'Dry run (skip actual publishing)'
+        required: false
+        default: false
+        type: boolean
+
 jobs:
-  publish:
+  release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
+
     steps:
-      # Checkout repo
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      # Set up Node.js and Yarn
-      - name: Set up Node.js and Corepack
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          registry-url: "https://registry.npmjs.org"
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'yarn'
 
-      # Fix Yarn configuration and install deps
-      - name: Setup Yarn and install dependencies
-        run: |
-          # Remove or backup the existing .yarnrc.yml to avoid path conflicts
-          if [ -f .yarnrc.yml ]; then
-            mv .yarnrc.yml .yarnrc.yml.backup
-          fi
+      - name: Setup Yarn
+        run: corepack enable
 
-          # Create a clean .yarnrc.yml for CI
-          cat > .yarnrc.yml << EOF
-          nodeLinker: node-modules
-          enableGlobalCache: false
-          EOF
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
 
-          # Enable corepack and setup yarn
-          corepack enable
-          corepack prepare yarn@stable --activate
+      - name: Run tests
+        run: yarn test
 
-          # Install dependencies
-          yarn install --no-immutable
+      - name: Run linting
+        run: yarn lint
 
-      # Quality checks using the actual package.json scripts
-      - name: Quality check
-        run: |
-          # TypeScript type checking
-          yarn typecheck
+      - name: Run type checking
+        run: yarn typecheck
 
-          # Lint check
-          yarn lint --fix
-
-          # Run tests
-          yarn test --passWithNoTests
-
-      # Build using create-react-native-library script
-      - name: Build package
+      - name: Build library
         run: yarn prepare
 
-      # Verify build output (react-native-builder-bob output structure)
-      - name: Verify dist
-        run: |
-          ls -la lib/
-          # Check for the outputs from react-native-builder-bob
-          test -f lib/module/index.js && test -f lib/typescript/src/index.d.ts
-
-      # Git identity for commits
       - name: Configure Git
         run: |
-          git config user.name "Gautham495"
-          git config user.email "kinggautham495@gmail.com"
+              git config user.name "Gautham495"
+              git config user.email "kinggautham495@gmail.com"
 
-      # Manual version bump (most reliable)
-      - name: Bump version and tag
-        run: |
-          # Bump version using Node.js script
-          node -e "
-            const fs = require('fs');
-            const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-            const version = pkg.version.split('.');
-            version[2] = parseInt(version[2]) + 1;
-            pkg.version = version.join('.');
-            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
-            console.log('New version:', pkg.version);
-          "
-
-          # Get the new version
-          VERSION=$(node -p "require('./package.json').version")
-          echo "Bumped to version: $VERSION"
-
-          # Commit version bump
-          git add package.json
-          git commit -m "chore: release v$VERSION [skip ci]"
-
-          # Create and push tag
-          git tag "v$VERSION"
-          git push origin main
-          git push origin "v$VERSION"
-
-      # Publish to npm
-      - name: Publish to npm
-        run: npm publish --access public
+      - name: Create release
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            echo "🧪 Running in dry-run mode"
+            yarn release --dry-run --ci --${{ github.event.inputs.version_type }}
+          else
+            if [ "${{ github.event.inputs.version_type }}" = "prerelease" ]; then
+              echo "🚀 Creating prerelease: ${{ github.event.inputs.prerelease_type }}"
+              yarn release --prerelease=${{ github.event.inputs.prerelease_type }} --ci
+            else
+              echo "🚀 Creating ${{ github.event.inputs.version_type }} release"
+              yarn release --${{ github.event.inputs.version_type }} --ci
+            fi
+          fi
+
+      - name: Upload build artifacts
+        if: github.event.inputs.dry_run != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            lib/
+            nitrogen/
+          retention-days: 30
+
+      - name: Notify success
+        if: success() && github.event.inputs.dry_run != 'true'
+        run: |
+          echo "✅ Release completed successfully!"
+          echo "📦 Package published to npm"
+          echo "🏷️  Git tag created"
+          echo "📝 GitHub release created"
+
+      - name: Notify dry run success
+        if: success() && github.event.inputs.dry_run == 'true'
+        run: |
+          echo "🧪 Dry run completed successfully!"
+          echo "📋 Check the logs above to see what would be released"

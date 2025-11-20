@@ -34,7 +34,6 @@ Nitro Modules autolink automatically — no manual steps required.
 
 - React Native 0.76+ (New Architecture)
 - Expo Custom Dev Clients
-- TypeScript
 
 ---
 
@@ -118,49 +117,6 @@ export interface DeclaredAgeRangeResult {
 
 ---
 
-## 🧱 Under the Hood
-
-### 🟩 Android
-
-Implemented in **Kotlin** using Nitro’s async promises:
-
-```kotlin
-val manager = AgeSignalsManagerFactory.create(appContext)
-val request = AgeSignalsRequest.builder().build()
-manager.checkAgeSignals(request)
-```
-
-Wrapped in:
-
-```kotlin
-Promise.async {
-  suspendCancellableCoroutine { cont -> ... }
-}
-```
-
-No `RCT_EXPORT_MODULE` — pure Nitro interop.
-
----
-
-### 🟦 iOS
-
-Implemented in **Swift** using Nitro async promises and Apple’s Declared Age Range API:
-
-```swift
-let response = try await AgeRangeService.shared.requestAgeRange(
-  ageGates: intGate,
-  in: viewController
-)
-```
-
-Bridged via:
-
-```swift
-class PlayAgeRangeDeclaration: HybridPlayAgeRangeDeclarationSpec { ... }
-```
-
----
-
 ## 🧾 Real-World Use Case
 
 Comply with **digital safety** and **age-appropriate design** laws automatically:
@@ -178,16 +134,6 @@ Comply with **digital safety** and **age-appropriate design** laws automatically
 | **iOS 26+**                | ✅ Supported                       |
 | **Expo Custom Dev Client** | ✅ Supported via Nitro autolinking |
 | **AOSP Emulator**          | ⚠️ Not supported (requires Play)   |
-
----
-
-## 🧭 Roadmap
-
-- ✅ Kotlin + Swift Nitro implementation
-- ✅ Cross-platform TypeScript definitions
-- ✅ Async Promise bridge
-- 🚧 Add example app with Fabric UI demo
-- 🚧 Add GitHub Actions auto-publish pipeline
 
 ---
 
