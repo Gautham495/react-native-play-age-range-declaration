@@ -1,16 +1,16 @@
 import type { HybridObject } from 'react-native-nitro-modules';
 
 export interface PlayAgeRangeDeclarationResult {
-  installId?: string | null;
-  userStatus?: string | null;
-  error?: string | null;
+  installId?: string;
+  userStatus?: string;
+  error?: string;
 }
 
 export interface DeclaredAgeRangeResult {
-  status?: string | null;
-  lowerBound?: number | null;
-  upperBound?: number | null;
-  error?: string | null;
+  status?: string;
+  lowerBound?: number;
+  upperBound?: number;
+  error?: string;
 }
 
 export interface PlayAgeRangeDeclaration

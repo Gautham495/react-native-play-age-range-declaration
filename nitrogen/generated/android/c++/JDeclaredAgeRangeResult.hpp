@@ -10,13 +10,8 @@
 #include <fbjni/fbjni.h>
 #include "DeclaredAgeRangeResult.hpp"
 
-#include "JVariant_NullType_Double.hpp"
-#include "JVariant_NullType_String.hpp"
-#include <NitroModules/JNull.hpp>
-#include <NitroModules/Null.hpp>
 #include <optional>
 #include <string>
-#include <variant>
 
 namespace margelo::nitro::playagerangedeclaration {
 
@@ -37,19 +32,19 @@ namespace margelo::nitro::playagerangedeclaration {
     [[nodiscard]]
     DeclaredAgeRangeResult toCpp() const {
       static const auto clazz = javaClassStatic();
-      static const auto fieldStatus = clazz->getField<JVariant_NullType_String>("status");
-      jni::local_ref<JVariant_NullType_String> status = this->getFieldValue(fieldStatus);
-      static const auto fieldLowerBound = clazz->getField<JVariant_NullType_Double>("lowerBound");
-      jni::local_ref<JVariant_NullType_Double> lowerBound = this->getFieldValue(fieldLowerBound);
-      static const auto fieldUpperBound = clazz->getField<JVariant_NullType_Double>("upperBound");
-      jni::local_ref<JVariant_NullType_Double> upperBound = this->getFieldValue(fieldUpperBound);
-      static const auto fieldError = clazz->getField<JVariant_NullType_String>("error");
-      jni::local_ref<JVariant_NullType_String> error = this->getFieldValue(fieldError);
+      static const auto fieldStatus = clazz->getField<jni::JString>("status");
+      jni::local_ref<jni::JString> status = this->getFieldValue(fieldStatus);
+      static const auto fieldLowerBound = clazz->getField<jni::JDouble>("lowerBound");
+      jni::local_ref<jni::JDouble> lowerBound = this->getFieldValue(fieldLowerBound);
+      static const auto fieldUpperBound = clazz->getField<jni::JDouble>("upperBound");
+      jni::local_ref<jni::JDouble> upperBound = this->getFieldValue(fieldUpperBound);
+      static const auto fieldError = clazz->getField<jni::JString>("error");
+      jni::local_ref<jni::JString> error = this->getFieldValue(fieldError);
       return DeclaredAgeRangeResult(
-        status != nullptr ? std::make_optional(status->toCpp()) : std::nullopt,
-        lowerBound != nullptr ? std::make_optional(lowerBound->toCpp()) : std::nullopt,
-        upperBound != nullptr ? std::make_optional(upperBound->toCpp()) : std::nullopt,
-        error != nullptr ? std::make_optional(error->toCpp()) : std::nullopt
+        status != nullptr ? std::make_optional(status->toStdString()) : std::nullopt,
+        lowerBound != nullptr ? std::make_optional(lowerBound->value()) : std::nullopt,
+        upperBound != nullptr ? std::make_optional(upperBound->value()) : std::nullopt,
+        error != nullptr ? std::make_optional(error->toStdString()) : std::nullopt
       );
     }
 
@@ -59,15 +54,15 @@ namespace margelo::nitro::playagerangedeclaration {
      */
     [[maybe_unused]]
     static jni::local_ref<JDeclaredAgeRangeResult::javaobject> fromCpp(const DeclaredAgeRangeResult& value) {
-      using JSignature = JDeclaredAgeRangeResult(jni::alias_ref<JVariant_NullType_String>, jni::alias_ref<JVariant_NullType_Double>, jni::alias_ref<JVariant_NullType_Double>, jni::alias_ref<JVariant_NullType_String>);
+      using JSignature = JDeclaredAgeRangeResult(jni::alias_ref<jni::JString>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JString>);
       static const auto clazz = javaClassStatic();
       static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
       return create(
         clazz,
-        value.status.has_value() ? JVariant_NullType_String::fromCpp(value.status.value()) : nullptr,
-        value.lowerBound.has_value() ? JVariant_NullType_Double::fromCpp(value.lowerBound.value()) : nullptr,
-        value.upperBound.has_value() ? JVariant_NullType_Double::fromCpp(value.upperBound.value()) : nullptr,
-        value.error.has_value() ? JVariant_NullType_String::fromCpp(value.error.value()) : nullptr
+        value.status.has_value() ? jni::make_jstring(value.status.value()) : nullptr,
+        value.lowerBound.has_value() ? jni::JDouble::valueOf(value.lowerBound.value()) : nullptr,
+        value.upperBound.has_value() ? jni::JDouble::valueOf(value.upperBound.value()) : nullptr,
+        value.error.has_value() ? jni::make_jstring(value.error.value()) : nullptr
       );
     }
   };

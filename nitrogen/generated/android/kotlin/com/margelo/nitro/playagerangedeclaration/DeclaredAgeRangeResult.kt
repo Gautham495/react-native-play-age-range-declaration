@@ -9,7 +9,7 @@ package com.margelo.nitro.playagerangedeclaration
 
 import androidx.annotation.Keep
 import com.facebook.proguard.annotations.DoNotStrip
-import com.margelo.nitro.core.NullType
+
 
 /**
  * Represents the JavaScript object/struct "DeclaredAgeRangeResult".
@@ -19,16 +19,16 @@ import com.margelo.nitro.core.NullType
 data class DeclaredAgeRangeResult(
   @DoNotStrip
   @Keep
-  val status: Variant_NullType_String?,
+  val status: String?,
   @DoNotStrip
   @Keep
-  val lowerBound: Variant_NullType_Double?,
+  val lowerBound: Double?,
   @DoNotStrip
   @Keep
-  val upperBound: Variant_NullType_Double?,
+  val upperBound: Double?,
   @DoNotStrip
   @Keep
-  val error: Variant_NullType_String?
+  val error: String?
 ) {
   /* primary constructor */
 
@@ -40,7 +40,7 @@ data class DeclaredAgeRangeResult(
     @Keep
     @Suppress("unused")
     @JvmStatic
-    private fun fromCpp(status: Variant_NullType_String?, lowerBound: Variant_NullType_Double?, upperBound: Variant_NullType_Double?, error: Variant_NullType_String?): DeclaredAgeRangeResult {
+    private fun fromCpp(status: String?, lowerBound: Double?, upperBound: Double?, error: String?): DeclaredAgeRangeResult {
       return DeclaredAgeRangeResult(status, lowerBound, upperBound, error)
     }
   }
