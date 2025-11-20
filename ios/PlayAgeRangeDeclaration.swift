@@ -1,4 +1,3 @@
-import React
 import Foundation
 import DeclaredAgeRange
 import UIKit
