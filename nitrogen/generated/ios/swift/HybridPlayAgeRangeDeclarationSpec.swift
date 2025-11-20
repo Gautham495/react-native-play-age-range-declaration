@@ -18,6 +18,13 @@ public protocol HybridPlayAgeRangeDeclarationSpec_protocol: HybridObject {
   func requestDeclaredAgeRange(ageGate: Double) throws -> Promise<DeclaredAgeRangeResult>
 }
 
+public extension HybridPlayAgeRangeDeclarationSpec_protocol {
+  /// Default implementation of ``HybridObject.toString``
+  func toString() -> String {
+    return "[HybridObject PlayAgeRangeDeclaration]"
+  }
+}
+
 /// See ``HybridPlayAgeRangeDeclarationSpec``
 open class HybridPlayAgeRangeDeclarationSpec_base {
   private weak var cxxWrapper: HybridPlayAgeRangeDeclarationSpec_cxx? = nil

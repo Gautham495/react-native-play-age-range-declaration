@@ -5,6 +5,7 @@
 /// Copyright © 2025 Marc Rousavy @ Margelo
 ///
 
+import Foundation
 import NitroModules
 
 /**
@@ -18,41 +19,81 @@ public extension DeclaredAgeRangeResult {
   /**
    * Create a new instance of `DeclaredAgeRangeResult`.
    */
-  init(status: String?, lowerBound: Double?, upperBound: Double?, error: String?) {
-    self.init({ () -> bridge.std__optional_std__string_ in
+  init(status: Variant_NullType_String?, lowerBound: Variant_NullType_Double?, upperBound: Variant_NullType_Double?, error: Variant_NullType_String?) {
+    self.init({ () -> bridge.std__optional_std__variant_nitro__NullType__std__string__ in
       if let __unwrappedValue = status {
-        return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
+        return bridge.create_std__optional_std__variant_nitro__NullType__std__string__({ () -> bridge.std__variant_nitro__NullType__std__string_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__std__string_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__std__string_(std.string(__value))
+          }
+        }().variant)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_double_ in
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__double__ in
       if let __unwrappedValue = lowerBound {
-        return bridge.create_std__optional_double_(__unwrappedValue)
+        return bridge.create_std__optional_std__variant_nitro__NullType__double__({ () -> bridge.std__variant_nitro__NullType__double_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__double_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__double_(__value)
+          }
+        }().variant)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_double_ in
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__double__ in
       if let __unwrappedValue = upperBound {
-        return bridge.create_std__optional_double_(__unwrappedValue)
+        return bridge.create_std__optional_std__variant_nitro__NullType__double__({ () -> bridge.std__variant_nitro__NullType__double_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__double_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__double_(__value)
+          }
+        }().variant)
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_std__string_ in
+    }(), { () -> bridge.std__optional_std__variant_nitro__NullType__std__string__ in
       if let __unwrappedValue = error {
-        return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
+        return bridge.create_std__optional_std__variant_nitro__NullType__std__string__({ () -> bridge.std__variant_nitro__NullType__std__string_ in
+          switch __unwrappedValue {
+            case .first(let __value):
+              return bridge.create_std__variant_nitro__NullType__std__string_(margelo.nitro.NullType.null)
+            case .second(let __value):
+              return bridge.create_std__variant_nitro__NullType__std__string_(std.string(__value))
+          }
+        }().variant)
       } else {
         return .init()
       }
     }())
   }
 
-  var status: String? {
+  var status: Variant_NullType_String? {
     @inline(__always)
     get {
-      return { () -> String? in
-        if bridge.has_value_std__optional_std__string_(self.__status) {
-          let __unwrapped = bridge.get_std__optional_std__string_(self.__status)
-          return String(__unwrapped)
+      return { () -> Variant_NullType_String? in
+        if bridge.has_value_std__optional_std__variant_nitro__NullType__std__string__(self.__status) {
+          let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__std__string__(self.__status)
+          return { () -> Variant_NullType_String in
+            let __variant = bridge.std__variant_nitro__NullType__std__string_(__unwrapped)
+            switch __variant.index() {
+              case 0:
+                let __actual = __variant.get_0()
+                return .first(NullType.null)
+              case 1:
+                let __actual = __variant.get_1()
+                return .second(String(__actual))
+              default:
+                fatalError("Variant can never have index \(__variant.index())!")
+            }
+          }()
         } else {
           return nil
         }
@@ -60,9 +101,16 @@ public extension DeclaredAgeRangeResult {
     }
     @inline(__always)
     set {
-      self.__status = { () -> bridge.std__optional_std__string_ in
+      self.__status = { () -> bridge.std__optional_std__variant_nitro__NullType__std__string__ in
         if let __unwrappedValue = newValue {
-          return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
+          return bridge.create_std__optional_std__variant_nitro__NullType__std__string__({ () -> bridge.std__variant_nitro__NullType__std__string_ in
+            switch __unwrappedValue {
+              case .first(let __value):
+                return bridge.create_std__variant_nitro__NullType__std__string_(margelo.nitro.NullType.null)
+              case .second(let __value):
+                return bridge.create_std__variant_nitro__NullType__std__string_(std.string(__value))
+            }
+          }().variant)
         } else {
           return .init()
         }
@@ -70,47 +118,25 @@ public extension DeclaredAgeRangeResult {
     }
   }
   
-  var lowerBound: Double? {
+  var lowerBound: Variant_NullType_Double? {
     @inline(__always)
     get {
-      return self.__lowerBound.value
-    }
-    @inline(__always)
-    set {
-      self.__lowerBound = { () -> bridge.std__optional_double_ in
-        if let __unwrappedValue = newValue {
-          return bridge.create_std__optional_double_(__unwrappedValue)
-        } else {
-          return .init()
-        }
-      }()
-    }
-  }
-  
-  var upperBound: Double? {
-    @inline(__always)
-    get {
-      return self.__upperBound.value
-    }
-    @inline(__always)
-    set {
-      self.__upperBound = { () -> bridge.std__optional_double_ in
-        if let __unwrappedValue = newValue {
-          return bridge.create_std__optional_double_(__unwrappedValue)
-        } else {
-          return .init()
-        }
-      }()
-    }
-  }
-  
-  var error: String? {
-    @inline(__always)
-    get {
-      return { () -> String? in
-        if bridge.has_value_std__optional_std__string_(self.__error) {
-          let __unwrapped = bridge.get_std__optional_std__string_(self.__error)
-          return String(__unwrapped)
+      return { () -> Variant_NullType_Double? in
+        if bridge.has_value_std__optional_std__variant_nitro__NullType__double__(self.__lowerBound) {
+          let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__double__(self.__lowerBound)
+          return { () -> Variant_NullType_Double in
+            let __variant = bridge.std__variant_nitro__NullType__double_(__unwrapped)
+            switch __variant.index() {
+              case 0:
+                let __actual = __variant.get_0()
+                return .first(NullType.null)
+              case 1:
+                let __actual = __variant.get_1()
+                return .second(__actual)
+              default:
+                fatalError("Variant can never have index \(__variant.index())!")
+            }
+          }()
         } else {
           return nil
         }
@@ -118,9 +144,102 @@ public extension DeclaredAgeRangeResult {
     }
     @inline(__always)
     set {
-      self.__error = { () -> bridge.std__optional_std__string_ in
+      self.__lowerBound = { () -> bridge.std__optional_std__variant_nitro__NullType__double__ in
         if let __unwrappedValue = newValue {
-          return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
+          return bridge.create_std__optional_std__variant_nitro__NullType__double__({ () -> bridge.std__variant_nitro__NullType__double_ in
+            switch __unwrappedValue {
+              case .first(let __value):
+                return bridge.create_std__variant_nitro__NullType__double_(margelo.nitro.NullType.null)
+              case .second(let __value):
+                return bridge.create_std__variant_nitro__NullType__double_(__value)
+            }
+          }().variant)
+        } else {
+          return .init()
+        }
+      }()
+    }
+  }
+  
+  var upperBound: Variant_NullType_Double? {
+    @inline(__always)
+    get {
+      return { () -> Variant_NullType_Double? in
+        if bridge.has_value_std__optional_std__variant_nitro__NullType__double__(self.__upperBound) {
+          let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__double__(self.__upperBound)
+          return { () -> Variant_NullType_Double in
+            let __variant = bridge.std__variant_nitro__NullType__double_(__unwrapped)
+            switch __variant.index() {
+              case 0:
+                let __actual = __variant.get_0()
+                return .first(NullType.null)
+              case 1:
+                let __actual = __variant.get_1()
+                return .second(__actual)
+              default:
+                fatalError("Variant can never have index \(__variant.index())!")
+            }
+          }()
+        } else {
+          return nil
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__upperBound = { () -> bridge.std__optional_std__variant_nitro__NullType__double__ in
+        if let __unwrappedValue = newValue {
+          return bridge.create_std__optional_std__variant_nitro__NullType__double__({ () -> bridge.std__variant_nitro__NullType__double_ in
+            switch __unwrappedValue {
+              case .first(let __value):
+                return bridge.create_std__variant_nitro__NullType__double_(margelo.nitro.NullType.null)
+              case .second(let __value):
+                return bridge.create_std__variant_nitro__NullType__double_(__value)
+            }
+          }().variant)
+        } else {
+          return .init()
+        }
+      }()
+    }
+  }
+  
+  var error: Variant_NullType_String? {
+    @inline(__always)
+    get {
+      return { () -> Variant_NullType_String? in
+        if bridge.has_value_std__optional_std__variant_nitro__NullType__std__string__(self.__error) {
+          let __unwrapped = bridge.get_std__optional_std__variant_nitro__NullType__std__string__(self.__error)
+          return { () -> Variant_NullType_String in
+            let __variant = bridge.std__variant_nitro__NullType__std__string_(__unwrapped)
+            switch __variant.index() {
+              case 0:
+                let __actual = __variant.get_0()
+                return .first(NullType.null)
+              case 1:
+                let __actual = __variant.get_1()
+                return .second(String(__actual))
+              default:
+                fatalError("Variant can never have index \(__variant.index())!")
+            }
+          }()
+        } else {
+          return nil
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__error = { () -> bridge.std__optional_std__variant_nitro__NullType__std__string__ in
+        if let __unwrappedValue = newValue {
+          return bridge.create_std__optional_std__variant_nitro__NullType__std__string__({ () -> bridge.std__variant_nitro__NullType__std__string_ in
+            switch __unwrappedValue {
+              case .first(let __value):
+                return bridge.create_std__variant_nitro__NullType__std__string_(margelo.nitro.NullType.null)
+              case .second(let __value):
+                return bridge.create_std__variant_nitro__NullType__std__string_(std.string(__value))
+            }
+          }().variant)
         } else {
           return .init()
         }

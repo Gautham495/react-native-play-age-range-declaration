@@ -10,6 +10,7 @@
 // Include C++ implementation defined types
 #include "HybridPlayAgeRangeDeclarationSpecSwift.hpp"
 #include "PlayAgeRangeDeclaration-Swift-Cxx-Umbrella.hpp"
+#include <NitroModules/NitroDefines.hpp>
 
 namespace margelo::nitro::playagerangedeclaration::bridge::swift {
 

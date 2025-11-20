@@ -19,12 +19,14 @@ namespace margelo::nitro::playagerangedeclaration { struct PlayAgeRangeDeclarati
 #include "DeclaredAgeRangeResult.hpp"
 #include "HybridPlayAgeRangeDeclarationSpec.hpp"
 #include "PlayAgeRangeDeclarationResult.hpp"
+#include <NitroModules/Null.hpp>
 #include <NitroModules/Promise.hpp>
 #include <NitroModules/Result.hpp>
 #include <exception>
 #include <memory>
 #include <optional>
 #include <string>
+#include <variant>
 
 // C++ helpers for Swift
 #include "PlayAgeRangeDeclaration-Swift-Cxx-Bridge.hpp"

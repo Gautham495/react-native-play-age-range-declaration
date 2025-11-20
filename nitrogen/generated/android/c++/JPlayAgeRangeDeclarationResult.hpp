@@ -10,8 +10,12 @@
 #include <fbjni/fbjni.h>
 #include "PlayAgeRangeDeclarationResult.hpp"
 
+#include "JVariant_NullType_String.hpp"
+#include <NitroModules/JNull.hpp>
+#include <NitroModules/Null.hpp>
 #include <optional>
 #include <string>
+#include <variant>
 
 namespace margelo::nitro::playagerangedeclaration {
 
@@ -32,16 +36,16 @@ namespace margelo::nitro::playagerangedeclaration {
     [[nodiscard]]
     PlayAgeRangeDeclarationResult toCpp() const {
       static const auto clazz = javaClassStatic();
-      static const auto fieldInstallId = clazz->getField<jni::JString>("installId");
-      jni::local_ref<jni::JString> installId = this->getFieldValue(fieldInstallId);
-      static const auto fieldUserStatus = clazz->getField<jni::JString>("userStatus");
-      jni::local_ref<jni::JString> userStatus = this->getFieldValue(fieldUserStatus);
-      static const auto fieldError = clazz->getField<jni::JString>("error");
-      jni::local_ref<jni::JString> error = this->getFieldValue(fieldError);
+      static const auto fieldInstallId = clazz->getField<JVariant_NullType_String>("installId");
+      jni::local_ref<JVariant_NullType_String> installId = this->getFieldValue(fieldInstallId);
+      static const auto fieldUserStatus = clazz->getField<JVariant_NullType_String>("userStatus");
+      jni::local_ref<JVariant_NullType_String> userStatus = this->getFieldValue(fieldUserStatus);
+      static const auto fieldError = clazz->getField<JVariant_NullType_String>("error");
+      jni::local_ref<JVariant_NullType_String> error = this->getFieldValue(fieldError);
       return PlayAgeRangeDeclarationResult(
-        installId != nullptr ? std::make_optional(installId->toStdString()) : std::nullopt,
-        userStatus != nullptr ? std::make_optional(userStatus->toStdString()) : std::nullopt,
-        error != nullptr ? std::make_optional(error->toStdString()) : std::nullopt
+        installId != nullptr ? std::make_optional(installId->toCpp()) : std::nullopt,
+        userStatus != nullptr ? std::make_optional(userStatus->toCpp()) : std::nullopt,
+        error != nullptr ? std::make_optional(error->toCpp()) : std::nullopt
       );
     }
 
@@ -51,10 +55,14 @@ namespace margelo::nitro::playagerangedeclaration {
      */
     [[maybe_unused]]
     static jni::local_ref<JPlayAgeRangeDeclarationResult::javaobject> fromCpp(const PlayAgeRangeDeclarationResult& value) {
-      return newInstance(
-        value.installId.has_value() ? jni::make_jstring(value.installId.value()) : nullptr,
-        value.userStatus.has_value() ? jni::make_jstring(value.userStatus.value()) : nullptr,
-        value.error.has_value() ? jni::make_jstring(value.error.value()) : nullptr
+      using JSignature = JPlayAgeRangeDeclarationResult(jni::alias_ref<JVariant_NullType_String>, jni::alias_ref<JVariant_NullType_String>, jni::alias_ref<JVariant_NullType_String>);
+      static const auto clazz = javaClassStatic();
+      static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
+      return create(
+        clazz,
+        value.installId.has_value() ? JVariant_NullType_String::fromCpp(value.installId.value()) : nullptr,
+        value.userStatus.has_value() ? JVariant_NullType_String::fromCpp(value.userStatus.value()) : nullptr,
+        value.error.has_value() ? JVariant_NullType_String::fromCpp(value.error.value()) : nullptr
       );
     }
   };

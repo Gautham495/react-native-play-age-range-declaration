@@ -19,7 +19,9 @@ namespace margelo::nitro::playagerangedeclaration { struct DeclaredAgeRangeResul
 
 #include "PlayAgeRangeDeclarationResult.hpp"
 #include <NitroModules/Promise.hpp>
+#include <NitroModules/Null.hpp>
 #include <string>
+#include <variant>
 #include <optional>
 #include "DeclaredAgeRangeResult.hpp"
 
@@ -56,6 +58,9 @@ namespace margelo::nitro::playagerangedeclaration {
     }
     void dispose() noexcept override {
       _swiftPart.dispose();
+    }
+    std::string toString() override {
+      return _swiftPart.toString();
     }
 
   public:

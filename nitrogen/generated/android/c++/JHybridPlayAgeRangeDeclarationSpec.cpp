@@ -16,10 +16,15 @@ namespace margelo::nitro::playagerangedeclaration { struct DeclaredAgeRangeResul
 #include <NitroModules/Promise.hpp>
 #include <NitroModules/JPromise.hpp>
 #include "JPlayAgeRangeDeclarationResult.hpp"
+#include <NitroModules/Null.hpp>
 #include <string>
+#include <variant>
 #include <optional>
+#include "JVariant_NullType_String.hpp"
+#include <NitroModules/JNull.hpp>
 #include "DeclaredAgeRangeResult.hpp"
 #include "JDeclaredAgeRangeResult.hpp"
+#include "JVariant_NullType_Double.hpp"
 
 namespace margelo::nitro::playagerangedeclaration {
 
@@ -41,6 +46,12 @@ namespace margelo::nitro::playagerangedeclaration {
   void JHybridPlayAgeRangeDeclarationSpec::dispose() noexcept {
     static const auto method = javaClassStatic()->getMethod<void()>("dispose");
     method(_javaPart);
+  }
+
+  std::string JHybridPlayAgeRangeDeclarationSpec::toString() {
+    static const auto method = javaClassStatic()->getMethod<jni::JString()>("toString");
+    auto javaString = method(_javaPart);
+    return javaString->toStdString();
   }
 
   // Properties
