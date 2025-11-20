@@ -46,21 +46,10 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
-            echo "🧪 Running in dry-run mode"
-            yarn release --dry-run --ci --${{ github.event.inputs.version_type }}
-          else
-            if [ "${{ github.event.inputs.version_type }}" = "prerelease" ]; then
-              echo "🚀 Creating prerelease: ${{ github.event.inputs.prerelease_type }}"
-              yarn release --prerelease=${{ github.event.inputs.prerelease_type }} --ci
-            else
               echo "🚀 Creating ${{ github.event.inputs.version_type }} release"
               yarn release --${{ github.event.inputs.version_type }} --ci
-            fi
-          fi
 
       - name: Upload build artifacts
-        if: github.event.inputs.dry_run != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
@@ -68,17 +57,3 @@ jobs:
             lib/
             nitrogen/
           retention-days: 30
-
-      - name: Notify success
-        if: success() && github.event.inputs.dry_run != 'true'
-        run: |
-          echo "✅ Release completed successfully!"
-          echo "📦 Package published to npm"
-          echo "🏷️  Git tag created"
-          echo "📝 GitHub release created"
-
-      - name: Notify dry run success
-        if: success() && github.event.inputs.dry_run == 'true'
-        run: |
-          echo "🧪 Dry run completed successfully!"
-          echo "📋 Check the logs above to see what would be released"
