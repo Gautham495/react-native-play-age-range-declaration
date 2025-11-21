@@ -22,13 +22,13 @@ data class DeclaredAgeRangeResult(
   val status: String?,
   @DoNotStrip
   @Keep
+  val parentControls: String?,
+  @DoNotStrip
+  @Keep
   val lowerBound: Double?,
   @DoNotStrip
   @Keep
-  val upperBound: Double?,
-  @DoNotStrip
-  @Keep
-  val error: String?
+  val upperBound: Double?
 ) {
   /* primary constructor */
 
@@ -40,8 +40,8 @@ data class DeclaredAgeRangeResult(
     @Keep
     @Suppress("unused")
     @JvmStatic
-    private fun fromCpp(status: String?, lowerBound: Double?, upperBound: Double?, error: String?): DeclaredAgeRangeResult {
-      return DeclaredAgeRangeResult(status, lowerBound, upperBound, error)
+    private fun fromCpp(status: String?, parentControls: String?, lowerBound: Double?, upperBound: Double?): DeclaredAgeRangeResult {
+      return DeclaredAgeRangeResult(status, parentControls, lowerBound, upperBound)
     }
   }
 }

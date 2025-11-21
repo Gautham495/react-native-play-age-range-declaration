@@ -137,9 +137,9 @@ open class HybridPlayAgeRangeDeclarationSpec_cxx {
   }
   
   @inline(__always)
-  public final func requestDeclaredAgeRange(ageGate: Double) -> bridge.Result_std__shared_ptr_Promise_DeclaredAgeRangeResult___ {
+  public final func requestDeclaredAgeRange(firstThresholdAge: Double, secondThresholdAge: Double, thirdThresholdAge: Double) -> bridge.Result_std__shared_ptr_Promise_DeclaredAgeRangeResult___ {
     do {
-      let __result = try self.__implementation.requestDeclaredAgeRange(ageGate: ageGate)
+      let __result = try self.__implementation.requestDeclaredAgeRange(firstThresholdAge: firstThresholdAge, secondThresholdAge: secondThresholdAge, thirdThresholdAge: thirdThresholdAge)
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_DeclaredAgeRangeResult__ in
         let __promise = bridge.create_std__shared_ptr_Promise_DeclaredAgeRangeResult__()
         let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_DeclaredAgeRangeResult__(__promise)

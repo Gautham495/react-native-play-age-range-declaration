@@ -19,9 +19,15 @@ public extension DeclaredAgeRangeResult {
   /**
    * Create a new instance of `DeclaredAgeRangeResult`.
    */
-  init(status: String?, lowerBound: Double?, upperBound: Double?, error: String?) {
+  init(status: String?, parentControls: String?, lowerBound: Double?, upperBound: Double?) {
     self.init({ () -> bridge.std__optional_std__string_ in
       if let __unwrappedValue = status {
+        return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
+      } else {
+        return .init()
+      }
+    }(), { () -> bridge.std__optional_std__string_ in
+      if let __unwrappedValue = parentControls {
         return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
       } else {
         return .init()
@@ -35,12 +41,6 @@ public extension DeclaredAgeRangeResult {
     }(), { () -> bridge.std__optional_double_ in
       if let __unwrappedValue = upperBound {
         return bridge.create_std__optional_double_(__unwrappedValue)
-      } else {
-        return .init()
-      }
-    }(), { () -> bridge.std__optional_std__string_ in
-      if let __unwrappedValue = error {
-        return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
       } else {
         return .init()
       }
@@ -62,6 +62,30 @@ public extension DeclaredAgeRangeResult {
     @inline(__always)
     set {
       self.__status = { () -> bridge.std__optional_std__string_ in
+        if let __unwrappedValue = newValue {
+          return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
+        } else {
+          return .init()
+        }
+      }()
+    }
+  }
+  
+  var parentControls: String? {
+    @inline(__always)
+    get {
+      return { () -> String? in
+        if bridge.has_value_std__optional_std__string_(self.__parentControls) {
+          let __unwrapped = bridge.get_std__optional_std__string_(self.__parentControls)
+          return String(__unwrapped)
+        } else {
+          return nil
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__parentControls = { () -> bridge.std__optional_std__string_ in
         if let __unwrappedValue = newValue {
           return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
         } else {
@@ -98,30 +122,6 @@ public extension DeclaredAgeRangeResult {
       self.__upperBound = { () -> bridge.std__optional_double_ in
         if let __unwrappedValue = newValue {
           return bridge.create_std__optional_double_(__unwrappedValue)
-        } else {
-          return .init()
-        }
-      }()
-    }
-  }
-  
-  var error: String? {
-    @inline(__always)
-    get {
-      return { () -> String? in
-        if bridge.has_value_std__optional_std__string_(self.__error) {
-          let __unwrapped = bridge.get_std__optional_std__string_(self.__error)
-          return String(__unwrapped)
-        } else {
-          return nil
-        }
-      }()
-    }
-    @inline(__always)
-    set {
-      self.__error = { () -> bridge.std__optional_std__string_ in
-        if let __unwrappedValue = newValue {
-          return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
         } else {
           return .init()
         }

@@ -15,7 +15,7 @@ public protocol HybridPlayAgeRangeDeclarationSpec_protocol: HybridObject {
 
   // Methods
   func getPlayAgeRangeDeclaration() throws -> Promise<PlayAgeRangeDeclarationResult>
-  func requestDeclaredAgeRange(ageGate: Double) throws -> Promise<DeclaredAgeRangeResult>
+  func requestDeclaredAgeRange(firstThresholdAge: Double, secondThresholdAge: Double, thirdThresholdAge: Double) throws -> Promise<DeclaredAgeRangeResult>
 }
 
 public extension HybridPlayAgeRangeDeclarationSpec_protocol {

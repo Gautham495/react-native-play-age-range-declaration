@@ -69,9 +69,9 @@ namespace margelo::nitro::playagerangedeclaration {
       return __promise;
     }();
   }
-  std::shared_ptr<Promise<DeclaredAgeRangeResult>> JHybridPlayAgeRangeDeclarationSpec::requestDeclaredAgeRange(double ageGate) {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(double /* ageGate */)>("requestDeclaredAgeRange");
-    auto __result = method(_javaPart, ageGate);
+  std::shared_ptr<Promise<DeclaredAgeRangeResult>> JHybridPlayAgeRangeDeclarationSpec::requestDeclaredAgeRange(double firstThresholdAge, double secondThresholdAge, double thirdThresholdAge) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(double /* firstThresholdAge */, double /* secondThresholdAge */, double /* thirdThresholdAge */)>("requestDeclaredAgeRange");
+    auto __result = method(_javaPart, firstThresholdAge, secondThresholdAge, thirdThresholdAge);
     return [&]() {
       auto __promise = Promise<DeclaredAgeRangeResult>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {

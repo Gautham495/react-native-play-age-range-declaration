@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   Text,
   View,
@@ -9,36 +9,50 @@ import {
   Pressable,
 } from 'react-native';
 
-import { getAgeData } from 'react-native-play-age-range-declaration';
+import {
+  getAndroidPlayAgeRangeStatus,
+  getAppleDeclaredAgeRangeStatus,
+} from 'react-native-play-age-range-declaration';
 
 type PlayAgeSignalsResult = {
-  installId?: string | null;
-  userStatus?: string | null;
-  error?: string | null;
+  installId?: string;
+  userStatus?: string;
+  error?: string;
 };
 
 type DeclaredAgeRangeResult = {
-  status?: string | null;
-  lowerBound?: number | null;
-  upperBound?: number | null;
-  error?: string | null;
+  status?: string;
+  parentControls?: string;
+  lowerBound?: number;
+  upperBound?: number;
 };
 
 export default function App() {
-  const [result, setResult] = useState<
-    PlayAgeSignalsResult | DeclaredAgeRangeResult | null
-  >(null);
+  const [androidResult, setAndroidResult] =
+    useState<PlayAgeSignalsResult | null>(null);
+
+  const [appleResult, setAppleResult] = useState<DeclaredAgeRangeResult | null>(
+    null
+  );
+
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchSignals = async () => {
+  const fetchStatus = async () => {
     try {
       setLoading(true);
+
       setError(null);
 
-      const data = await getAgeData(13);
+      if (Platform.OS === 'android') {
+        const data = await getAndroidPlayAgeRangeStatus();
 
-      setResult(data);
+        setAndroidResult(data);
+      } else {
+        const data = await getAppleDeclaredAgeRangeStatus(10, 13, 16);
+
+        setAppleResult(data);
+      }
     } catch (err: any) {
       console.error('❌ Failed to fetch Age Signals:', err);
       const msg =
@@ -46,15 +60,10 @@ export default function App() {
         err?.nativeStackAndroid ??
         'Unknown error retrieving Play Age Signals';
       setError(msg);
-      setResult(null);
     } finally {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchSignals();
-  }, []);
 
   const title =
     Platform.OS === 'ios'
@@ -74,13 +83,26 @@ export default function App() {
         </View>
       ) : (
         <ScrollView style={styles.resultBox}>
-          <Text style={styles.resultText}>
-            {result ? JSON.stringify(result, null, 2) : 'No result'}
-          </Text>
+          {Platform.OS === 'ios' ? (
+            <Text style={styles.resultText}>
+              Status: {appleResult ? appleResult?.status : ''} {`\n`}
+              ParentControls: {appleResult
+                ? appleResult?.parentControls
+                : ''}{' '}
+              {`\n`}
+              Lower Bound: {appleResult ? appleResult?.lowerBound : ''} {`\n`}
+            </Text>
+          ) : (
+            <Text style={styles.resultText}>
+              Install Id: {androidResult ? androidResult?.installId : ''} {`\n`}
+              User Status: {androidResult ? androidResult?.userStatus : ''}{' '}
+              {`\n`}
+            </Text>
+          )}
         </ScrollView>
       )}
 
-      <Pressable style={styles.button} onPress={fetchSignals}>
+      <Pressable style={styles.button} onPress={fetchStatus}>
         <Text style={styles.buttonTitle}>Check</Text>
       </Pressable>
     </View>

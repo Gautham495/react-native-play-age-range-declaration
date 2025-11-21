@@ -1,5 +1,3 @@
-import { Platform } from 'react-native';
-
 import { NitroModules } from 'react-native-nitro-modules';
 
 import type {
@@ -13,14 +11,18 @@ const PlayAgeRangeDeclarationHybridObject =
     'PlayAgeRangeDeclaration'
   );
 
-export async function getAgeData(
-  ageGate: number
-): Promise<PlayAgeRangeDeclarationResult | DeclaredAgeRangeResult> {
-  if (Platform.OS === 'ios') {
-    return await PlayAgeRangeDeclarationHybridObject.requestDeclaredAgeRange(
-      ageGate
-    );
-  } else {
-    return await PlayAgeRangeDeclarationHybridObject.getPlayAgeRangeDeclaration();
-  }
+export async function getAppleDeclaredAgeRangeStatus(
+  firstThresholdAge: number,
+  secondThresholdAge: number,
+  thirdThresholdAge: number
+): Promise<DeclaredAgeRangeResult> {
+  return await PlayAgeRangeDeclarationHybridObject.requestDeclaredAgeRange(
+    firstThresholdAge,
+    secondThresholdAge,
+    thirdThresholdAge
+  );
+}
+
+export async function getAndroidPlayAgeRangeStatus(): Promise<PlayAgeRangeDeclarationResult> {
+  return await PlayAgeRangeDeclarationHybridObject.getPlayAgeRangeDeclaration();
 }

@@ -52,7 +52,7 @@ abstract class HybridPlayAgeRangeDeclarationSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun requestDeclaredAgeRange(ageGate: Double): Promise<DeclaredAgeRangeResult>
+  abstract fun requestDeclaredAgeRange(firstThresholdAge: Double, secondThresholdAge: Double, thirdThresholdAge: Double): Promise<DeclaredAgeRangeResult>
 
   private external fun initHybrid(): HybridData
 

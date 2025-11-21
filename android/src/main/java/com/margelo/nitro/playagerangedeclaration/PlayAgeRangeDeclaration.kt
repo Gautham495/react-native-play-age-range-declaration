@@ -17,8 +17,7 @@ class PlayAgeRangeDeclaration(private val appContext: Context) : HybridPlayAgeRa
       try {
         val manager = AgeSignalsManagerFactory.create(appContext)
         val request = AgeSignalsRequest.builder().build()
-
-        // Suspend until async call completes
+        
         val result = suspendCancellableCoroutine<PlayAgeRangeDeclarationResult> { cont ->
           manager.checkAgeSignals(request)
             .addOnSuccessListener { r ->
@@ -32,12 +31,11 @@ class PlayAgeRangeDeclaration(private val appContext: Context) : HybridPlayAgeRa
             }
             .addOnFailureListener { e ->
               val msg = e.message ?: "Unknown error"
-              Log.e("PlayAgeRangeDeclaration", "Failed to fetch Age Signals: $msg", e)
               cont.resume(
                 PlayAgeRangeDeclarationResult(
                   installId = null,
                   userStatus = null,
-                  error = "AGE_SIGNALS_ERROR: $msg"
+                  error = "$msg"
                 )
               )
             }
@@ -55,13 +53,13 @@ class PlayAgeRangeDeclaration(private val appContext: Context) : HybridPlayAgeRa
     }
   }
 
-  override fun requestDeclaredAgeRange(ageGate: Double): Promise<DeclaredAgeRangeResult> {
+  override fun requestDeclaredAgeRange(firstThresholdAge: Double, secondThresholdAge: Double, thirdThresholdAge: Double): Promise<DeclaredAgeRangeResult> {
     return Promise.async {
       DeclaredAgeRangeResult(
         status = null,
         lowerBound = null,
         upperBound = null,
-        error = null
+        parentControls = null
       )
     }
   }

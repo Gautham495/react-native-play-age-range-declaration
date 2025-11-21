@@ -36,13 +36,13 @@ namespace margelo::nitro::playagerangedeclaration {
   struct DeclaredAgeRangeResult {
   public:
     std::optional<std::string> status     SWIFT_PRIVATE;
+    std::optional<std::string> parentControls     SWIFT_PRIVATE;
     std::optional<double> lowerBound     SWIFT_PRIVATE;
     std::optional<double> upperBound     SWIFT_PRIVATE;
-    std::optional<std::string> error     SWIFT_PRIVATE;
 
   public:
     DeclaredAgeRangeResult() = default;
-    explicit DeclaredAgeRangeResult(std::optional<std::string> status, std::optional<double> lowerBound, std::optional<double> upperBound, std::optional<std::string> error): status(status), lowerBound(lowerBound), upperBound(upperBound), error(error) {}
+    explicit DeclaredAgeRangeResult(std::optional<std::string> status, std::optional<std::string> parentControls, std::optional<double> lowerBound, std::optional<double> upperBound): status(status), parentControls(parentControls), lowerBound(lowerBound), upperBound(upperBound) {}
   };
 
 } // namespace margelo::nitro::playagerangedeclaration
@@ -56,17 +56,17 @@ namespace margelo::nitro {
       jsi::Object obj = arg.asObject(runtime);
       return margelo::nitro::playagerangedeclaration::DeclaredAgeRangeResult(
         JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, "status")),
+        JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, "parentControls")),
         JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, "lowerBound")),
-        JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, "upperBound")),
-        JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, "error"))
+        JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, "upperBound"))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::playagerangedeclaration::DeclaredAgeRangeResult& arg) {
       jsi::Object obj(runtime);
       obj.setProperty(runtime, "status", JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.status));
+      obj.setProperty(runtime, "parentControls", JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.parentControls));
       obj.setProperty(runtime, "lowerBound", JSIConverter<std::optional<double>>::toJSI(runtime, arg.lowerBound));
       obj.setProperty(runtime, "upperBound", JSIConverter<std::optional<double>>::toJSI(runtime, arg.upperBound));
-      obj.setProperty(runtime, "error", JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.error));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -78,9 +78,9 @@ namespace margelo::nitro {
         return false;
       }
       if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, "status"))) return false;
+      if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, "parentControls"))) return false;
       if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, "lowerBound"))) return false;
       if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, "upperBound"))) return false;
-      if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, "error"))) return false;
       return true;
     }
   };
