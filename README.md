@@ -11,16 +11,12 @@ A **React Native Nitro Module** providing a unified API for **age-appropriate ex
 - 🟢 **Google Play Age Signals API** (Android)
 - 🔵 **Apple Declared Age Range API** (iOS 26+)
 
-> [!NOTE]
->
-> - The APIs for Apple's Declared Age Range works in iOS 26 as I have tested in real device and I have attached a video showing the workings of it.
-
 ---
 
 > [!IMPORTANT]
 >
-> - The APIs for Google Play Age Signals are returning "Not Yet Implemented" as of Nov 2025 for my app tested in my 2023 Android 14 device.
 > - Need testers for testing the library in a production based app with Android 15 or Android 16 and above!
+> - The APIs for Google Play Age Signals are returning "Not Yet Implemented" as of Nov 2025 for my app tested in my Android 14 device powered device which I bought in 2022.
 
 ---
 
@@ -29,6 +25,10 @@ A **React Native Nitro Module** providing a unified API for **age-appropriate ex
 ```bash
 npm install react-native-play-age-range-declaration react-native-nitro-modules
 ```
+
+> [!NOTE]
+>
+> - The APIs for Apple's Declared Age Range works in iOS 26 as I have tested in real device and I have attached a video showing the workings of it.
 
 ## Demo
 
@@ -39,10 +39,10 @@ npm install react-native-play-age-range-declaration react-native-nitro-modules
   </tr>
   <tr>
     <td align="center">
-      <video src="./docs/videos/iOS.mp4" width="300" controls></video>
+      <video src="https://github.com/user-attachments/assets/5fa5c82d-054c-46a2-bfec-4a0b4398576f" height="650" width="300" controls></video>
     </td>
     <td align="center">
-     <img alt="android" src="./docs/img/android.jpg" />
+     <img alt="android" src="./docs/img/android.jpg"  height="650" width="300"/>
     </td>
   </tr>
 </table>
@@ -55,6 +55,16 @@ npm install react-native-play-age-range-declaration react-native-nitro-modules
 | ----------- | ------------------------------------------------------------ | -------------------------------------------------- |
 | **Android** | Play Age Signals API (`com.google.android.play:age-signals`) | Detect user supervision / verified status          |
 | **iOS**     | Declared Age Range API (`AgeRangeService.requestAgeRange`)   | Get user’s declared age range (e.g., 13–15, 16–17) |
+
+---
+
+## Configuration
+
+iOS: Add the below entitlement to your project:
+
+com.apple.developer.declared-age-range
+
+Android: No extra configuration needed, but for this API to work, you have to have play console installed in your android device.
 
 ---
 
@@ -79,13 +89,13 @@ import {
 
 type PlayAgeSignalsResult = {
   installId?: string;
-  userStatus?: string;
+  userStatus?: string; // https://developer.android.com/google/play/age-signals/use-age-signals-api
   error?: string;
 };
 
 type DeclaredAgeRangeResult = {
   status?: string;
-  parentControls?: string;
+  parentControls?: string; // selfDeclared | guardianDeclared
   lowerBound?: number;
   upperBound?: number;
 };
