@@ -5,9 +5,22 @@ import android.util.Log
 import com.facebook.proguard.annotations.DoNotStrip
 import com.google.android.play.agesignals.AgeSignalsManagerFactory
 import com.google.android.play.agesignals.AgeSignalsRequest
+import com.google.android.play.agesignals.AgeSignalsResult
+import com.google.android.play.agesignals.model.AgeSignalsVerificationStatus
+// import com.google.android.play.agesignals.testing.FakeAgeSignalsManager
 import com.margelo.nitro.core.Promise
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
+import java.time.LocalDate
+import java.time.ZoneOffset
+import java.util.Date
+import java.text.SimpleDateFormat
+import java.util.Locale
+
+
+// https://developer.android.com/google/play/age-signals/test-age-signals-api
+
+
 
 @DoNotStrip
 class PlayAgeRangeDeclaration(private val appContext: Context) : HybridPlayAgeRangeDeclarationSpec() {
@@ -15,17 +28,50 @@ class PlayAgeRangeDeclaration(private val appContext: Context) : HybridPlayAgeRa
   override fun getPlayAgeRangeDeclaration(): Promise<PlayAgeRangeDeclarationResult> {
     return Promise.async {
       try {
-        val manager = AgeSignalsManagerFactory.create(appContext)
-        val request = AgeSignalsRequest.builder().build()
+        // MOCK: Using FakeAgeSignalsManager for testing (Commented out for production)
+        // https://developer.android.com/google/play/age-signals/test-age-signals-api
+        // 
+        // To test different scenarios, change the AgeSignalsVerificationStatus:
+        // - AgeSignalsVerificationStatus.VERIFIED - User is 18+ (verified adult)
+        // - AgeSignalsVerificationStatus.SUPERVISED - User is supervised (13-17 with parental controls)
+        // - AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_PENDING - Pending approval
+        // - AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_DENIED - Approval denied
+        // - AgeSignalsVerificationStatus.UNKNOWN - User status unknown
         
+
+        // val fakeVerifiedUser = AgeSignalsResult.builder()
+        //   .setUserStatus(AgeSignalsVerificationStatus.UNKNOWN)
+        //   .setAgeLower(13)
+        //   .setAgeUpper(17)
+        //   .setMostRecentApprovalDate(
+        //     Date.from(LocalDate.of(2025, 2, 1).atStartOfDay(ZoneOffset.UTC).toInstant())
+        //   )
+        //   .setInstallId("fake_install_id_12345")
+        //   .build()
+        
+        // val manager = FakeAgeSignalsManager()
+        // manager.setNextAgeSignalsResult(fakeVerifiedUser)
+
+        // Comment the line below to use the FakeAgeSignalsManager instead of the real API
+        val manager = AgeSignalsManagerFactory.create(appContext)
+
+        
+        val request = AgeSignalsRequest.builder().build()
+
         val result = suspendCancellableCoroutine<PlayAgeRangeDeclarationResult> { cont ->
           manager.checkAgeSignals(request)
             .addOnSuccessListener { r ->
+              val isoDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+              val approvalDate = r.mostRecentApprovalDate()?.let { isoDateFormat.format(it) }
+              
               cont.resume(
                 PlayAgeRangeDeclarationResult(
                   installId = r.installId(),
-                  userStatus = r.userStatus()?.toString() ?: "UNKNOWN",
-                  error = null
+                  userStatus = r.userStatus()?.toString(),
+                  error = null,
+                  ageLower = r.ageLower()?.toDouble(),
+                  ageUpper = r.ageUpper()?.toDouble(),
+                  mostRecentApprovalDate = approvalDate,
                 )
               )
             }
@@ -35,7 +81,10 @@ class PlayAgeRangeDeclaration(private val appContext: Context) : HybridPlayAgeRa
                 PlayAgeRangeDeclarationResult(
                   installId = null,
                   userStatus = null,
-                  error = "$msg"
+                  error = "$msg",
+                  ageLower = null,
+                  ageUpper = null,
+                  mostRecentApprovalDate = null,
                 )
               )
             }
@@ -47,7 +96,10 @@ class PlayAgeRangeDeclaration(private val appContext: Context) : HybridPlayAgeRa
         PlayAgeRangeDeclarationResult(
           installId = null,
           userStatus = null,
-          error = "AGE_SIGNALS_INIT_ERROR: ${e.message}"
+          error = "AGE_SIGNALS_INIT_ERROR: ${e.message}",
+          ageLower = null,
+          ageUpper = null,
+          mostRecentApprovalDate = null,
         )
       }
     }

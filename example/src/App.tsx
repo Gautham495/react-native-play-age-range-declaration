@@ -12,24 +12,15 @@ import {
 import {
   getAndroidPlayAgeRangeStatus,
   getAppleDeclaredAgeRangeStatus,
+  type PlayAgeRangeDeclarationResult,
+  type DeclaredAgeRangeResult,
+  PlayAgeRangeDeclarationUserStatusString,
+  PlayAgeRangeDeclarationUserStatus,
 } from 'react-native-play-age-range-declaration';
-
-type PlayAgeSignalsResult = {
-  installId?: string;
-  userStatus?: string;
-  error?: string;
-};
-
-type DeclaredAgeRangeResult = {
-  status?: string;
-  parentControls?: string;
-  lowerBound?: number;
-  upperBound?: number;
-};
 
 export default function App() {
   const [androidResult, setAndroidResult] =
-    useState<PlayAgeSignalsResult | null>(null);
+    useState<PlayAgeRangeDeclarationResult | null>(null);
 
   const [appleResult, setAppleResult] = useState<DeclaredAgeRangeResult | null>(
     null
@@ -95,8 +86,19 @@ export default function App() {
           ) : (
             <Text style={styles.resultText}>
               Install Id: {androidResult ? androidResult?.installId : ''} {`\n`}
-              User Status: {androidResult ? androidResult?.userStatus : ''}{' '}
+              User Status:{' '}
+              {androidResult
+                ? PlayAgeRangeDeclarationUserStatusString[
+                    androidResult?.userStatus as PlayAgeRangeDeclarationUserStatus
+                  ]
+                : ''}{' '}
               {`\n`}
+              Most Recent Approval Date:{' '}
+              {androidResult ? androidResult?.mostRecentApprovalDate : ''}{' '}
+              {`\n`}
+              Age Lower: {androidResult ? androidResult?.ageLower : ''} {`\n`}
+              Age Upper: {androidResult ? androidResult?.ageUpper : ''} {`\n`}
+              Error: {androidResult ? androidResult?.error : ''} {`\n`}
             </Text>
           )}
         </ScrollView>

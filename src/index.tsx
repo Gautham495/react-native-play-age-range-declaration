@@ -26,3 +26,11 @@ export async function getAppleDeclaredAgeRangeStatus(
 export async function getAndroidPlayAgeRangeStatus(): Promise<PlayAgeRangeDeclarationResult> {
   return await PlayAgeRangeDeclarationHybridObject.getPlayAgeRangeDeclaration();
 }
+
+// Export types for consumers
+export type { DeclaredAgeRangeResult, PlayAgeRangeDeclarationResult };
+
+export {
+  PlayAgeRangeDeclarationUserStatus,
+  PlayAgeRangeDeclarationUserStatusString,
+} from './PlayAgeRangeDeclaration.nitro';
