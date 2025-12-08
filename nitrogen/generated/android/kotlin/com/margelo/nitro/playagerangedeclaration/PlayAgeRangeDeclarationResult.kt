@@ -19,6 +19,9 @@ import com.facebook.proguard.annotations.DoNotStrip
 data class PlayAgeRangeDeclarationResult(
   @DoNotStrip
   @Keep
+  val isEligible: Boolean,
+  @DoNotStrip
+  @Keep
   val installId: String?,
   @DoNotStrip
   @Keep
@@ -37,8 +40,8 @@ data class PlayAgeRangeDeclarationResult(
     @Keep
     @Suppress("unused")
     @JvmStatic
-    private fun fromCpp(installId: String?, userStatus: String?, error: String?): PlayAgeRangeDeclarationResult {
-      return PlayAgeRangeDeclarationResult(installId, userStatus, error)
+    private fun fromCpp(isEligible: Boolean, installId: String?, userStatus: String?, error: String?): PlayAgeRangeDeclarationResult {
+      return PlayAgeRangeDeclarationResult(isEligible, installId, userStatus, error)
     }
   }
 }

@@ -1,12 +1,14 @@
 import type { HybridObject } from 'react-native-nitro-modules';
 
 export interface PlayAgeRangeDeclarationResult {
+  isEligible: boolean;
   installId?: string;
   userStatus?: string;
   error?: string;
 }
 
 export interface DeclaredAgeRangeResult {
+  isEligible: boolean;
   status?: string;
   parentControls?: string;
   lowerBound?: number;

@@ -32,6 +32,8 @@ namespace margelo::nitro::playagerangedeclaration {
     [[nodiscard]]
     PlayAgeRangeDeclarationResult toCpp() const {
       static const auto clazz = javaClassStatic();
+      static const auto fieldIsEligible = clazz->getField<jboolean>("isEligible");
+      jboolean isEligible = this->getFieldValue(fieldIsEligible);
       static const auto fieldInstallId = clazz->getField<jni::JString>("installId");
       jni::local_ref<jni::JString> installId = this->getFieldValue(fieldInstallId);
       static const auto fieldUserStatus = clazz->getField<jni::JString>("userStatus");
@@ -39,6 +41,7 @@ namespace margelo::nitro::playagerangedeclaration {
       static const auto fieldError = clazz->getField<jni::JString>("error");
       jni::local_ref<jni::JString> error = this->getFieldValue(fieldError);
       return PlayAgeRangeDeclarationResult(
+        static_cast<bool>(isEligible),
         installId != nullptr ? std::make_optional(installId->toStdString()) : std::nullopt,
         userStatus != nullptr ? std::make_optional(userStatus->toStdString()) : std::nullopt,
         error != nullptr ? std::make_optional(error->toStdString()) : std::nullopt
@@ -51,11 +54,12 @@ namespace margelo::nitro::playagerangedeclaration {
      */
     [[maybe_unused]]
     static jni::local_ref<JPlayAgeRangeDeclarationResult::javaobject> fromCpp(const PlayAgeRangeDeclarationResult& value) {
-      using JSignature = JPlayAgeRangeDeclarationResult(jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>);
+      using JSignature = JPlayAgeRangeDeclarationResult(jboolean, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>);
       static const auto clazz = javaClassStatic();
       static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
       return create(
         clazz,
+        value.isEligible,
         value.installId.has_value() ? jni::make_jstring(value.installId.value()) : nullptr,
         value.userStatus.has_value() ? jni::make_jstring(value.userStatus.value()) : nullptr,
         value.error.has_value() ? jni::make_jstring(value.error.value()) : nullptr

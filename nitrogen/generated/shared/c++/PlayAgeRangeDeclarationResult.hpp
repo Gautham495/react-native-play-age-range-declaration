@@ -35,13 +35,14 @@ namespace margelo::nitro::playagerangedeclaration {
    */
   struct PlayAgeRangeDeclarationResult {
   public:
+    bool isEligible     SWIFT_PRIVATE;
     std::optional<std::string> installId     SWIFT_PRIVATE;
     std::optional<std::string> userStatus     SWIFT_PRIVATE;
     std::optional<std::string> error     SWIFT_PRIVATE;
 
   public:
     PlayAgeRangeDeclarationResult() = default;
-    explicit PlayAgeRangeDeclarationResult(std::optional<std::string> installId, std::optional<std::string> userStatus, std::optional<std::string> error): installId(installId), userStatus(userStatus), error(error) {}
+    explicit PlayAgeRangeDeclarationResult(bool isEligible, std::optional<std::string> installId, std::optional<std::string> userStatus, std::optional<std::string> error): isEligible(isEligible), installId(installId), userStatus(userStatus), error(error) {}
   };
 
 } // namespace margelo::nitro::playagerangedeclaration
@@ -54,6 +55,7 @@ namespace margelo::nitro {
     static inline margelo::nitro::playagerangedeclaration::PlayAgeRangeDeclarationResult fromJSI(jsi::Runtime& runtime, const jsi::Value& arg) {
       jsi::Object obj = arg.asObject(runtime);
       return margelo::nitro::playagerangedeclaration::PlayAgeRangeDeclarationResult(
+        JSIConverter<bool>::fromJSI(runtime, obj.getProperty(runtime, "isEligible")),
         JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, "installId")),
         JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, "userStatus")),
         JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, "error"))
@@ -61,6 +63,7 @@ namespace margelo::nitro {
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::playagerangedeclaration::PlayAgeRangeDeclarationResult& arg) {
       jsi::Object obj(runtime);
+      obj.setProperty(runtime, "isEligible", JSIConverter<bool>::toJSI(runtime, arg.isEligible));
       obj.setProperty(runtime, "installId", JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.installId));
       obj.setProperty(runtime, "userStatus", JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.userStatus));
       obj.setProperty(runtime, "error", JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.error));
@@ -74,6 +77,7 @@ namespace margelo::nitro {
       if (!nitro::isPlainObject(runtime, obj)) {
         return false;
       }
+      if (!JSIConverter<bool>::canConvert(runtime, obj.getProperty(runtime, "isEligible"))) return false;
       if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, "installId"))) return false;
       if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, "userStatus"))) return false;
       if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, "error"))) return false;
