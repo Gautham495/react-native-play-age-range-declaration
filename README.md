@@ -91,6 +91,21 @@ import {
   PlayAgeRangeDeclarationUserStatus,
 } from 'react-native-play-age-range-declaration';
 
+type PlayAgeSignalsResult = {
+  isEligible: boolean; // true if the user is in a region where age verification is legally required
+  installId?: string;
+  userStatus?: string; // https://developer.android.com/google/play/age-signals/use-age-signals-api
+  error?: string;
+};
+
+type DeclaredAgeRangeResult = {
+  isEligible: boolean; // true if the device supports age features and the API is available
+  status?: string;
+  parentControls?: string; // selfDeclared | guardianDeclared
+  lowerBound?: number;
+  upperBound?: number;
+};
+
 export default function App() {
   const [androidResult, setAndroidResult] =
     useState<PlayAgeRangeDeclarationResult | null>(null);
@@ -149,6 +164,7 @@ export default function App() {
         <ScrollView style={styles.resultBox}>
           {Platform.OS === 'ios' ? (
             <Text style={styles.resultText}>
+              Is Eligible: {appleResult ? String(appleResult?.isEligible) : ''} {`\n`}
               Status: {appleResult ? appleResult?.status : ''} {`\n`}
               ParentControls: {appleResult
                 ? appleResult?.parentControls
@@ -158,6 +174,7 @@ export default function App() {
             </Text>
           ) : (
             <Text style={styles.resultText}>
+              Is Eligible: {androidResult ? String(androidResult?.isEligible) : ''} {`\n`}
               Install Id: {androidResult ? androidResult?.installId : ''} {`\n`}
               User Status: {androidResult ? PlayAgeRangeDeclarationUserStatusString[androidResult?.userStatus as PlayAgeRangeDeclarationUserStatus] : ''} {`\n`}
               Most Recent Approval Date: {androidResult ? androidResult?.mostRecentApprovalDate : ''} {`\n`}
@@ -240,6 +257,15 @@ const styles = StyleSheet.create({
   },
 });
 ```
+
+---
+
+## 🔍 Understanding `isEligible`
+
+Both result types include an `isEligible` boolean field that indicates whether age-related features are available and applicable for the current user:
+
+- **`true`**: The user is in a region where age verification is legally required.
+- **`false`**: The user is not in an applicable region, if isEligible is false we should be allow to let users view age gated content *(Not verified by a laywer)*
 
 ---
 

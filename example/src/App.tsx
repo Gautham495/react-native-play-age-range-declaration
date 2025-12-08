@@ -76,6 +76,8 @@ export default function App() {
         <ScrollView style={styles.resultBox}>
           {Platform.OS === 'ios' ? (
             <Text style={styles.resultText}>
+              Is Eligible: {appleResult ? String(appleResult?.isEligible) : ''}{' '}
+              {`\n`}
               Status: {appleResult ? appleResult?.status : ''} {`\n`}
               ParentControls: {appleResult
                 ? appleResult?.parentControls
@@ -85,6 +87,8 @@ export default function App() {
             </Text>
           ) : (
             <Text style={styles.resultText}>
+              Is Eligible:{' '}
+              {androidResult ? String(androidResult?.isEligible) : ''} {`\n`}
               Install Id: {androidResult ? androidResult?.installId : ''} {`\n`}
               User Status:{' '}
               {androidResult
@@ -92,7 +96,6 @@ export default function App() {
                     androidResult?.userStatus as PlayAgeRangeDeclarationUserStatus
                   ]
                 : ''}{' '}
-              {`\n`}
               Most Recent Approval Date:{' '}
               {androidResult ? androidResult?.mostRecentApprovalDate : ''}{' '}
               {`\n`}

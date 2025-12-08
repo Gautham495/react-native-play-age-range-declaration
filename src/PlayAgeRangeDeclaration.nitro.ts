@@ -19,6 +19,7 @@ export const PlayAgeRangeDeclarationUserStatusString = {
 } as const;
 
 export interface PlayAgeRangeDeclarationResult {
+  isEligible: boolean;
   installId?: string;
   userStatus?: string;
   error?: string;
@@ -28,6 +29,7 @@ export interface PlayAgeRangeDeclarationResult {
 }
 
 export interface DeclaredAgeRangeResult {
+  isEligible: boolean;
   status?: string;
   parentControls?: string;
   lowerBound?: number;

@@ -19,8 +19,8 @@ public extension PlayAgeRangeDeclarationResult {
   /**
    * Create a new instance of `PlayAgeRangeDeclarationResult`.
    */
-  init(installId: String?, userStatus: String?, error: String?, ageLower: Double?, ageUpper: Double?, mostRecentApprovalDate: String?) {
-    self.init({ () -> bridge.std__optional_std__string_ in
+  init(isEligible: Bool, installId: String?, userStatus: String?, error: String?, ageLower: Double?, ageUpper: Double?, mostRecentApprovalDate: String?) {
+    self.init(isEligible, { () -> bridge.std__optional_std__string_ in
       if let __unwrappedValue = installId {
         return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
       } else {
@@ -59,6 +59,17 @@ public extension PlayAgeRangeDeclarationResult {
     }())
   }
 
+  var isEligible: Bool {
+    @inline(__always)
+    get {
+      return self.__isEligible
+    }
+    @inline(__always)
+    set {
+      self.__isEligible = newValue
+    }
+  }
+  
   var installId: String? {
     @inline(__always)
     get {

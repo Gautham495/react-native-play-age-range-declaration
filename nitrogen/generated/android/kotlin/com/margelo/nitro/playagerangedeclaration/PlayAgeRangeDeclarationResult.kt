@@ -19,6 +19,9 @@ import com.facebook.proguard.annotations.DoNotStrip
 data class PlayAgeRangeDeclarationResult(
   @DoNotStrip
   @Keep
+  val isEligible: Boolean,
+  @DoNotStrip
+  @Keep
   val installId: String?,
   @DoNotStrip
   @Keep

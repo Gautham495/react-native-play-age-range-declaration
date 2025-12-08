@@ -32,6 +32,8 @@ namespace margelo::nitro::playagerangedeclaration {
     [[nodiscard]]
     DeclaredAgeRangeResult toCpp() const {
       static const auto clazz = javaClassStatic();
+      static const auto fieldIsEligible = clazz->getField<jboolean>("isEligible");
+      jboolean isEligible = this->getFieldValue(fieldIsEligible);
       static const auto fieldStatus = clazz->getField<jni::JString>("status");
       jni::local_ref<jni::JString> status = this->getFieldValue(fieldStatus);
       static const auto fieldParentControls = clazz->getField<jni::JString>("parentControls");
@@ -41,6 +43,7 @@ namespace margelo::nitro::playagerangedeclaration {
       static const auto fieldUpperBound = clazz->getField<jni::JDouble>("upperBound");
       jni::local_ref<jni::JDouble> upperBound = this->getFieldValue(fieldUpperBound);
       return DeclaredAgeRangeResult(
+        static_cast<bool>(isEligible),
         status != nullptr ? std::make_optional(status->toStdString()) : std::nullopt,
         parentControls != nullptr ? std::make_optional(parentControls->toStdString()) : std::nullopt,
         lowerBound != nullptr ? std::make_optional(lowerBound->value()) : std::nullopt,
@@ -54,11 +57,12 @@ namespace margelo::nitro::playagerangedeclaration {
      */
     [[maybe_unused]]
     static jni::local_ref<JDeclaredAgeRangeResult::javaobject> fromCpp(const DeclaredAgeRangeResult& value) {
-      using JSignature = JDeclaredAgeRangeResult(jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>);
+      using JSignature = JDeclaredAgeRangeResult(jboolean, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>);
       static const auto clazz = javaClassStatic();
       static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
       return create(
         clazz,
+        value.isEligible,
         value.status.has_value() ? jni::make_jstring(value.status.value()) : nullptr,
         value.parentControls.has_value() ? jni::make_jstring(value.parentControls.value()) : nullptr,
         value.lowerBound.has_value() ? jni::JDouble::valueOf(value.lowerBound.value()) : nullptr,

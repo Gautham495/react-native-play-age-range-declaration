@@ -19,6 +19,9 @@ import com.facebook.proguard.annotations.DoNotStrip
 data class DeclaredAgeRangeResult(
   @DoNotStrip
   @Keep
+  val isEligible: Boolean,
+  @DoNotStrip
+  @Keep
   val status: String?,
   @DoNotStrip
   @Keep
@@ -40,8 +43,8 @@ data class DeclaredAgeRangeResult(
     @Keep
     @Suppress("unused")
     @JvmStatic
-    private fun fromCpp(status: String?, parentControls: String?, lowerBound: Double?, upperBound: Double?): DeclaredAgeRangeResult {
-      return DeclaredAgeRangeResult(status, parentControls, lowerBound, upperBound)
+    private fun fromCpp(isEligible: Boolean, status: String?, parentControls: String?, lowerBound: Double?, upperBound: Double?): DeclaredAgeRangeResult {
+      return DeclaredAgeRangeResult(isEligible, status, parentControls, lowerBound, upperBound)
     }
   }
 }

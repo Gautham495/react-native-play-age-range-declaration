@@ -35,36 +35,65 @@ class PlayAgeRangeDeclaration: HybridPlayAgeRangeDeclarationSpec {
         switch response {
 
                 case .sharing(let declaration):
-                  
+
                   let statusString: String
 
                   if let declarationStatus = declaration.ageRangeDeclaration {
                       statusString = String(describing: declarationStatus)
-                
+
                   } else {
                       statusString = "unknown"
                   }
-          
+
                   let controlsRawValue = declaration.activeParentalControls.rawValue
-                  
+
                   return DeclaredAgeRangeResult(
+                    isEligible: true,
                     status: statusString,
                     parentControls: "\(controlsRawValue)",
                     lowerBound: declaration.lowerBound.map { Double($0) },
                     upperBound: declaration.upperBound.map { Double($0) }
                   )
-              
+
                 case .declinedSharing:
                   return DeclaredAgeRangeResult(
+                    isEligible: true,
                     status: "declined",
                     parentControls: nil,
                     lowerBound: nil,
                     upperBound: nil
                   )
-                  
+
+                @unknown default:
+                  return DeclaredAgeRangeResult(
+                    isEligible: true,
+                    status: "unknown",
+                    parentControls: nil,
+                    lowerBound: nil,
+                    upperBound: nil
+                  )
+
       }
 
       } catch {
+        // Handle notAvailable error specifically
+        // The .notAvailable error is thrown when the age range feature is not available on the device,
+        // which can occur if the device doesn't support the feature or it's not available in the user's region.
+        // This is a valid state - we return isEligible: false
+        // TODO: We should be albe to check this flag instead of relying on the error. but it was not available when this was written.
+        // See: https://developer.apple.com/documentation/declaredagerange/agerangeservice/iseligibleforagefeatures
+        if #available(iOS 26.0, *) {
+          if let ageRangeError = error as? AgeRangeService.Error,
+             case .notAvailable = ageRangeError {
+            return DeclaredAgeRangeResult(
+              isEligible: false,
+              status: nil,
+              parentControls: nil,
+              lowerBound: nil,
+              upperBound: nil
+            )
+          }
+        }
         throw error
       }
     }
