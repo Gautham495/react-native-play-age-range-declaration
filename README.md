@@ -70,6 +70,8 @@ Android: No extra configuration needed, but for this API to work, you have to ha
 
 ## ⚙️ Usage
 
+### Basic Usage
+
 ```tsx
 import { useState } from 'react';
 import {
@@ -177,6 +179,157 @@ export default function App() {
 
       <Pressable style={styles.button} onPress={fetchStatus}>
         <Text style={styles.buttonTitle}>Check</Text>
+      </Pressable>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#f4f6f8',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  header: {
+    fontSize: 20,
+    fontWeight: '700',
+    marginBottom: 20,
+  },
+  resultBox: {
+    maxHeight: 240,
+    width: '100%',
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 12,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 6,
+    elevation: 2,
+  },
+  resultText: {
+    fontFamily: Platform.select({ ios: 'Menlo', android: 'monospace' }),
+    fontSize: 13,
+    color: '#333',
+  },
+
+  button: {
+    backgroundColor: '#2fe5e5',
+    borderRadius: 10,
+    padding: 12,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+
+  buttonTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: 'black',
+  },
+
+  errorBox: {
+    backgroundColor: '#ffe5e5',
+    borderRadius: 10,
+    padding: 12,
+    width: '100%',
+  },
+  errorTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#b00020',
+    marginBottom: 4,
+  },
+  errorText: {
+    color: '#b00020',
+    fontSize: 14,
+  },
+});
+```
+
+### Using `getIsOlderThan` with Singleton Pattern
+
+**App Configuration (index.js or App.tsx):**
+
+```tsx
+import { setAgeRangeThresholds } from 'react-native-play-age-range-declaration';
+
+// Configure age range thresholds once when the app initializes
+// Must be between 1-18, ascending order, no duplicates, 1-3 values
+try {
+  setAgeRangeThresholds([10, 13, 16]);
+} catch (err) {
+  console.error('Failed to set age range thresholds:', err);
+}
+```
+
+**Component Usage:**
+
+```tsx
+import { useState } from 'react';
+import {
+  Text,
+  View,
+  StyleSheet,
+  ActivityIndicator,
+  ScrollView,
+  Platform,
+  Pressable,
+} from 'react-native';
+
+import { getIsOlderThan } from 'react-native-play-age-range-declaration';
+
+export default function App() {
+  const [isOlderThanResult, setIsOlderThanResult] = useState<boolean | null>(
+    null
+  );
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const checkAge = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      // Check if user is older than a specific age
+      const isOlderThan18 = await getIsOlderThan(18);
+      setIsOlderThanResult(isOlderThan18);
+    } catch (err: any) {
+      console.error('❌ Failed to check age:', err);
+      const msg =
+        err?.message ??
+        err?.nativeStackAndroid ??
+        'Unknown error checking age';
+      setError(msg);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.header}>Age Range Declaration Demo</Text>
+
+      {loading ? (
+        <ActivityIndicator size="large" color="#007aff" />
+      ) : error ? (
+        <View style={styles.errorBox}>
+          <Text style={styles.errorTitle}>Error</Text>
+          <Text style={styles.errorText}>{error}</Text>
+        </View>
+      ) : (
+        <ScrollView style={styles.resultBox}>
+          <Text style={styles.resultText}>
+            Is older than 18: {isOlderThanResult !== null ? (isOlderThanResult ? 'Yes' : 'No') : 'Not checked'}
+          </Text>
+        </ScrollView>
+      )}
+
+      <Pressable style={styles.button} onPress={checkAge}>
+        <Text style={styles.buttonTitle}>Check Age</Text>
       </Pressable>
     </View>
   );
