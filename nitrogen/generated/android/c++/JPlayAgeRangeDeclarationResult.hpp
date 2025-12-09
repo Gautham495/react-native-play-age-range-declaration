@@ -63,7 +63,7 @@ namespace margelo::nitro::playagerangedeclaration {
      */
     [[maybe_unused]]
     static jni::local_ref<JPlayAgeRangeDeclarationResult::javaobject> fromCpp(const PlayAgeRangeDeclarationResult& value) {
-      using JSignature = JPlayAgeRangeDeclarationResult(jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JString>);
+      using JSignature = JPlayAgeRangeDeclarationResult(jboolean, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JString>);
       static const auto clazz = javaClassStatic();
       static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
       return create(

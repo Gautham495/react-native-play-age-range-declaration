@@ -49,8 +49,8 @@ data class PlayAgeRangeDeclarationResult(
     @Keep
     @Suppress("unused")
     @JvmStatic
-    private fun fromCpp(installId: String?, userStatus: String?, error: String?, ageLower: Double?, ageUpper: Double?, mostRecentApprovalDate: String?): PlayAgeRangeDeclarationResult {
-      return PlayAgeRangeDeclarationResult(installId, userStatus, error, ageLower, ageUpper, mostRecentApprovalDate)
+    private fun fromCpp(isEligible: Boolean, installId: String?, userStatus: String?, error: String?, ageLower: Double?, ageUpper: Double?, mostRecentApprovalDate: String?): PlayAgeRangeDeclarationResult {
+      return PlayAgeRangeDeclarationResult(isEligible, installId, userStatus, error, ageLower, ageUpper, mostRecentApprovalDate)
     }
   }
 }

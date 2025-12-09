@@ -1,14 +1,14 @@
 import type { HybridObject } from 'react-native-nitro-modules';
 
-export enum PlayAgeRangeDeclarationUserStatus {
-  VERIFIED = '0',
-  SUPERVISED = '1',
-  SUPERVISED_APPROVAL_PENDING = '2',
-  SUPERVISED_APPROVAL_DENIED = '3',
-  UNKNOWN = '4',
-}
+export const PlayAgeRangeDeclarationUserStatus = {
+  VERIFIED: '0',
+  SUPERVISED: '1',
+  SUPERVISED_APPROVAL_PENDING: '2',
+  SUPERVISED_APPROVAL_DENIED: '3',
+  UNKNOWN: '4',
+} as const;
 
-export const PlayAgeRangeDeclarationUserStatusString = {
+export const PlayAgeRangeDeclarationUserStatusString: Record<string, string> = {
   [PlayAgeRangeDeclarationUserStatus.VERIFIED]: 'VERIFIED',
   [PlayAgeRangeDeclarationUserStatus.SUPERVISED]: 'SUPERVISED',
   [PlayAgeRangeDeclarationUserStatus.SUPERVISED_APPROVAL_PENDING]:
@@ -16,7 +16,7 @@ export const PlayAgeRangeDeclarationUserStatusString = {
   [PlayAgeRangeDeclarationUserStatus.SUPERVISED_APPROVAL_DENIED]:
     'SUPERVISED_APPROVAL_DENIED',
   [PlayAgeRangeDeclarationUserStatus.UNKNOWN]: 'UNKNOWN',
-} as const;
+};
 
 export interface PlayAgeRangeDeclarationResult {
   isEligible: boolean;

@@ -7,7 +7,7 @@ import com.google.android.play.agesignals.AgeSignalsManagerFactory
 import com.google.android.play.agesignals.AgeSignalsRequest
 import com.google.android.play.agesignals.AgeSignalsResult
 import com.google.android.play.agesignals.model.AgeSignalsVerificationStatus
-// import com.google.android.play.agesignals.testing.FakeAgeSignalsManager
+import com.google.android.play.agesignals.testing.FakeAgeSignalsManager
 import com.margelo.nitro.core.Promise
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
@@ -40,7 +40,7 @@ class PlayAgeRangeDeclaration(private val appContext: Context) : HybridPlayAgeRa
         
 
         // val fakeVerifiedUser = AgeSignalsResult.builder()
-        //   .setUserStatus(AgeSignalsVerificationStatus.UNKNOWN)
+        //   .setUserStatus(AgeSignalsVerificationStatus.SUPERVISED)
         //   .setAgeLower(13)
         //   .setAgeUpper(17)
         //   .setMostRecentApprovalDate(

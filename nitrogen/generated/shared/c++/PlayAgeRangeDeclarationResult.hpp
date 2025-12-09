@@ -45,11 +45,7 @@ namespace margelo::nitro::playagerangedeclaration {
 
   public:
     PlayAgeRangeDeclarationResult() = default;
-<<<<<<< HEAD
-    explicit PlayAgeRangeDeclarationResult(std::optional<std::string> installId, std::optional<std::string> userStatus, std::optional<std::string> error, std::optional<double> ageLower, std::optional<double> ageUpper, std::optional<std::string> mostRecentApprovalDate): installId(installId), userStatus(userStatus), error(error), ageLower(ageLower), ageUpper(ageUpper), mostRecentApprovalDate(mostRecentApprovalDate) {}
-=======
-    explicit PlayAgeRangeDeclarationResult(bool isEligible, std::optional<std::string> installId, std::optional<std::string> userStatus, std::optional<std::string> error): isEligible(isEligible), installId(installId), userStatus(userStatus), error(error) {}
->>>>>>> 85bd9e9 (feat: add isEligible field to age range result types)
+    explicit PlayAgeRangeDeclarationResult(bool isEligible, std::optional<std::string> installId, std::optional<std::string> userStatus, std::optional<std::string> error, std::optional<double> ageLower, std::optional<double> ageUpper, std::optional<std::string> mostRecentApprovalDate): isEligible(isEligible), installId(installId), userStatus(userStatus), error(error), ageLower(ageLower), ageUpper(ageUpper), mostRecentApprovalDate(mostRecentApprovalDate) {}
   };
 
 } // namespace margelo::nitro::playagerangedeclaration
