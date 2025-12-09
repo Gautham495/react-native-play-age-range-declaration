@@ -41,7 +41,7 @@ export interface PlayAgeRangeDeclaration
   getPlayAgeRangeDeclaration(): Promise<PlayAgeRangeDeclarationResult>;
   requestDeclaredAgeRange(
     firstThresholdAge: number,
-    secondThresholdAge: number,
-    thirdThresholdAge: number
+    secondThresholdAge?: number,
+    thirdThresholdAge?: number
   ): Promise<DeclaredAgeRangeResult>;
 }

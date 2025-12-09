@@ -16,7 +16,10 @@ import {
   type DeclaredAgeRangeResult,
   PlayAgeRangeDeclarationUserStatusString,
   getIsConsideredOlderThan,
+  setAgeRangeThresholds,
 } from 'react-native-play-age-range-declaration';
+
+setAgeRangeThresholds([13, 15]);
 
 export default function App() {
   const [androidResult, setAndroidResult] =
@@ -50,7 +53,7 @@ export default function App() {
 
         setAndroidResult(data);
       } else {
-        const data = await getAppleDeclaredAgeRangeStatus(10, 13, 16);
+        const data = await getAppleDeclaredAgeRangeStatus();
 
         setAppleResult(data);
       }

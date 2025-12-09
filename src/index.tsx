@@ -7,6 +7,8 @@ import type {
   PlayAgeRangeDeclarationResult,
 } from './PlayAgeRangeDeclaration.nitro';
 
+import { ageRangeThresholdManager } from './AgeRangeThresholdManager';
+
 import {
   getIsConsideredOlderThaniOS,
   getIsConsideredOlderThanAndroid,
@@ -16,21 +18,25 @@ const PlayAgeRangeDeclarationHybridObject =
     'PlayAgeRangeDeclaration'
   );
 
-export async function getAppleDeclaredAgeRangeStatus(
-  firstThresholdAge: number,
-  secondThresholdAge: number,
-  thirdThresholdAge: number
-): Promise<DeclaredAgeRangeResult> {
+export async function getAppleDeclaredAgeRangeStatus(): Promise<DeclaredAgeRangeResult> {
+  const thresholds = ageRangeThresholdManager.getThresholds();
+
   return await PlayAgeRangeDeclarationHybridObject.requestDeclaredAgeRange(
-    firstThresholdAge,
-    secondThresholdAge,
-    thirdThresholdAge
+    thresholds[0],
+    thresholds[1],
+    thresholds[2]
   );
 }
 
 export async function getAndroidPlayAgeRangeStatus(): Promise<PlayAgeRangeDeclarationResult> {
   return await PlayAgeRangeDeclarationHybridObject.getPlayAgeRangeDeclaration();
 }
+
+export const setAgeRangeThresholds = (
+  thresholds: [number, number?, number?]
+): void => {
+  ageRangeThresholdManager.setAgeRangeThresholds(thresholds);
+};
 // Export types for consumers
 export type { DeclaredAgeRangeResult, PlayAgeRangeDeclarationResult };
 
@@ -38,7 +44,7 @@ export const getIsConsideredOlderThan = async (
   age: number
 ): Promise<boolean> => {
   if (Platform.OS === 'ios') {
-    const ageData = await getAppleDeclaredAgeRangeStatus(10, 13, 16);
+    const ageData = await getAppleDeclaredAgeRangeStatus();
     return getIsConsideredOlderThaniOS(ageData, age);
   } else {
     const ageData = await getAndroidPlayAgeRangeStatus();

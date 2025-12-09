@@ -21,6 +21,7 @@ namespace margelo::nitro::playagerangedeclaration { struct DeclaredAgeRangeResul
 #include "PlayAgeRangeDeclarationResult.hpp"
 #include <NitroModules/Promise.hpp>
 #include "DeclaredAgeRangeResult.hpp"
+#include <optional>
 
 namespace margelo::nitro::playagerangedeclaration {
 
@@ -54,7 +55,7 @@ namespace margelo::nitro::playagerangedeclaration {
     public:
       // Methods
       virtual std::shared_ptr<Promise<PlayAgeRangeDeclarationResult>> getPlayAgeRangeDeclaration() = 0;
-      virtual std::shared_ptr<Promise<DeclaredAgeRangeResult>> requestDeclaredAgeRange(double firstThresholdAge, double secondThresholdAge, double thirdThresholdAge) = 0;
+      virtual std::shared_ptr<Promise<DeclaredAgeRangeResult>> requestDeclaredAgeRange(double firstThresholdAge, std::optional<double> secondThresholdAge, std::optional<double> thirdThresholdAge) = 0;
 
     protected:
       // Hybrid Setup

@@ -5,7 +5,7 @@ import NitroModules
 
 class PlayAgeRangeDeclaration: HybridPlayAgeRangeDeclarationSpec {
 
-  func requestDeclaredAgeRange(firstThresholdAge: Double, secondThresholdAge: Double, thirdThresholdAge: Double) throws -> Promise<DeclaredAgeRangeResult> {
+  func requestDeclaredAgeRange(firstThresholdAge: Double, secondThresholdAge: Double?, thirdThresholdAge: Double?) throws -> Promise<DeclaredAgeRangeResult> {
 
     return Promise.async {
       do {
@@ -15,6 +15,18 @@ class PlayAgeRangeDeclaration: HybridPlayAgeRangeDeclarationSpec {
                         userInfo: [NSLocalizedDescriptionKey: message])
         }
 
+        // You can comment out this guard if you want to test this in a region where you are not legally required to show the age verification prompt
+        guard AgeRangeService.shared.isEligibleForAgeFeatures else {
+          let message = "Declared Age Range API is not available on this device"
+            return DeclaredAgeRangeResult(
+              isEligible: false,
+              status: nil,
+              parentControls: nil,
+              lowerBound: nil,
+              upperBound: nil
+            )
+        }
+
         guard let viewController = Self.topViewController() else {
           let message = "Could not find top view controller to present UI"
           throw NSError(domain: "PlayAgeRangeDeclaration", code: 2,
@@ -22,10 +34,9 @@ class PlayAgeRangeDeclaration: HybridPlayAgeRangeDeclarationSpec {
         }
 
         let firstThreshold = Int(firstThresholdAge)
+        let secondThreshold = secondThresholdAge.map { Int($0) }
+        let thirdThreshold = thirdThresholdAge.map { Int($0) }
 
-        let secondThreshold = Int(secondThresholdAge)
-
-        let thirdThreshold = Int(thirdThresholdAge)
 
         let response = try await AgeRangeService.shared.requestAgeRange(
           ageGates: firstThreshold, secondThreshold, thirdThreshold,
@@ -45,7 +56,7 @@ class PlayAgeRangeDeclaration: HybridPlayAgeRangeDeclarationSpec {
                       statusString = "unknown"
                   }
 
-                  let controlsRawValue = declaration.activeParentalControls.rawValue
+                  let controlsRawValue = try declaration.activeParentalControls.rawValue
 
                   return DeclaredAgeRangeResult(
                     isEligible: true,
@@ -76,24 +87,6 @@ class PlayAgeRangeDeclaration: HybridPlayAgeRangeDeclarationSpec {
       }
 
       } catch {
-        // Handle notAvailable error specifically
-        // The .notAvailable error is thrown when the age range feature is not available on the device,
-        // which can occur if the device doesn't support the feature or it's not available in the user's region.
-        // This is a valid state - we return isEligible: false
-        // TODO: We should be albe to check this flag instead of relying on the error. but it was not available when this was written.
-        // See: https://developer.apple.com/documentation/declaredagerange/agerangeservice/iseligibleforagefeatures
-        if #available(iOS 26.0, *) {
-          if let ageRangeError = error as? AgeRangeService.Error,
-             case .notAvailable = ageRangeError {
-            return DeclaredAgeRangeResult(
-              isEligible: false,
-              status: nil,
-              parentControls: nil,
-              lowerBound: nil,
-              upperBound: nil
-            )
-          }
-        }
         throw error
       }
     }

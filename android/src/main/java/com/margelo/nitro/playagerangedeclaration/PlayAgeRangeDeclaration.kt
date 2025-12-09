@@ -113,10 +113,10 @@ class PlayAgeRangeDeclaration(private val appContext: Context) : HybridPlayAgeRa
     }
   }
 
-  override fun requestDeclaredAgeRange(firstThresholdAge: Double, secondThresholdAge: Double, thirdThresholdAge: Double): Promise<DeclaredAgeRangeResult> {
+  override fun requestDeclaredAgeRange(firstThresholdAge: Double, secondThresholdAge: Double?, thirdThresholdAge: Double?): Promise<DeclaredAgeRangeResult> {
     return Promise.async {
       DeclaredAgeRangeResult(
-        isEligible = true,
+        isEligible = false,
         status = null,
         lowerBound = null,
         upperBound = null,
