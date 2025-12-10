@@ -32,16 +32,28 @@ namespace margelo::nitro::playagerangedeclaration {
     [[nodiscard]]
     PlayAgeRangeDeclarationResult toCpp() const {
       static const auto clazz = javaClassStatic();
+      static const auto fieldIsEligible = clazz->getField<jboolean>("isEligible");
+      jboolean isEligible = this->getFieldValue(fieldIsEligible);
       static const auto fieldInstallId = clazz->getField<jni::JString>("installId");
       jni::local_ref<jni::JString> installId = this->getFieldValue(fieldInstallId);
       static const auto fieldUserStatus = clazz->getField<jni::JString>("userStatus");
       jni::local_ref<jni::JString> userStatus = this->getFieldValue(fieldUserStatus);
       static const auto fieldError = clazz->getField<jni::JString>("error");
       jni::local_ref<jni::JString> error = this->getFieldValue(fieldError);
+      static const auto fieldAgeLower = clazz->getField<jni::JDouble>("ageLower");
+      jni::local_ref<jni::JDouble> ageLower = this->getFieldValue(fieldAgeLower);
+      static const auto fieldAgeUpper = clazz->getField<jni::JDouble>("ageUpper");
+      jni::local_ref<jni::JDouble> ageUpper = this->getFieldValue(fieldAgeUpper);
+      static const auto fieldMostRecentApprovalDate = clazz->getField<jni::JString>("mostRecentApprovalDate");
+      jni::local_ref<jni::JString> mostRecentApprovalDate = this->getFieldValue(fieldMostRecentApprovalDate);
       return PlayAgeRangeDeclarationResult(
+        static_cast<bool>(isEligible),
         installId != nullptr ? std::make_optional(installId->toStdString()) : std::nullopt,
         userStatus != nullptr ? std::make_optional(userStatus->toStdString()) : std::nullopt,
-        error != nullptr ? std::make_optional(error->toStdString()) : std::nullopt
+        error != nullptr ? std::make_optional(error->toStdString()) : std::nullopt,
+        ageLower != nullptr ? std::make_optional(ageLower->value()) : std::nullopt,
+        ageUpper != nullptr ? std::make_optional(ageUpper->value()) : std::nullopt,
+        mostRecentApprovalDate != nullptr ? std::make_optional(mostRecentApprovalDate->toStdString()) : std::nullopt
       );
     }
 
@@ -51,14 +63,18 @@ namespace margelo::nitro::playagerangedeclaration {
      */
     [[maybe_unused]]
     static jni::local_ref<JPlayAgeRangeDeclarationResult::javaobject> fromCpp(const PlayAgeRangeDeclarationResult& value) {
-      using JSignature = JPlayAgeRangeDeclarationResult(jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>);
+      using JSignature = JPlayAgeRangeDeclarationResult(jboolean, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JString>);
       static const auto clazz = javaClassStatic();
       static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
       return create(
         clazz,
+        value.isEligible,
         value.installId.has_value() ? jni::make_jstring(value.installId.value()) : nullptr,
         value.userStatus.has_value() ? jni::make_jstring(value.userStatus.value()) : nullptr,
-        value.error.has_value() ? jni::make_jstring(value.error.value()) : nullptr
+        value.error.has_value() ? jni::make_jstring(value.error.value()) : nullptr,
+        value.ageLower.has_value() ? jni::JDouble::valueOf(value.ageLower.value()) : nullptr,
+        value.ageUpper.has_value() ? jni::JDouble::valueOf(value.ageUpper.value()) : nullptr,
+        value.mostRecentApprovalDate.has_value() ? jni::make_jstring(value.mostRecentApprovalDate.value()) : nullptr
       );
     }
   };

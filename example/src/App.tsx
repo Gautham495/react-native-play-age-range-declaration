@@ -12,28 +12,32 @@ import {
 import {
   getAndroidPlayAgeRangeStatus,
   getAppleDeclaredAgeRangeStatus,
+  type PlayAgeRangeDeclarationResult,
+  type DeclaredAgeRangeResult,
+  PlayAgeRangeDeclarationUserStatusString,
+  getIsConsideredOlderThan,
+  setAgeRangeThresholds,
 } from 'react-native-play-age-range-declaration';
 
-type PlayAgeSignalsResult = {
-  installId?: string;
-  userStatus?: string;
-  error?: string;
-};
-
-type DeclaredAgeRangeResult = {
-  status?: string;
-  parentControls?: string;
-  lowerBound?: number;
-  upperBound?: number;
-};
+setAgeRangeThresholds([13, 15]);
 
 export default function App() {
   const [androidResult, setAndroidResult] =
-    useState<PlayAgeSignalsResult | null>(null);
+    useState<PlayAgeRangeDeclarationResult | null>(null);
 
   const [appleResult, setAppleResult] = useState<DeclaredAgeRangeResult | null>(
     null
   );
+
+  const [isConsideredOlderThan18, setIsConsideredOlderThan18] = useState<
+    boolean | null
+  >(null);
+  const [isConsideredOlderThan15, setIsConsideredOlderThan15] = useState<
+    boolean | null
+  >(null);
+  const [isConsideredOlderThan13, setIsConsideredOlderThan13] = useState<
+    boolean | null
+  >(null);
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -49,10 +53,14 @@ export default function App() {
 
         setAndroidResult(data);
       } else {
-        const data = await getAppleDeclaredAgeRangeStatus(10, 13, 16);
+        const data = await getAppleDeclaredAgeRangeStatus();
 
         setAppleResult(data);
       }
+
+      setIsConsideredOlderThan18(await getIsConsideredOlderThan(18));
+      setIsConsideredOlderThan15(await getIsConsideredOlderThan(15));
+      setIsConsideredOlderThan13(await getIsConsideredOlderThan(13));
     } catch (err: any) {
       console.error('❌ Failed to fetch Age Signals:', err);
       const msg =
@@ -85,6 +93,8 @@ export default function App() {
         <ScrollView style={styles.resultBox}>
           {Platform.OS === 'ios' ? (
             <Text style={styles.resultText}>
+              Is Eligible: {appleResult ? String(appleResult?.isEligible) : ''}{' '}
+              {`\n`}
               Status: {appleResult ? appleResult?.status : ''} {`\n`}
               ParentControls: {appleResult
                 ? appleResult?.parentControls
@@ -94,10 +104,46 @@ export default function App() {
             </Text>
           ) : (
             <Text style={styles.resultText}>
+              Is Eligible:{' '}
+              {androidResult ? String(androidResult?.isEligible) : ''} {`\n`}
               Install Id: {androidResult ? androidResult?.installId : ''} {`\n`}
-              User Status: {androidResult ? androidResult?.userStatus : ''}{' '}
+              User Status:{' '}
+              {androidResult && androidResult.userStatus
+                ? PlayAgeRangeDeclarationUserStatusString[
+                    androidResult?.userStatus
+                  ]
+                : ''}
+              {'\n'}
+              Most Recent Approval Date:{' '}
+              {androidResult ? androidResult?.mostRecentApprovalDate : ''}
+              {''}
               {`\n`}
+              Age Lower: {androidResult ? androidResult?.ageLower : ''} {`\n`}
+              Age Upper: {androidResult ? androidResult?.ageUpper : ''} {`\n`}
+              Error: {androidResult ? androidResult?.error : ''} {`\n`}
             </Text>
+          )}
+
+          {isConsideredOlderThan18 ? (
+            <Text style={styles.resultText}>
+              This is only visible to users older than 18
+            </Text>
+          ) : (
+            <Text style={styles.resultText}>The user is younger than 18</Text>
+          )}
+          {isConsideredOlderThan15 ? (
+            <Text style={styles.resultText}>
+              This is only visible to users older than 15
+            </Text>
+          ) : (
+            <Text style={styles.resultText}>The user is younger than 15</Text>
+          )}
+          {isConsideredOlderThan13 ? (
+            <Text style={styles.resultText}>
+              This is only visible to users older than 13
+            </Text>
+          ) : (
+            <Text style={styles.resultText}>The user is younger than 13</Text>
           )}
         </ScrollView>
       )}

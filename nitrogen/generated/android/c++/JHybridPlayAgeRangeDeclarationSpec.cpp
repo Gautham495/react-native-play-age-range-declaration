@@ -69,9 +69,9 @@ namespace margelo::nitro::playagerangedeclaration {
       return __promise;
     }();
   }
-  std::shared_ptr<Promise<DeclaredAgeRangeResult>> JHybridPlayAgeRangeDeclarationSpec::requestDeclaredAgeRange(double firstThresholdAge, double secondThresholdAge, double thirdThresholdAge) {
-    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(double /* firstThresholdAge */, double /* secondThresholdAge */, double /* thirdThresholdAge */)>("requestDeclaredAgeRange");
-    auto __result = method(_javaPart, firstThresholdAge, secondThresholdAge, thirdThresholdAge);
+  std::shared_ptr<Promise<DeclaredAgeRangeResult>> JHybridPlayAgeRangeDeclarationSpec::requestDeclaredAgeRange(double firstThresholdAge, std::optional<double> secondThresholdAge, std::optional<double> thirdThresholdAge) {
+    static const auto method = javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>(double /* firstThresholdAge */, jni::alias_ref<jni::JDouble> /* secondThresholdAge */, jni::alias_ref<jni::JDouble> /* thirdThresholdAge */)>("requestDeclaredAgeRange");
+    auto __result = method(_javaPart, firstThresholdAge, secondThresholdAge.has_value() ? jni::JDouble::valueOf(secondThresholdAge.value()) : nullptr, thirdThresholdAge.has_value() ? jni::JDouble::valueOf(thirdThresholdAge.value()) : nullptr);
     return [&]() {
       auto __promise = Promise<DeclaredAgeRangeResult>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {

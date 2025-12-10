@@ -70,6 +70,81 @@ Android: No extra configuration needed, but for this API to work, you have to ha
 
 ## ⚙️ Usage
 
+### Initialize the package
+
+> [!NOTE]
+> **iOS Only**: `setAgeRangeThresholds` is only required for iOS. Android does not require this initialization.
+
+Before using `getIsConsideredOlderThan` on iOS, or `getAppleDeclaredAgeRangeStatus` you must initialize the package by calling `setAgeRangeThresholds` with an array of age thresholds. This should include the different ages that gate content in your app
+
+```tsx
+import { setAgeRangeThresholds } from 'react-native-play-age-range-declaration';
+
+setAgeRangeThresholds([13, 15]);
+```
+
+**Requirements:**
+- First threshold is **required**
+- Values must be between **1 and 18** (inclusive)
+- Values must be in **ascending order**
+- Values must be **at least 2 years apart**
+
+**Examples:**
+```tsx
+setAgeRangeThresholds([13]);           // Single threshold at 13
+setAgeRangeThresholds([13, 15]);       // Two thresholds at 13 and 15
+setAgeRangeThresholds([13, 15, 17]);   // Three thresholds at 13, 15, and 17
+```
+
+> [!WARNING]
+> **iOS Permission Re-prompt**: If you change the age thresholds after the user has already granted permission, iOS will re-prompt the user for permission. It's recommended to set the thresholds once at app startup and keep them consistent.
+     <img alt="android" src="./docs/img/ios_re_approval.png"  height="600" width="375"/>
+
+### Checking if the user is allowed to access age-gated content
+
+Use `getIsConsideredOlderThan` to check if a user is allowed to access age-gated content. This function works on both iOS and Android and returns `true` if the user is considered older than the specified age.
+
+```tsx
+import { getIsConsideredOlderThan } from 'react-native-play-age-range-declaration';
+
+// Check if user is older than 18
+const canAccessGatedContent = await getIsConsideredOlderThan(16);
+
+if (canAccessGatedContent) {
+  // Show 16+ content
+} else {
+  // Show age restriction message
+}
+
+```
+
+**Behavior:**
+- Returns `true` if the user is not in an applicable region where we are legally required to show the age verification prompt
+- Returns `true` if the user is older than or equal to the specified age
+- Returns `true` if the user has parental approval to view content
+- Returns `false` in all other cases
+
+**Example: Gating content based on age**
+
+```tsx
+const [isLoading, setIsLoading] = useState<boolean>(false);
+const [canAccessContent, setCanAccessContent] = useState<boolean>(false);
+
+const checkAgeRestriction = async () => {
+  const getIsConsideredOlderThan18 = await getIsConsideredOlderThan(18);
+  setCanAccessContent(getIsConsideredOlderThan18);
+};
+
+// In your component
+{ !isLoading && checkAgeRestriction ? (
+  <AgeGatedContent />
+) : (
+  <AgeRestrictionMessage />
+)}
+```
+
+### Full Example
+
 ```tsx
 import { useState } from 'react';
 import {
@@ -85,28 +160,32 @@ import {
 import {
   getAndroidPlayAgeRangeStatus,
   getAppleDeclaredAgeRangeStatus,
+  type PlayAgeRangeDeclarationResult,
+  type DeclaredAgeRangeResult,
+  PlayAgeRangeDeclarationUserStatusString,
+  getIsConsideredOlderThan,
+  setAgeRangeThresholds,
 } from 'react-native-play-age-range-declaration';
 
-type PlayAgeSignalsResult = {
-  installId?: string;
-  userStatus?: string; // https://developer.android.com/google/play/age-signals/use-age-signals-api
-  error?: string;
-};
-
-type DeclaredAgeRangeResult = {
-  status?: string;
-  parentControls?: string; // selfDeclared | guardianDeclared
-  lowerBound?: number;
-  upperBound?: number;
-};
+setAgeRangeThresholds([13, 15]);
 
 export default function App() {
   const [androidResult, setAndroidResult] =
-    useState<PlayAgeSignalsResult | null>(null);
+    useState<PlayAgeRangeDeclarationResult | null>(null);
 
   const [appleResult, setAppleResult] = useState<DeclaredAgeRangeResult | null>(
     null
   );
+
+  const [isConsideredOlderThan18, setIsConsideredOlderThan18] = useState<
+    boolean | null
+  >(null);
+  const [isConsideredOlderThan15, setIsConsideredOlderThan15] = useState<
+    boolean | null
+  >(null);
+  const [isConsideredOlderThan13, setIsConsideredOlderThan13] = useState<
+    boolean | null
+  >(null);
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -122,10 +201,14 @@ export default function App() {
 
         setAndroidResult(data);
       } else {
-        const data = await getAppleDeclaredAgeRangeStatus(10, 13, 16);
+        const data = await getAppleDeclaredAgeRangeStatus();
 
         setAppleResult(data);
       }
+
+      setIsConsideredOlderThan18(await getIsConsideredOlderThan(18));
+      setIsConsideredOlderThan15(await getIsConsideredOlderThan(15));
+      setIsConsideredOlderThan13(await getIsConsideredOlderThan(13));
     } catch (err: any) {
       console.error('❌ Failed to fetch Age Signals:', err);
       const msg =
@@ -158,6 +241,8 @@ export default function App() {
         <ScrollView style={styles.resultBox}>
           {Platform.OS === 'ios' ? (
             <Text style={styles.resultText}>
+              Is Eligible: {appleResult ? String(appleResult?.isEligible) : ''}{' '}
+              {`\n`}
               Status: {appleResult ? appleResult?.status : ''} {`\n`}
               ParentControls: {appleResult
                 ? appleResult?.parentControls
@@ -167,10 +252,46 @@ export default function App() {
             </Text>
           ) : (
             <Text style={styles.resultText}>
+              Is Eligible:{' '}
+              {androidResult ? String(androidResult?.isEligible) : ''} {`\n`}
               Install Id: {androidResult ? androidResult?.installId : ''} {`\n`}
-              User Status: {androidResult ? androidResult?.userStatus : ''}{' '}
+              User Status:{' '}
+              {androidResult && androidResult.userStatus
+                ? PlayAgeRangeDeclarationUserStatusString[
+                    androidResult?.userStatus
+                  ]
+                : ''}
+              {'\n'}
+              Most Recent Approval Date:{' '}
+              {androidResult ? androidResult?.mostRecentApprovalDate : ''}
+              {''}
               {`\n`}
+              Age Lower: {androidResult ? androidResult?.ageLower : ''} {`\n`}
+              Age Upper: {androidResult ? androidResult?.ageUpper : ''} {`\n`}
+              Error: {androidResult ? androidResult?.error : ''} {`\n`}
             </Text>
+          )}
+
+          {isConsideredOlderThan18 ? (
+            <Text style={styles.resultText}>
+              This is only visible to users older than 18
+            </Text>
+          ) : (
+            <Text style={styles.resultText}>The user is younger than 18</Text>
+          )}
+          {isConsideredOlderThan15 ? (
+            <Text style={styles.resultText}>
+              This is only visible to users older than 15
+            </Text>
+          ) : (
+            <Text style={styles.resultText}>The user is younger than 15</Text>
+          )}
+          {isConsideredOlderThan13 ? (
+            <Text style={styles.resultText}>
+              This is only visible to users older than 13
+            </Text>
+          ) : (
+            <Text style={styles.resultText}>The user is younger than 13</Text>
           )}
         </ScrollView>
       )}
@@ -247,6 +368,15 @@ const styles = StyleSheet.create({
   },
 });
 ```
+
+---
+
+## 🔍 Understanding `isEligible`
+
+Both result types include an `isEligible` boolean field that indicates whether age-related features are available and applicable for the current user:
+
+- **`true`**: The user is in a region where age verification is legally required.
+- **`false`**: The user is not in an applicable region, if isEligible is false we should be allow to let users view age gated content *(Not verified by a laywer)*
 
 ---
 

@@ -55,7 +55,7 @@ namespace margelo::nitro::playagerangedeclaration {
   public:
     // Methods
     std::shared_ptr<Promise<PlayAgeRangeDeclarationResult>> getPlayAgeRangeDeclaration() override;
-    std::shared_ptr<Promise<DeclaredAgeRangeResult>> requestDeclaredAgeRange(double firstThresholdAge, double secondThresholdAge, double thirdThresholdAge) override;
+    std::shared_ptr<Promise<DeclaredAgeRangeResult>> requestDeclaredAgeRange(double firstThresholdAge, std::optional<double> secondThresholdAge, std::optional<double> thirdThresholdAge) override;
 
   private:
     friend HybridBase;

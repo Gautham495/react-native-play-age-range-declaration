@@ -19,8 +19,8 @@ public extension PlayAgeRangeDeclarationResult {
   /**
    * Create a new instance of `PlayAgeRangeDeclarationResult`.
    */
-  init(installId: String?, userStatus: String?, error: String?) {
-    self.init({ () -> bridge.std__optional_std__string_ in
+  init(isEligible: Bool, installId: String?, userStatus: String?, error: String?, ageLower: Double?, ageUpper: Double?, mostRecentApprovalDate: String?) {
+    self.init(isEligible, { () -> bridge.std__optional_std__string_ in
       if let __unwrappedValue = installId {
         return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
       } else {
@@ -38,9 +38,38 @@ public extension PlayAgeRangeDeclarationResult {
       } else {
         return .init()
       }
+    }(), { () -> bridge.std__optional_double_ in
+      if let __unwrappedValue = ageLower {
+        return bridge.create_std__optional_double_(__unwrappedValue)
+      } else {
+        return .init()
+      }
+    }(), { () -> bridge.std__optional_double_ in
+      if let __unwrappedValue = ageUpper {
+        return bridge.create_std__optional_double_(__unwrappedValue)
+      } else {
+        return .init()
+      }
+    }(), { () -> bridge.std__optional_std__string_ in
+      if let __unwrappedValue = mostRecentApprovalDate {
+        return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
+      } else {
+        return .init()
+      }
     }())
   }
 
+  var isEligible: Bool {
+    @inline(__always)
+    get {
+      return self.__isEligible
+    }
+    @inline(__always)
+    set {
+      self.__isEligible = newValue
+    }
+  }
+  
   var installId: String? {
     @inline(__always)
     get {
@@ -104,6 +133,64 @@ public extension PlayAgeRangeDeclarationResult {
     @inline(__always)
     set {
       self.__error = { () -> bridge.std__optional_std__string_ in
+        if let __unwrappedValue = newValue {
+          return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
+        } else {
+          return .init()
+        }
+      }()
+    }
+  }
+  
+  var ageLower: Double? {
+    @inline(__always)
+    get {
+      return self.__ageLower.value
+    }
+    @inline(__always)
+    set {
+      self.__ageLower = { () -> bridge.std__optional_double_ in
+        if let __unwrappedValue = newValue {
+          return bridge.create_std__optional_double_(__unwrappedValue)
+        } else {
+          return .init()
+        }
+      }()
+    }
+  }
+  
+  var ageUpper: Double? {
+    @inline(__always)
+    get {
+      return self.__ageUpper.value
+    }
+    @inline(__always)
+    set {
+      self.__ageUpper = { () -> bridge.std__optional_double_ in
+        if let __unwrappedValue = newValue {
+          return bridge.create_std__optional_double_(__unwrappedValue)
+        } else {
+          return .init()
+        }
+      }()
+    }
+  }
+  
+  var mostRecentApprovalDate: String? {
+    @inline(__always)
+    get {
+      return { () -> String? in
+        if bridge.has_value_std__optional_std__string_(self.__mostRecentApprovalDate) {
+          let __unwrapped = bridge.get_std__optional_std__string_(self.__mostRecentApprovalDate)
+          return String(__unwrapped)
+        } else {
+          return nil
+        }
+      }()
+    }
+    @inline(__always)
+    set {
+      self.__mostRecentApprovalDate = { () -> bridge.std__optional_std__string_ in
         if let __unwrappedValue = newValue {
           return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
         } else {
