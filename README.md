@@ -4,7 +4,7 @@
   </picture>
 </a>
 
-# react-native-play-age-range-declaration (Beta)
+# react-native-play-age-range-declaration
 
 A **React Native Nitro Module** providing a unified API for **age-appropriate experiences** across platforms — bridging:
 
@@ -15,8 +15,7 @@ A **React Native Nitro Module** providing a unified API for **age-appropriate ex
 
 > [!IMPORTANT]
 >
-> - Need testers for testing the library in a production based app with Android 15 or Android 16 and above!
-> - The APIs for Google Play Age Signals are returning "Not Yet Implemented" as of Nov 2025 for my app tested in my Android 14 device powered device which I bought in 2022.
+> - Works well in both Android & iOS - Special thanks to https://github.com/luigiinred
 
 ---
 
@@ -28,7 +27,7 @@ npm install react-native-play-age-range-declaration react-native-nitro-modules
 
 > [!NOTE]
 >
-> - The APIs for Apple's Declared Age Range works in iOS 26 as I have tested in real device and I have attached a video showing the workings of it.
+> - The APIs for Apple's Declared Age Range and the android play age works in iOS 26 and in Android 15+ as I have tested in real device and I have attached a gif showing the workings of it.
 
 ## Demo
 
@@ -39,10 +38,10 @@ npm install react-native-play-age-range-declaration react-native-nitro-modules
   </tr>
   <tr>
     <td align="center">
-      <video src="https://github.com/user-attachments/assets/5fa5c82d-054c-46a2-bfec-4a0b4398576f" height="650" width="300" controls></video>
+    <img alt="android" src="./docs/videos/iOS.gif"  height="650" width="300"/>
     </td>
     <td align="center">
-     <img alt="android" src="./docs/img/android.jpg"  height="650" width="300"/>
+     <img alt="android" src="./docs/videos/android.gif"  height="650" width="300"/>
     </td>
   </tr>
 </table>
