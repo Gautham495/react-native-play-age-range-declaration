@@ -15,7 +15,9 @@ A **React Native Nitro Module** providing a unified API for **age-appropriate ex
 
 > [!IMPORTANT]
 >
-> - Works well in both Android & iOS - Special thanks to https://github.com/luigiinred
+> - Works in both Expo & Bare (Non Expo) React Native projects.
+> - Works well in both Android & iOS - Special thanks to https://github.com/luigiinred for helping out test on real Android & iOS devices to finalise the APIs.
+> - Will start working properly from January 1st 2026, as mentioned by Apple & Google.
 
 ---
 
