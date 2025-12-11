@@ -37,7 +37,7 @@ export const setAgeRangeThresholds = (
 ): void => {
   ageRangeThresholdManager.setAgeRangeThresholds(thresholds);
 };
-// Export types for consumers
+
 export type { DeclaredAgeRangeResult, PlayAgeRangeDeclarationResult };
 
 export const getIsConsideredOlderThan = async (

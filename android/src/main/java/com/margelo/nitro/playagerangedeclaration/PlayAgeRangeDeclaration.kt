@@ -17,10 +17,7 @@ import java.util.Date
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-
 // https://developer.android.com/google/play/age-signals/test-age-signals-api
-
-
 
 @DoNotStrip
 class PlayAgeRangeDeclaration(private val appContext: Context) : HybridPlayAgeRangeDeclarationSpec() {
@@ -55,7 +52,6 @@ class PlayAgeRangeDeclaration(private val appContext: Context) : HybridPlayAgeRa
         // Comment the line below to use the FakeAgeSignalsManager instead of the real API
         val manager = AgeSignalsManagerFactory.create(appContext)
 
-        
         val request = AgeSignalsRequest.builder().build()
 
         val result = suspendCancellableCoroutine<PlayAgeRangeDeclarationResult> { cont ->
