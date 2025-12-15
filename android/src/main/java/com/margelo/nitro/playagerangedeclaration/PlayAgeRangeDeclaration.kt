@@ -20,7 +20,11 @@ import java.util.Locale
 // https://developer.android.com/google/play/age-signals/test-age-signals-api
 
 @DoNotStrip
-class PlayAgeRangeDeclaration(private val appContext: Context) : HybridPlayAgeRangeDeclarationSpec() {
+class PlayAgeRangeDeclaration : HybridPlayAgeRangeDeclarationSpec() {
+
+  private val appContext: Context
+        get() = NitroModules.applicationContext 
+            ?: throw IllegalStateException("Application context not available")
 
   override fun getPlayAgeRangeDeclaration(): Promise<PlayAgeRangeDeclarationResult> {
     return Promise.async {
@@ -34,7 +38,6 @@ class PlayAgeRangeDeclaration(private val appContext: Context) : HybridPlayAgeRa
         // - AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_PENDING - Pending approval
         // - AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_DENIED - Approval denied
         // - AgeSignalsVerificationStatus.UNKNOWN - User status unknown
-        
 
         // val fakeVerifiedUser = AgeSignalsResult.builder()
         //   .setUserStatus(AgeSignalsVerificationStatus.SUPERVISED)
