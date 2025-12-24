@@ -9,23 +9,23 @@ class PlayAgeRangeDeclaration: HybridPlayAgeRangeDeclarationSpec {
 
     return Promise.async {
       do {
-        guard #available(iOS 26.0, *) else {
-          let message = "Declared Age Range API requires iOS 26+"
+        guard #available(iOS 26.2, *) else {
+          let message = "Declared Age Range API requires iOS 26.2"
           throw NSError(domain: "PlayAgeRangeDeclaration", code: 1,
                         userInfo: [NSLocalizedDescriptionKey: message])
         }
 
         // You can comment out this guard if you want to test this in a region where you are not legally required to show the age verification prompt
-        // guard AgeRangeService.shared.isEligibleForAgeFeatures else {
-        //   let message = "Declared Age Range API is not available on this device"
-        //     return DeclaredAgeRangeResult(
-        //       isEligible: false,
-        //       status: nil,
-        //       parentControls: nil,
-        //       lowerBound: nil,
-        //       upperBound: nil
-        //     )
-        // }
+        guard try await AgeRangeService.shared.isEligibleForAgeFeatures else {
+          let message = "Declared Age Range API is not available on this device"
+            return DeclaredAgeRangeResult(
+              isEligible: false,
+              status: nil,
+              parentControls: nil,
+              lowerBound: nil,
+              upperBound: nil
+            )
+        }
 
         guard let viewController = Self.topViewController() else {
           let message = "Could not find top view controller to present UI"
@@ -115,4 +115,3 @@ class PlayAgeRangeDeclaration: HybridPlayAgeRangeDeclarationSpec {
     return top
   }
 }
-
