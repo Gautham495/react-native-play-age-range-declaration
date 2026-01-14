@@ -16,7 +16,7 @@ class PlayAgeRangeDeclaration: HybridPlayAgeRangeDeclarationSpec {
         }
 
         // You can comment out this guard if you want to test this in a region where you are not legally required to show the age verification prompt
-        guard try await AgeRangeService.shared.isEligibleForAgeFeatures else {
+        guard try await AgeRangeService.shared.isEligible else {
           let message = "Declared Age Range API is not available on this device"
             return DeclaredAgeRangeResult(
               isEligible: false,
