@@ -8,6 +8,7 @@ export const PlayAgeRangeDeclarationUserStatus = {
   UNKNOWN: '4',
 } as const;
 
+// https://developer.android.com/google/play/age-signals/use-age-signals-api#age-signals-responses
 export const PlayAgeRangeDeclarationUserStatusString: Record<string, string> = {
   [PlayAgeRangeDeclarationUserStatus.VERIFIED]: 'VERIFIED',
   [PlayAgeRangeDeclarationUserStatus.SUPERVISED]: 'SUPERVISED',
@@ -18,19 +19,41 @@ export const PlayAgeRangeDeclarationUserStatusString: Record<string, string> = {
   [PlayAgeRangeDeclarationUserStatus.UNKNOWN]: 'UNKNOWN',
 };
 
+export type PlayAgeRangeDeclarationUserStatusValues =
+  (typeof PlayAgeRangeDeclarationUserStatus)[keyof typeof PlayAgeRangeDeclarationUserStatus];
+
 export interface PlayAgeRangeDeclarationResult {
   isEligible: boolean;
   installId?: string;
-  userStatus?: string;
+  userStatus?: PlayAgeRangeDeclarationUserStatusValues;
   error?: string;
   ageLower?: number;
   ageUpper?: number;
   mostRecentApprovalDate?: string; // ISO 8601 format (YYYY-MM-DD)
 }
 
+// https://developer.apple.com/documentation/declaredagerange/agerangeservice/agerangedeclaration#Determining-the-age-set-method
+export const AppleAgeRangeDeclarationUserStatus = {
+  checkedByOtherMethod: 'checkedByOtherMethod',
+  governmentIDChecked: 'governmentIDChecked',
+  guardianCheckedByOtherMethod: 'guardianCheckedByOtherMethod',
+  guardianDeclared: 'guardianDeclared',
+  guardianGovernmentIDChecked: 'guardianGovernmentIDChecked',
+  guardianPaymentChecked: 'guardianPaymentChecked',
+  paymentChecked: 'paymentChecked',
+  selfDeclared: 'selfDeclared',
+
+  // Library defined statuses
+  declined: 'declined', // Declined sharing age range
+  unknown: 'unknown', // Fallback value
+} as const;
+
+export type AppleAgeRangeDeclarationUserStatusValues =
+  (typeof AppleAgeRangeDeclarationUserStatus)[keyof typeof AppleAgeRangeDeclarationUserStatus];
+
 export interface DeclaredAgeRangeResult {
   isEligible: boolean;
-  status?: string;
+  status?: AppleAgeRangeDeclarationUserStatusValues;
   parentControls?: string;
   lowerBound?: number;
   upperBound?: number;
