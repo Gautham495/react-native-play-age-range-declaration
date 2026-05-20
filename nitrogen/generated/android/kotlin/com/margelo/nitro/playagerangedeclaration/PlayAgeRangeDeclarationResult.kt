@@ -26,7 +26,7 @@ data class PlayAgeRangeDeclarationResult(
   val installId: String?,
   @DoNotStrip
   @Keep
-  val userStatus: String?,
+  val userStatus: PlayAgeRangeDeclarationUserStatusValues?,
   @DoNotStrip
   @Keep
   val error: String?,
@@ -74,7 +74,7 @@ data class PlayAgeRangeDeclarationResult(
     @Keep
     @Suppress("unused")
     @JvmStatic
-    private fun fromCpp(isEligible: Boolean, installId: String?, userStatus: String?, error: String?, ageLower: Double?, ageUpper: Double?, mostRecentApprovalDate: String?): PlayAgeRangeDeclarationResult {
+    private fun fromCpp(isEligible: Boolean, installId: String?, userStatus: PlayAgeRangeDeclarationUserStatusValues?, error: String?, ageLower: Double?, ageUpper: Double?, mostRecentApprovalDate: String?): PlayAgeRangeDeclarationResult {
       return PlayAgeRangeDeclarationResult(isEligible, installId, userStatus, error, ageLower, ageUpper, mostRecentApprovalDate)
     }
   }

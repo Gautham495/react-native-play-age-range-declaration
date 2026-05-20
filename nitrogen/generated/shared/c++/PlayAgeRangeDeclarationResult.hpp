@@ -28,10 +28,12 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-
+// Forward declaration of `PlayAgeRangeDeclarationUserStatusValues` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class PlayAgeRangeDeclarationUserStatusValues; }
 
 #include <string>
 #include <optional>
+#include "PlayAgeRangeDeclarationUserStatusValues.hpp"
 
 namespace margelo::nitro::playagerangedeclaration {
 
@@ -42,7 +44,7 @@ namespace margelo::nitro::playagerangedeclaration {
   public:
     bool isEligible     SWIFT_PRIVATE;
     std::optional<std::string> installId     SWIFT_PRIVATE;
-    std::optional<std::string> userStatus     SWIFT_PRIVATE;
+    std::optional<PlayAgeRangeDeclarationUserStatusValues> userStatus     SWIFT_PRIVATE;
     std::optional<std::string> error     SWIFT_PRIVATE;
     std::optional<double> ageLower     SWIFT_PRIVATE;
     std::optional<double> ageUpper     SWIFT_PRIVATE;
@@ -50,7 +52,7 @@ namespace margelo::nitro::playagerangedeclaration {
 
   public:
     PlayAgeRangeDeclarationResult() = default;
-    explicit PlayAgeRangeDeclarationResult(bool isEligible, std::optional<std::string> installId, std::optional<std::string> userStatus, std::optional<std::string> error, std::optional<double> ageLower, std::optional<double> ageUpper, std::optional<std::string> mostRecentApprovalDate): isEligible(isEligible), installId(installId), userStatus(userStatus), error(error), ageLower(ageLower), ageUpper(ageUpper), mostRecentApprovalDate(mostRecentApprovalDate) {}
+    explicit PlayAgeRangeDeclarationResult(bool isEligible, std::optional<std::string> installId, std::optional<PlayAgeRangeDeclarationUserStatusValues> userStatus, std::optional<std::string> error, std::optional<double> ageLower, std::optional<double> ageUpper, std::optional<std::string> mostRecentApprovalDate): isEligible(isEligible), installId(installId), userStatus(userStatus), error(error), ageLower(ageLower), ageUpper(ageUpper), mostRecentApprovalDate(mostRecentApprovalDate) {}
 
   public:
     friend bool operator==(const PlayAgeRangeDeclarationResult& lhs, const PlayAgeRangeDeclarationResult& rhs) = default;
@@ -68,7 +70,7 @@ namespace margelo::nitro {
       return margelo::nitro::playagerangedeclaration::PlayAgeRangeDeclarationResult(
         JSIConverter<bool>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "isEligible"))),
         JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "installId"))),
-        JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "userStatus"))),
+        JSIConverter<std::optional<margelo::nitro::playagerangedeclaration::PlayAgeRangeDeclarationUserStatusValues>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "userStatus"))),
         JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "error"))),
         JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "ageLower"))),
         JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "ageUpper"))),
@@ -79,7 +81,7 @@ namespace margelo::nitro {
       jsi::Object obj(runtime);
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "isEligible"), JSIConverter<bool>::toJSI(runtime, arg.isEligible));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "installId"), JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.installId));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "userStatus"), JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.userStatus));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "userStatus"), JSIConverter<std::optional<margelo::nitro::playagerangedeclaration::PlayAgeRangeDeclarationUserStatusValues>>::toJSI(runtime, arg.userStatus));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "error"), JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.error));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "ageLower"), JSIConverter<std::optional<double>>::toJSI(runtime, arg.ageLower));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "ageUpper"), JSIConverter<std::optional<double>>::toJSI(runtime, arg.ageUpper));
@@ -96,7 +98,7 @@ namespace margelo::nitro {
       }
       if (!JSIConverter<bool>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "isEligible")))) return false;
       if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "installId")))) return false;
-      if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "userStatus")))) return false;
+      if (!JSIConverter<std::optional<margelo::nitro::playagerangedeclaration::PlayAgeRangeDeclarationUserStatusValues>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "userStatus")))) return false;
       if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "error")))) return false;
       if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "ageLower")))) return false;
       if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "ageUpper")))) return false;

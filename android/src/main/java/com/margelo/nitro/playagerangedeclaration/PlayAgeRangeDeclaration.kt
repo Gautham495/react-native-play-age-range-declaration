@@ -40,11 +40,18 @@ class PlayAgeRangeDeclaration : HybridPlayAgeRangeDeclarationSpec() {
             .addOnSuccessListener { r ->
               val isoDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
               val approvalDate = r.mostRecentApprovalDate()?.let { isoDateFormat.format(it) }
-              val userStatusString = r.userStatus()?.toString()
               // userStatus will be empty if the user is not in a location where are legally required to show show the age verification prompt
               // This is different from UNKNOWN where the user is not verified, but is in an applicable region
               // https://developer.android.com/google/play/age-signals/use-age-signals-api#age-signals-responses
-              val isEligible = !userStatusString.isNullOrEmpty()
+              val userStatus = when (r.userStatus()) {
+                AgeSignalsVerificationStatus.VERIFIED -> PlayAgeRangeDeclarationUserStatusValues._0
+                AgeSignalsVerificationStatus.SUPERVISED -> PlayAgeRangeDeclarationUserStatusValues._1
+                AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_PENDING -> PlayAgeRangeDeclarationUserStatusValues._2
+                AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_DENIED -> PlayAgeRangeDeclarationUserStatusValues._3
+                AgeSignalsVerificationStatus.UNKNOWN -> PlayAgeRangeDeclarationUserStatusValues._4
+                else -> null
+              }
+              val isEligible = userStatus != null
 
               cont.resume(
                 PlayAgeRangeDeclarationResult(
@@ -53,7 +60,7 @@ class PlayAgeRangeDeclaration : HybridPlayAgeRangeDeclarationSpec() {
                   ageLower = r.ageLower()?.toDouble(),
                   ageUpper = r.ageUpper()?.toDouble(),
                   mostRecentApprovalDate = approvalDate,
-                  userStatus = userStatusString,
+                  userStatus = userStatus,
                   error = null
                 )
               )

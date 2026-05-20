@@ -23,7 +23,7 @@ data class DeclaredAgeRangeResult(
   val isEligible: Boolean,
   @DoNotStrip
   @Keep
-  val status: String?,
+  val status: AppleAgeRangeDeclarationUserStatusValues?,
   @DoNotStrip
   @Keep
   val parentControls: String?,
@@ -64,7 +64,7 @@ data class DeclaredAgeRangeResult(
     @Keep
     @Suppress("unused")
     @JvmStatic
-    private fun fromCpp(isEligible: Boolean, status: String?, parentControls: String?, lowerBound: Double?, upperBound: Double?): DeclaredAgeRangeResult {
+    private fun fromCpp(isEligible: Boolean, status: AppleAgeRangeDeclarationUserStatusValues?, parentControls: String?, lowerBound: Double?, upperBound: Double?): DeclaredAgeRangeResult {
       return DeclaredAgeRangeResult(isEligible, status, parentControls, lowerBound, upperBound)
     }
   }

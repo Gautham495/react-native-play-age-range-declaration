@@ -8,21 +8,27 @@
 #pragma once
 
 // Forward declarations of C++ defined types
+// Forward declaration of `AppleAgeRangeDeclarationUserStatusValues` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class AppleAgeRangeDeclarationUserStatusValues; }
 // Forward declaration of `DeclaredAgeRangeResult` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { struct DeclaredAgeRangeResult; }
 // Forward declaration of `HybridPlayAgeRangeDeclarationSpec` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { class HybridPlayAgeRangeDeclarationSpec; }
 // Forward declaration of `PlayAgeRangeDeclarationResult` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { struct PlayAgeRangeDeclarationResult; }
+// Forward declaration of `PlayAgeRangeDeclarationUserStatusValues` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class PlayAgeRangeDeclarationUserStatusValues; }
 
 // Forward declarations of Swift defined types
 // Forward declaration of `HybridPlayAgeRangeDeclarationSpec_cxx` to properly resolve imports.
 namespace PlayAgeRangeDeclaration { class HybridPlayAgeRangeDeclarationSpec_cxx; }
 
 // Include C++ defined types
+#include "AppleAgeRangeDeclarationUserStatusValues.hpp"
 #include "DeclaredAgeRangeResult.hpp"
 #include "HybridPlayAgeRangeDeclarationSpec.hpp"
 #include "PlayAgeRangeDeclarationResult.hpp"
+#include "PlayAgeRangeDeclarationUserStatusValues.hpp"
 #include <NitroModules/Promise.hpp>
 #include <NitroModules/PromiseHolder.hpp>
 #include <NitroModules/Result.hpp>
@@ -50,6 +56,21 @@ namespace margelo::nitro::playagerangedeclaration::bridge::swift {
     return optional.has_value();
   }
   inline std::string get_std__optional_std__string_(const std::optional<std::string>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<PlayAgeRangeDeclarationUserStatusValues>
+  /**
+   * Specialized version of `std::optional<PlayAgeRangeDeclarationUserStatusValues>`.
+   */
+  using std__optional_PlayAgeRangeDeclarationUserStatusValues_ = std::optional<PlayAgeRangeDeclarationUserStatusValues>;
+  inline std::optional<PlayAgeRangeDeclarationUserStatusValues> create_std__optional_PlayAgeRangeDeclarationUserStatusValues_(const PlayAgeRangeDeclarationUserStatusValues& value) noexcept {
+    return std::optional<PlayAgeRangeDeclarationUserStatusValues>(value);
+  }
+  inline bool has_value_std__optional_PlayAgeRangeDeclarationUserStatusValues_(const std::optional<PlayAgeRangeDeclarationUserStatusValues>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline PlayAgeRangeDeclarationUserStatusValues get_std__optional_PlayAgeRangeDeclarationUserStatusValues_(const std::optional<PlayAgeRangeDeclarationUserStatusValues>& optional) noexcept {
     return optional.value();
   }
   
@@ -122,6 +143,21 @@ namespace margelo::nitro::playagerangedeclaration::bridge::swift {
   Func_void_std__exception_ptr create_Func_void_std__exception_ptr(void* NON_NULL swiftClosureWrapper) noexcept;
   inline Func_void_std__exception_ptr_Wrapper wrap_Func_void_std__exception_ptr(Func_void_std__exception_ptr value) noexcept {
     return Func_void_std__exception_ptr_Wrapper(std::move(value));
+  }
+  
+  // pragma MARK: std::optional<AppleAgeRangeDeclarationUserStatusValues>
+  /**
+   * Specialized version of `std::optional<AppleAgeRangeDeclarationUserStatusValues>`.
+   */
+  using std__optional_AppleAgeRangeDeclarationUserStatusValues_ = std::optional<AppleAgeRangeDeclarationUserStatusValues>;
+  inline std::optional<AppleAgeRangeDeclarationUserStatusValues> create_std__optional_AppleAgeRangeDeclarationUserStatusValues_(const AppleAgeRangeDeclarationUserStatusValues& value) noexcept {
+    return std::optional<AppleAgeRangeDeclarationUserStatusValues>(value);
+  }
+  inline bool has_value_std__optional_AppleAgeRangeDeclarationUserStatusValues_(const std::optional<AppleAgeRangeDeclarationUserStatusValues>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline AppleAgeRangeDeclarationUserStatusValues get_std__optional_AppleAgeRangeDeclarationUserStatusValues_(const std::optional<AppleAgeRangeDeclarationUserStatusValues>& optional) noexcept {
+    return optional.value();
   }
   
   // pragma MARK: std::shared_ptr<Promise<DeclaredAgeRangeResult>>

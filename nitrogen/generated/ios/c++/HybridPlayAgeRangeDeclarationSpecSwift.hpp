@@ -14,14 +14,20 @@ namespace PlayAgeRangeDeclaration { class HybridPlayAgeRangeDeclarationSpec_cxx;
 
 // Forward declaration of `PlayAgeRangeDeclarationResult` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { struct PlayAgeRangeDeclarationResult; }
+// Forward declaration of `PlayAgeRangeDeclarationUserStatusValues` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class PlayAgeRangeDeclarationUserStatusValues; }
 // Forward declaration of `DeclaredAgeRangeResult` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { struct DeclaredAgeRangeResult; }
+// Forward declaration of `AppleAgeRangeDeclarationUserStatusValues` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class AppleAgeRangeDeclarationUserStatusValues; }
 
 #include "PlayAgeRangeDeclarationResult.hpp"
 #include <NitroModules/Promise.hpp>
 #include <string>
 #include <optional>
+#include "PlayAgeRangeDeclarationUserStatusValues.hpp"
 #include "DeclaredAgeRangeResult.hpp"
+#include "AppleAgeRangeDeclarationUserStatusValues.hpp"
 
 #include "PlayAgeRangeDeclaration-Swift-Cxx-Umbrella.hpp"
 
