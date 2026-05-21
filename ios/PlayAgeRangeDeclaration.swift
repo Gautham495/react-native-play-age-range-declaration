@@ -47,20 +47,19 @@ class PlayAgeRangeDeclaration: HybridPlayAgeRangeDeclarationSpec {
 
                 case .sharing(let declaration):
 
-                  let statusString: String
+                  let status: AppleAgeRangeDeclarationUserStatusValues
 
                   if let declarationStatus = declaration.ageRangeDeclaration {
-                      statusString = String(describing: declarationStatus)
-
+                    status = AppleAgeRangeDeclarationUserStatusValues(fromString: String(describing: declarationStatus)) ?? .unknown
                   } else {
-                      statusString = "unknown"
+                    status = .unknown
                   }
 
                   let controlsRawValue = try declaration.activeParentalControls.rawValue
 
                   return DeclaredAgeRangeResult(
                     isEligible: true,
-                    status: statusString,
+                    status: status,
                     parentControls: "\(controlsRawValue)",
                     lowerBound: declaration.lowerBound.map { Double($0) },
                     upperBound: declaration.upperBound.map { Double($0) }
@@ -69,7 +68,7 @@ class PlayAgeRangeDeclaration: HybridPlayAgeRangeDeclarationSpec {
                 case .declinedSharing:
                   return DeclaredAgeRangeResult(
                     isEligible: true,
-                    status: "declined",
+                    status: .declined,
                     parentControls: nil,
                     lowerBound: nil,
                     upperBound: nil
@@ -78,7 +77,7 @@ class PlayAgeRangeDeclaration: HybridPlayAgeRangeDeclarationSpec {
                 @unknown default:
                   return DeclaredAgeRangeResult(
                     isEligible: true,
-                    status: "unknown",
+                    status: .unknown,
                     parentControls: nil,
                     lowerBound: nil,
                     upperBound: nil
