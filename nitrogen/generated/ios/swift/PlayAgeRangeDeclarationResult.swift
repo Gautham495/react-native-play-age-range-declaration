@@ -18,16 +18,16 @@ public extension PlayAgeRangeDeclarationResult {
   /**
    * Create a new instance of `PlayAgeRangeDeclarationResult`.
    */
-  init(isEligible: Bool, installId: String?, userStatus: PlayAgeRangeDeclarationUserStatusValues?, error: String?, ageLower: Double?, ageUpper: Double?, mostRecentApprovalDate: String?) {
+  init(isEligible: Bool, installId: String?, userStatus: PlayAgeRangeDeclarationUserStatus?, error: String?, ageLower: Double?, ageUpper: Double?, mostRecentApprovalDate: String?) {
     self.init(isEligible, { () -> bridge.std__optional_std__string_ in
       if let __unwrappedValue = installId {
         return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
       } else {
         return .init()
       }
-    }(), { () -> bridge.std__optional_PlayAgeRangeDeclarationUserStatusValues_ in
+    }(), { () -> bridge.std__optional_PlayAgeRangeDeclarationUserStatus_ in
       if let __unwrappedValue = userStatus {
-        return bridge.create_std__optional_PlayAgeRangeDeclarationUserStatusValues_(__unwrappedValue)
+        return bridge.create_std__optional_PlayAgeRangeDeclarationUserStatus_(__unwrappedValue)
       } else {
         return .init()
       }
@@ -76,8 +76,8 @@ public extension PlayAgeRangeDeclarationResult {
   }
   
   @inline(__always)
-  var userStatus: PlayAgeRangeDeclarationUserStatusValues? {
-    return self.__userStatus.value
+  var userStatus: PlayAgeRangeDeclarationUserStatus? {
+    return self.__userStatus.has_value() ? self.__userStatus.pointee : nil
   }
   
   @inline(__always)

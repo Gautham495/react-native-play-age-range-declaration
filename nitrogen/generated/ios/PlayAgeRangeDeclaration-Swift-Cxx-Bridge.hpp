@@ -16,8 +16,8 @@ namespace margelo::nitro::playagerangedeclaration { struct DeclaredAgeRangeResul
 namespace margelo::nitro::playagerangedeclaration { class HybridPlayAgeRangeDeclarationSpec; }
 // Forward declaration of `PlayAgeRangeDeclarationResult` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { struct PlayAgeRangeDeclarationResult; }
-// Forward declaration of `PlayAgeRangeDeclarationUserStatusValues` to properly resolve imports.
-namespace margelo::nitro::playagerangedeclaration { enum class PlayAgeRangeDeclarationUserStatusValues; }
+// Forward declaration of `PlayAgeRangeDeclarationUserStatus` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class PlayAgeRangeDeclarationUserStatus; }
 
 // Forward declarations of Swift defined types
 // Forward declaration of `HybridPlayAgeRangeDeclarationSpec_cxx` to properly resolve imports.
@@ -28,7 +28,7 @@ namespace PlayAgeRangeDeclaration { class HybridPlayAgeRangeDeclarationSpec_cxx;
 #include "DeclaredAgeRangeResult.hpp"
 #include "HybridPlayAgeRangeDeclarationSpec.hpp"
 #include "PlayAgeRangeDeclarationResult.hpp"
-#include "PlayAgeRangeDeclarationUserStatusValues.hpp"
+#include "PlayAgeRangeDeclarationUserStatus.hpp"
 #include <NitroModules/Promise.hpp>
 #include <NitroModules/PromiseHolder.hpp>
 #include <NitroModules/Result.hpp>
@@ -59,18 +59,18 @@ namespace margelo::nitro::playagerangedeclaration::bridge::swift {
     return optional.value();
   }
   
-  // pragma MARK: std::optional<PlayAgeRangeDeclarationUserStatusValues>
+  // pragma MARK: std::optional<PlayAgeRangeDeclarationUserStatus>
   /**
-   * Specialized version of `std::optional<PlayAgeRangeDeclarationUserStatusValues>`.
+   * Specialized version of `std::optional<PlayAgeRangeDeclarationUserStatus>`.
    */
-  using std__optional_PlayAgeRangeDeclarationUserStatusValues_ = std::optional<PlayAgeRangeDeclarationUserStatusValues>;
-  inline std::optional<PlayAgeRangeDeclarationUserStatusValues> create_std__optional_PlayAgeRangeDeclarationUserStatusValues_(const PlayAgeRangeDeclarationUserStatusValues& value) noexcept {
-    return std::optional<PlayAgeRangeDeclarationUserStatusValues>(value);
+  using std__optional_PlayAgeRangeDeclarationUserStatus_ = std::optional<PlayAgeRangeDeclarationUserStatus>;
+  inline std::optional<PlayAgeRangeDeclarationUserStatus> create_std__optional_PlayAgeRangeDeclarationUserStatus_(const PlayAgeRangeDeclarationUserStatus& value) noexcept {
+    return std::optional<PlayAgeRangeDeclarationUserStatus>(value);
   }
-  inline bool has_value_std__optional_PlayAgeRangeDeclarationUserStatusValues_(const std::optional<PlayAgeRangeDeclarationUserStatusValues>& optional) noexcept {
+  inline bool has_value_std__optional_PlayAgeRangeDeclarationUserStatus_(const std::optional<PlayAgeRangeDeclarationUserStatus>& optional) noexcept {
     return optional.has_value();
   }
-  inline PlayAgeRangeDeclarationUserStatusValues get_std__optional_PlayAgeRangeDeclarationUserStatusValues_(const std::optional<PlayAgeRangeDeclarationUserStatusValues>& optional) noexcept {
+  inline PlayAgeRangeDeclarationUserStatus get_std__optional_PlayAgeRangeDeclarationUserStatus_(const std::optional<PlayAgeRangeDeclarationUserStatus>& optional) noexcept {
     return optional.value();
   }
   
