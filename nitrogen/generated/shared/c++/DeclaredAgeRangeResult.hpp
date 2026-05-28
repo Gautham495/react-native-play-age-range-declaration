@@ -28,10 +28,12 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
+// Forward declaration of `AppleAgeRangeDeclarationUserStatusValues` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class AppleAgeRangeDeclarationUserStatusValues; }
 
-
-#include <string>
+#include "AppleAgeRangeDeclarationUserStatusValues.hpp"
 #include <optional>
+#include <string>
 
 namespace margelo::nitro::playagerangedeclaration {
 
@@ -41,14 +43,14 @@ namespace margelo::nitro::playagerangedeclaration {
   struct DeclaredAgeRangeResult final {
   public:
     bool isEligible     SWIFT_PRIVATE;
-    std::optional<std::string> status     SWIFT_PRIVATE;
+    std::optional<AppleAgeRangeDeclarationUserStatusValues> status     SWIFT_PRIVATE;
     std::optional<std::string> parentControls     SWIFT_PRIVATE;
     std::optional<double> lowerBound     SWIFT_PRIVATE;
     std::optional<double> upperBound     SWIFT_PRIVATE;
 
   public:
     DeclaredAgeRangeResult() = default;
-    explicit DeclaredAgeRangeResult(bool isEligible, std::optional<std::string> status, std::optional<std::string> parentControls, std::optional<double> lowerBound, std::optional<double> upperBound): isEligible(isEligible), status(status), parentControls(parentControls), lowerBound(lowerBound), upperBound(upperBound) {}
+    explicit DeclaredAgeRangeResult(bool isEligible, std::optional<AppleAgeRangeDeclarationUserStatusValues> status, std::optional<std::string> parentControls, std::optional<double> lowerBound, std::optional<double> upperBound): isEligible(isEligible), status(status), parentControls(parentControls), lowerBound(lowerBound), upperBound(upperBound) {}
 
   public:
     friend bool operator==(const DeclaredAgeRangeResult& lhs, const DeclaredAgeRangeResult& rhs) = default;
@@ -65,7 +67,7 @@ namespace margelo::nitro {
       jsi::Object obj = arg.asObject(runtime);
       return margelo::nitro::playagerangedeclaration::DeclaredAgeRangeResult(
         JSIConverter<bool>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "isEligible"))),
-        JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "status"))),
+        JSIConverter<std::optional<margelo::nitro::playagerangedeclaration::AppleAgeRangeDeclarationUserStatusValues>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "status"))),
         JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "parentControls"))),
         JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "lowerBound"))),
         JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "upperBound")))
@@ -74,7 +76,7 @@ namespace margelo::nitro {
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::playagerangedeclaration::DeclaredAgeRangeResult& arg) {
       jsi::Object obj(runtime);
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "isEligible"), JSIConverter<bool>::toJSI(runtime, arg.isEligible));
-      obj.setProperty(runtime, PropNameIDCache::get(runtime, "status"), JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.status));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "status"), JSIConverter<std::optional<margelo::nitro::playagerangedeclaration::AppleAgeRangeDeclarationUserStatusValues>>::toJSI(runtime, arg.status));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "parentControls"), JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.parentControls));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "lowerBound"), JSIConverter<std::optional<double>>::toJSI(runtime, arg.lowerBound));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "upperBound"), JSIConverter<std::optional<double>>::toJSI(runtime, arg.upperBound));
@@ -89,7 +91,7 @@ namespace margelo::nitro {
         return false;
       }
       if (!JSIConverter<bool>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "isEligible")))) return false;
-      if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "status")))) return false;
+      if (!JSIConverter<std::optional<margelo::nitro::playagerangedeclaration::AppleAgeRangeDeclarationUserStatusValues>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "status")))) return false;
       if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "parentControls")))) return false;
       if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "lowerBound")))) return false;
       if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "upperBound")))) return false;

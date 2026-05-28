@@ -25,7 +25,7 @@ import java.util.Locale
 class PlayAgeRangeDeclaration : HybridPlayAgeRangeDeclarationSpec() {
 
   private val appContext: Context
-        get() = NitroModules.applicationContext 
+        get() = NitroModules.applicationContext
             ?: throw IllegalStateException("Application context not available")
 
   override fun getPlayAgeRangeDeclaration(): Promise<PlayAgeRangeDeclarationResult> {
@@ -40,11 +40,18 @@ class PlayAgeRangeDeclaration : HybridPlayAgeRangeDeclarationSpec() {
             .addOnSuccessListener { r ->
               val isoDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
               val approvalDate = r.mostRecentApprovalDate()?.let { isoDateFormat.format(it) }
-              val userStatusString = r.userStatus()?.toString()
               // userStatus will be empty if the user is not in a location where are legally required to show show the age verification prompt
               // This is different from UNKNOWN where the user is not verified, but is in an applicable region
               // https://developer.android.com/google/play/age-signals/use-age-signals-api#age-signals-responses
-              val isEligible = !userStatusString.isNullOrEmpty()
+              val userStatus = when (r.userStatus()) {
+                AgeSignalsVerificationStatus.VERIFIED -> PlayAgeRangeDeclarationUserStatus.VERIFIED
+                AgeSignalsVerificationStatus.SUPERVISED -> PlayAgeRangeDeclarationUserStatus.SUPERVISED
+                AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_PENDING -> PlayAgeRangeDeclarationUserStatus.SUPERVISED_APPROVAL_PENDING
+                AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_DENIED -> PlayAgeRangeDeclarationUserStatus.SUPERVISED_APPROVAL_DENIED
+                AgeSignalsVerificationStatus.UNKNOWN -> PlayAgeRangeDeclarationUserStatus.UNKNOWN
+                else -> null
+              }
+              val isEligible = userStatus != null
 
               cont.resume(
                 PlayAgeRangeDeclarationResult(
@@ -53,7 +60,7 @@ class PlayAgeRangeDeclaration : HybridPlayAgeRangeDeclarationSpec() {
                   ageLower = r.ageLower()?.toDouble(),
                   ageUpper = r.ageUpper()?.toDouble(),
                   mostRecentApprovalDate = approvalDate,
-                  userStatus = userStatusString,
+                  userStatus = userStatus,
                   error = null
                 )
               )
@@ -104,14 +111,14 @@ class PlayAgeRangeDeclaration : HybridPlayAgeRangeDeclarationSpec() {
 
   // MOCK: Use setMockUser for testing
   // https://developer.android.com/google/play/age-signals/test-age-signals-api
-  // 
+  //
   // To test different scenarios, you can override the userStatus with one of the following values:
   // - AgeSignalsVerificationStatus.VERIFIED - User is 18+ (verified adult)
   // - AgeSignalsVerificationStatus.SUPERVISED - User is supervised (13-17 with parental controls)
   // - AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_PENDING - Pending approval
   // - AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_DENIED - Approval denied
   // - AgeSignalsVerificationStatus.UNKNOWN - User status unknown
-  // 
+  //
   // Configure it in any of your native app files (f.ex MainActivity.kt):
   // TODO: Expose the setMockUser functionality to the native bridge
   //

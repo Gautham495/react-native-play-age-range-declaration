@@ -18,10 +18,10 @@ public extension DeclaredAgeRangeResult {
   /**
    * Create a new instance of `DeclaredAgeRangeResult`.
    */
-  init(isEligible: Bool, status: String?, parentControls: String?, lowerBound: Double?, upperBound: Double?) {
-    self.init(isEligible, { () -> bridge.std__optional_std__string_ in
+  init(isEligible: Bool, status: AppleAgeRangeDeclarationUserStatusValues?, parentControls: String?, lowerBound: Double?, upperBound: Double?) {
+    self.init(isEligible, { () -> bridge.std__optional_AppleAgeRangeDeclarationUserStatusValues_ in
       if let __unwrappedValue = status {
-        return bridge.create_std__optional_std__string_(std.string(__unwrappedValue))
+        return bridge.create_std__optional_AppleAgeRangeDeclarationUserStatusValues_(__unwrappedValue)
       } else {
         return .init()
       }
@@ -52,15 +52,8 @@ public extension DeclaredAgeRangeResult {
   }
   
   @inline(__always)
-  var status: String? {
-    return { () -> String? in
-      if bridge.has_value_std__optional_std__string_(self.__status) {
-        let __unwrapped = bridge.get_std__optional_std__string_(self.__status)
-        return String(__unwrapped)
-      } else {
-        return nil
-      }
-    }()
+  var status: AppleAgeRangeDeclarationUserStatusValues? {
+    return self.__status.value
   }
   
   @inline(__always)

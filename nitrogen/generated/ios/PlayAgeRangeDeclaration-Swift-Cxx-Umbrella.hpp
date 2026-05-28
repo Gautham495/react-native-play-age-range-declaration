@@ -8,17 +8,23 @@
 #pragma once
 
 // Forward declarations of C++ defined types
+// Forward declaration of `AppleAgeRangeDeclarationUserStatusValues` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class AppleAgeRangeDeclarationUserStatusValues; }
 // Forward declaration of `DeclaredAgeRangeResult` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { struct DeclaredAgeRangeResult; }
 // Forward declaration of `HybridPlayAgeRangeDeclarationSpec` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { class HybridPlayAgeRangeDeclarationSpec; }
 // Forward declaration of `PlayAgeRangeDeclarationResult` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { struct PlayAgeRangeDeclarationResult; }
+// Forward declaration of `PlayAgeRangeDeclarationUserStatus` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class PlayAgeRangeDeclarationUserStatus; }
 
 // Include C++ defined types
+#include "AppleAgeRangeDeclarationUserStatusValues.hpp"
 #include "DeclaredAgeRangeResult.hpp"
 #include "HybridPlayAgeRangeDeclarationSpec.hpp"
 #include "PlayAgeRangeDeclarationResult.hpp"
+#include "PlayAgeRangeDeclarationUserStatus.hpp"
 #include <NitroModules/Promise.hpp>
 #include <NitroModules/Result.hpp>
 #include <exception>

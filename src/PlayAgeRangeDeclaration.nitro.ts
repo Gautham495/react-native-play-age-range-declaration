@@ -1,15 +1,18 @@
 import type { HybridObject } from 'react-native-nitro-modules';
 
-export const PlayAgeRangeDeclarationUserStatus = {
-  VERIFIED: '0',
-  SUPERVISED: '1',
-  SUPERVISED_APPROVAL_PENDING: '2',
-  SUPERVISED_APPROVAL_DENIED: '3',
-  UNKNOWN: '4',
-} as const;
+export enum PlayAgeRangeDeclarationUserStatus {
+  VERIFIED = 0,
+  SUPERVISED = 1,
+  SUPERVISED_APPROVAL_PENDING = 2,
+  SUPERVISED_APPROVAL_DENIED = 3,
+  UNKNOWN = 4,
+}
 
 // https://developer.android.com/google/play/age-signals/use-age-signals-api#age-signals-responses
-export const PlayAgeRangeDeclarationUserStatusString: Record<string, string> = {
+export const PlayAgeRangeDeclarationUserStatusString: Record<
+  PlayAgeRangeDeclarationUserStatus,
+  string
+> = {
   [PlayAgeRangeDeclarationUserStatus.VERIFIED]: 'VERIFIED',
   [PlayAgeRangeDeclarationUserStatus.SUPERVISED]: 'SUPERVISED',
   [PlayAgeRangeDeclarationUserStatus.SUPERVISED_APPROVAL_PENDING]:
@@ -19,13 +22,10 @@ export const PlayAgeRangeDeclarationUserStatusString: Record<string, string> = {
   [PlayAgeRangeDeclarationUserStatus.UNKNOWN]: 'UNKNOWN',
 };
 
-export type PlayAgeRangeDeclarationUserStatusValues =
-  (typeof PlayAgeRangeDeclarationUserStatus)[keyof typeof PlayAgeRangeDeclarationUserStatus];
-
 export interface PlayAgeRangeDeclarationResult {
   isEligible: boolean;
   installId?: string;
-  userStatus?: PlayAgeRangeDeclarationUserStatusValues;
+  userStatus?: PlayAgeRangeDeclarationUserStatus;
   error?: string;
   ageLower?: number;
   ageUpper?: number;

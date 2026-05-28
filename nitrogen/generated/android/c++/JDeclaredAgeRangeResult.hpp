@@ -10,6 +10,8 @@
 #include <fbjni/fbjni.h>
 #include "DeclaredAgeRangeResult.hpp"
 
+#include "AppleAgeRangeDeclarationUserStatusValues.hpp"
+#include "JAppleAgeRangeDeclarationUserStatusValues.hpp"
 #include <optional>
 #include <string>
 
@@ -34,8 +36,8 @@ namespace margelo::nitro::playagerangedeclaration {
       static const auto clazz = javaClassStatic();
       static const auto fieldIsEligible = clazz->getField<jboolean>("isEligible");
       jboolean isEligible = this->getFieldValue(fieldIsEligible);
-      static const auto fieldStatus = clazz->getField<jni::JString>("status");
-      jni::local_ref<jni::JString> status = this->getFieldValue(fieldStatus);
+      static const auto fieldStatus = clazz->getField<JAppleAgeRangeDeclarationUserStatusValues>("status");
+      jni::local_ref<JAppleAgeRangeDeclarationUserStatusValues> status = this->getFieldValue(fieldStatus);
       static const auto fieldParentControls = clazz->getField<jni::JString>("parentControls");
       jni::local_ref<jni::JString> parentControls = this->getFieldValue(fieldParentControls);
       static const auto fieldLowerBound = clazz->getField<jni::JDouble>("lowerBound");
@@ -44,7 +46,7 @@ namespace margelo::nitro::playagerangedeclaration {
       jni::local_ref<jni::JDouble> upperBound = this->getFieldValue(fieldUpperBound);
       return DeclaredAgeRangeResult(
         static_cast<bool>(isEligible),
-        status != nullptr ? std::make_optional(status->toStdString()) : std::nullopt,
+        status != nullptr ? std::make_optional(status->toCpp()) : std::nullopt,
         parentControls != nullptr ? std::make_optional(parentControls->toStdString()) : std::nullopt,
         lowerBound != nullptr ? std::make_optional(lowerBound->value()) : std::nullopt,
         upperBound != nullptr ? std::make_optional(upperBound->value()) : std::nullopt
@@ -57,13 +59,13 @@ namespace margelo::nitro::playagerangedeclaration {
      */
     [[maybe_unused]]
     static jni::local_ref<JDeclaredAgeRangeResult::javaobject> fromCpp(const DeclaredAgeRangeResult& value) {
-      using JSignature = JDeclaredAgeRangeResult(jboolean, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>);
+      using JSignature = JDeclaredAgeRangeResult(jboolean, jni::alias_ref<JAppleAgeRangeDeclarationUserStatusValues>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>);
       static const auto clazz = javaClassStatic();
       static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
       return create(
         clazz,
         value.isEligible,
-        value.status.has_value() ? jni::make_jstring(value.status.value()) : nullptr,
+        value.status.has_value() ? JAppleAgeRangeDeclarationUserStatusValues::fromCpp(value.status.value()) : nullptr,
         value.parentControls.has_value() ? jni::make_jstring(value.parentControls.value()) : nullptr,
         value.lowerBound.has_value() ? jni::JDouble::valueOf(value.lowerBound.value()) : nullptr,
         value.upperBound.has_value() ? jni::JDouble::valueOf(value.upperBound.value()) : nullptr

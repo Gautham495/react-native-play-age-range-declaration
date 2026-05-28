@@ -9,8 +9,12 @@
 
 // Forward declaration of `PlayAgeRangeDeclarationResult` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { struct PlayAgeRangeDeclarationResult; }
+// Forward declaration of `PlayAgeRangeDeclarationUserStatus` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class PlayAgeRangeDeclarationUserStatus; }
 // Forward declaration of `DeclaredAgeRangeResult` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { struct DeclaredAgeRangeResult; }
+// Forward declaration of `AppleAgeRangeDeclarationUserStatusValues` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class AppleAgeRangeDeclarationUserStatusValues; }
 
 #include "PlayAgeRangeDeclarationResult.hpp"
 #include <NitroModules/Promise.hpp>
@@ -18,8 +22,12 @@ namespace margelo::nitro::playagerangedeclaration { struct DeclaredAgeRangeResul
 #include "JPlayAgeRangeDeclarationResult.hpp"
 #include <string>
 #include <optional>
+#include "PlayAgeRangeDeclarationUserStatus.hpp"
+#include "JPlayAgeRangeDeclarationUserStatus.hpp"
 #include "DeclaredAgeRangeResult.hpp"
 #include "JDeclaredAgeRangeResult.hpp"
+#include "AppleAgeRangeDeclarationUserStatusValues.hpp"
+#include "JAppleAgeRangeDeclarationUserStatusValues.hpp"
 
 namespace margelo::nitro::playagerangedeclaration {
 
