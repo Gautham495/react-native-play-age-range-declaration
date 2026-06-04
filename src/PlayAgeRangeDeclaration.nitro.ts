@@ -33,23 +33,17 @@ export interface PlayAgeRangeDeclarationResult {
 }
 
 // https://developer.apple.com/documentation/declaredagerange/agerangeservice/agerangedeclaration#Determining-the-age-set-method
-export const AppleAgeRangeDeclarationUserStatus = {
-  checkedByOtherMethod: 'checkedByOtherMethod',
-  governmentIDChecked: 'governmentIDChecked',
-  guardianCheckedByOtherMethod: 'guardianCheckedByOtherMethod',
-  guardianDeclared: 'guardianDeclared',
-  guardianGovernmentIDChecked: 'guardianGovernmentIDChecked',
-  guardianPaymentChecked: 'guardianPaymentChecked',
-  paymentChecked: 'paymentChecked',
-  selfDeclared: 'selfDeclared',
-
-  // Library defined statuses
-  declined: 'declined', // Declined sharing age range
-  unknown: 'unknown', // Fallback value
-} as const;
-
 export type AppleAgeRangeDeclarationUserStatusValues =
-  (typeof AppleAgeRangeDeclarationUserStatus)[keyof typeof AppleAgeRangeDeclarationUserStatus];
+  | 'checkedByOtherMethod'
+  | 'governmentIDChecked'
+  | 'guardianCheckedByOtherMethod'
+  | 'guardianDeclared'
+  | 'guardianGovernmentIDChecked'
+  | 'guardianPaymentChecked'
+  | 'paymentChecked'
+  | 'selfDeclared'
+  | 'declined'
+  | 'unknown';
 
 export interface DeclaredAgeRangeResult {
   isEligible: boolean;

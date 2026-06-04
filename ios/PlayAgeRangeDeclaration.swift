@@ -20,15 +20,15 @@ class PlayAgeRangeDeclaration: HybridPlayAgeRangeDeclarationSpec {
       }
 
       // isEligibleForAgeFeatures is a synchronous property, not async/throws
-      guard AgeRangeService.shared.isEligibleForAgeFeatures else {
-        return DeclaredAgeRangeResult(
-          isEligible: false,
-          status: nil,
-          parentControls: nil,
-          lowerBound: nil,
-          upperBound: nil
-        )
-      }
+    guard try await AgeRangeService.shared.isEligibleForAgeFeatures else {
+  return DeclaredAgeRangeResult(
+    isEligible: false,
+    status: nil,
+    parentControls: nil,
+    lowerBound: nil,
+    upperBound: nil
+  )
+}
 
       guard let viewController = await Self.topViewController() else {
         throw NSError(
@@ -47,26 +47,27 @@ class PlayAgeRangeDeclaration: HybridPlayAgeRangeDeclarationSpec {
       )
 
       switch response {
-      case .sharing(let declaration):
-        let status: AppleAgeRangeDeclarationUserStatusValues
-        if let declarationStatus = declaration.ageRangeDeclaration {
-          status = AppleAgeRangeDeclarationUserStatusValues(
-            rawValue: String(describing: declarationStatus)
-          ) ?? .unknown
-        } else {
-          status = .unknown
-        }
+     case .sharing(let declaration):
+  let status: AppleAgeRangeDeclarationUserStatusValues
+  if let declarationStatus = declaration.ageRangeDeclaration {
+    // String(describing:) on the Apple enum gives "selfDeclared", "guardianDeclared", etc.
+    // which matches the keys in fromString
+    status = AppleAgeRangeDeclarationUserStatusValues(
+      fromString: String(describing: declarationStatus)
+    ) ?? .unknown
+  } else {
+    status = .unknown
+  }
 
-        // activeParentalControls is an OptionSet — .rawValue is a non-throwing Int
-        let controlsRawValue = declaration.activeParentalControls.rawValue
+  let controlsRawValue = declaration.activeParentalControls.rawValue
 
-        return DeclaredAgeRangeResult(
-          isEligible: true,
-          status: status,
-          parentControls: "\(controlsRawValue)",
-          lowerBound: declaration.lowerBound.map { Double($0) },
-          upperBound: declaration.upperBound.map { Double($0) }
-        )
+  return DeclaredAgeRangeResult(
+    isEligible: true,
+    status: status,
+    parentControls: "\(controlsRawValue)",
+    lowerBound: declaration.lowerBound.map { Double($0) },
+    upperBound: declaration.upperBound.map { Double($0) }
+  )
 
       case .declinedSharing:
         return DeclaredAgeRangeResult(
