@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.license      = package["license"]
   s.authors      = package["author"]
 
-  s.platforms    = { :ios => 15.1 }
+  s.platforms    = { :ios => 16.0 }
   s.source       = { :git => "https://github.com/Gautham495/react-native-play-age-range-declaration.git", :tag => "#{s.version}" }
 
 
