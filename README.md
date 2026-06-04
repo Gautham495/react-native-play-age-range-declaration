@@ -16,8 +16,6 @@ A **React Native Nitro Module** providing a unified API for **age-appropriate ex
 > [!IMPORTANT]
 >
 > - Works in both Expo & Bare (Non Expo) React Native projects.
-> - Works well in both Android & iOS - Special thanks to https://github.com/luigiinred for helping out test on real Android & iOS devices to finalise the APIs.
-> - Will start working properly from January 1st 2026, as mentioned by Apple & Google.
 
 ---
 
@@ -67,6 +65,10 @@ com.apple.developer.declared-age-range
 
 Android: No extra configuration needed, but for this API to work, you have to have play console installed in your android device.
 
+## Android Testing
+
+View this Read me file to test in the android side - [TESTING_ANDROID.md](TESTING_ANDROID.md)
+
 ---
 
 ## ⚙️ Usage
@@ -85,21 +87,24 @@ setAgeRangeThresholds([13, 15]);
 ```
 
 **Requirements:**
+
 - First threshold is **required**
 - Values must be between **1 and 18** (inclusive)
 - Values must be in **ascending order**
 - Values must be **at least 2 years apart**
 
 **Examples:**
+
 ```tsx
-setAgeRangeThresholds([13]);           // Single threshold at 13
-setAgeRangeThresholds([13, 15]);       // Two thresholds at 13 and 15
-setAgeRangeThresholds([13, 15, 17]);   // Three thresholds at 13, 15, and 17
+setAgeRangeThresholds([13]); // Single threshold at 13
+setAgeRangeThresholds([13, 15]); // Two thresholds at 13 and 15
+setAgeRangeThresholds([13, 15, 17]); // Three thresholds at 13, 15, and 17
 ```
 
 > [!WARNING]
 > **iOS Permission Re-prompt**: If you change the age thresholds after the user has already granted permission, iOS will re-prompt the user for permission. It's recommended to set the thresholds once at app startup and keep them consistent.
-     <img alt="android" src="./docs/img/ios_re_approval.png"  height="600" width="375"/>
+
+<img alt="android" src="./docs/img/ios-re-approval.png"  height="600" width="375"/>
 
 ### Checking if the user is allowed to access age-gated content
 
@@ -116,10 +121,10 @@ if (canAccessGatedContent) {
 } else {
   // Show age restriction message
 }
-
 ```
 
 **Behavior:**
+
 - Returns `true` if the user is not in an applicable region where we are legally required to show the age verification prompt
 - Returns `true` if the user is older than or equal to the specified age
 - Returns `true` if the user has parental approval to view content
@@ -137,11 +142,13 @@ const checkAgeRestriction = async () => {
 };
 
 // In your component
-{ !isLoading && checkAgeRestriction ? (
-  <AgeGatedContent />
-) : (
-  <AgeRestrictionMessage />
-)}
+{
+  !isLoading && checkAgeRestriction ? (
+    <AgeGatedContent />
+  ) : (
+    <AgeRestrictionMessage />
+  );
+}
 ```
 
 ### Full Example
@@ -377,7 +384,7 @@ const styles = StyleSheet.create({
 Both result types include an `isEligible` boolean field that indicates whether age-related features are available and applicable for the current user:
 
 - **`true`**: The user is in a region where age verification is legally required.
-- **`false`**: The user is not in an applicable region, if isEligible is false we should be allow to let users view age gated content *(Not verified by a laywer)*
+- **`false`**: The user is not in an applicable region, if isEligible is false we should be allow to let users view age gated content _(Not verified by a laywer)_
 
 ---
 
