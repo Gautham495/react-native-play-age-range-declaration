@@ -1,2 +1,27 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Samsung Galaxy Store Age Signals API -->
+    <uses-permission android:name="com.sec.android.app.samsungapps.accesspermission.ASAA_PROVIDER.READ" />
+
+    <queries>
+        <!-- Samsung Galaxy Store ContentProvider -->
+        <provider android:authorities="com.sec.android.app.samsungapps.provider.ASAA" />
+        <!-- Amazon Appstore ContentProvider -->
+        <provider android:authorities="amzn_appstore" />
+    </queries>
+
+    <application>
+        <!-- Amazon test ContentProvider. Activated by PlayAgeRangeDeclaration.setAmazonTestOption(1..11).
+             Not exported — only accessible within this app. Safe to ship in production builds. -->
+        <provider
+            android:name="com.margelo.nitro.playagerangedeclaration.AmazonTestContentProvider"
+            android:authorities="${applicationId}.amzn_test_appstore"
+            android:exported="false" />
+
+        <!-- Samsung test ContentProvider. Activated by PlayAgeRangeDeclaration.setSamsungTestOption(1..10).
+             Not exported — only accessible within this app. Safe to ship in production builds. -->
+        <provider
+            android:name="com.margelo.nitro.playagerangedeclaration.SamsungTestContentProvider"
+            android:authorities="${applicationId}.samsung_test_provider"
+            android:exported="false" />
+    </application>
 </manifest>
