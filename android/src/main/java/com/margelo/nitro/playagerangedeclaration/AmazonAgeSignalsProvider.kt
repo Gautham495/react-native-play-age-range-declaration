@@ -76,6 +76,9 @@ object AmazonAgeSignalsProvider {
       val ageUpperIdx = c.getColumnIndex("ageUpper")
       val userIdIdx = c.getColumnIndex("userId")
       val approvalDateIdx = c.getColumnIndex("mostRecentApprovalDate")
+      val rawApprovalDate =
+        if (approvalDateIdx >= 0 && !c.isNull(approvalDateIdx)) c.getString(approvalDateIdx) else null
+      val approvalDate = rawApprovalDate?.substringBefore('T')
 
       PlayAgeRangeDeclarationResult(
         isEligible = isEligible,
@@ -84,7 +87,7 @@ object AmazonAgeSignalsProvider {
         error = null,
         ageLower = if (ageLowerIdx >= 0 && !c.isNull(ageLowerIdx)) c.getInt(ageLowerIdx).toDouble() else null,
         ageUpper = if (ageUpperIdx >= 0 && !c.isNull(ageUpperIdx)) c.getInt(ageUpperIdx).toDouble() else null,
-        mostRecentApprovalDate = if (approvalDateIdx >= 0 && !c.isNull(approvalDateIdx)) c.getString(approvalDateIdx) else null
+        mostRecentApprovalDate = approvalDate
       )
     }
   }

@@ -47,6 +47,7 @@ class PlayAgeRangeDeclaration : HybridPlayAgeRangeDeclarationSpec() {
           )
         }
       } catch (e: Exception) {
+        Log.e("PlayAgeRangeDeclaration", "Initialization error", e)
         PlayAgeRangeDeclarationResult(
           isEligible = false,
           installId = null,
