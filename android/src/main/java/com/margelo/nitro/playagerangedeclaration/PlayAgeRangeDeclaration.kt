@@ -30,16 +30,28 @@ class PlayAgeRangeDeclaration : HybridPlayAgeRangeDeclarationSpec() {
 
   override fun getPlayAgeRangeDeclaration(): Promise<PlayAgeRangeDeclarationResult> {
     return Promise.async {
-      val store = mockStore ?: StoreDetector.detectStore(appContext)
-      when (store) {
-        AppStore.GOOGLE_PLAY -> getGooglePlayAgeDeclaration()
-        AppStore.SAMSUNG_GALAXY_STORE -> SamsungAgeSignalsProvider.getAgeSignals(appContext, _samsungTestOption)
-        AppStore.AMAZON_APPSTORE -> AmazonAgeSignalsProvider.getAgeSignals(appContext, _amazonTestOption)
-        AppStore.UNKNOWN -> PlayAgeRangeDeclarationResult(
+      try {
+        val store = mockStore ?: StoreDetector.detectStore(appContext)
+        when (store) {
+          AppStore.GOOGLE_PLAY -> getGooglePlayAgeDeclaration()
+          AppStore.SAMSUNG_GALAXY_STORE -> SamsungAgeSignalsProvider.getAgeSignals(appContext, _samsungTestOption)
+          AppStore.AMAZON_APPSTORE -> AmazonAgeSignalsProvider.getAgeSignals(appContext, _amazonTestOption)
+          AppStore.UNKNOWN -> PlayAgeRangeDeclarationResult(
+            isEligible = false,
+            installId = null,
+            userStatus = null,
+            error = "UNSUPPORTED_STORE",
+            ageLower = null,
+            ageUpper = null,
+            mostRecentApprovalDate = null
+          )
+        }
+      } catch (e: Exception) {
+        PlayAgeRangeDeclarationResult(
           isEligible = false,
           installId = null,
           userStatus = null,
-          error = "UNSUPPORTED_STORE",
+          error = "AGE_SIGNALS_INIT_ERROR: ${e.message}",
           ageLower = null,
           ageUpper = null,
           mostRecentApprovalDate = null
