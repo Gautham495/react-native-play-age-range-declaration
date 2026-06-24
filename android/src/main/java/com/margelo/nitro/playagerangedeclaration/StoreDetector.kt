@@ -7,7 +7,8 @@ object StoreDetector {
   fun detectStore(context: Context): AppStore {
     val installer = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
       runCatching {
-        context.packageManager.getInstallSourceInfo(context.packageName).installingPackageName
+        val info = context.packageManager.getInstallSourceInfo(context.packageName)
+        info.installingPackageName ?: info.initiatingPackageName
       }.getOrNull()
     } else {
       @Suppress("DEPRECATION")
