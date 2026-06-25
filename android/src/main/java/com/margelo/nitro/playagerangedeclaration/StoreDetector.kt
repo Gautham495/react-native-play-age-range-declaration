@@ -15,10 +15,9 @@ object StoreDetector {
       context.packageManager.getInstallerPackageName(context.packageName)
     }
     return when (installer) {
-      "com.android.vending" -> AppStore.GOOGLE_PLAY
       "com.sec.android.app.samsungapps" -> AppStore.SAMSUNG_GALAXY_STORE
       "com.amazon.venezia" -> AppStore.AMAZON_APPSTORE
-      else -> AppStore.UNKNOWN
+      else -> AppStore.GOOGLE_PLAY
     }
   }
 }
