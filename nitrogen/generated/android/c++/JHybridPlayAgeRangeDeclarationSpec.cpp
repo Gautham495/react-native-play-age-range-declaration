@@ -7,23 +7,47 @@
 
 #include "JHybridPlayAgeRangeDeclarationSpec.hpp"
 
-// Forward declaration of `PlayAgeRangeDeclarationResult` to properly resolve imports.
-namespace margelo::nitro::playagerangedeclaration { struct PlayAgeRangeDeclarationResult; }
-// Forward declaration of `PlayAgeRangeDeclarationUserStatus` to properly resolve imports.
-namespace margelo::nitro::playagerangedeclaration { enum class PlayAgeRangeDeclarationUserStatus; }
+// Forward declaration of `AppStore` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class AppStore; }
+// Forward declaration of `PlayAgeSignalsResult` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { struct PlayAgeSignalsResult; }
+// Forward declaration of `PlayAgeSignalsUserStatus` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class PlayAgeSignalsUserStatus; }
+// Forward declaration of `AmazonGetUserAgeDataResult` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { struct AmazonGetUserAgeDataResult; }
+// Forward declaration of `AmazonGetUserAgeDataResponseStatus` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class AmazonGetUserAgeDataResponseStatus; }
+// Forward declaration of `AmazonGetUserAgeDataUserStatus` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class AmazonGetUserAgeDataUserStatus; }
+// Forward declaration of `SamsungGetAgeSignalsResult` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { struct SamsungGetAgeSignalsResult; }
+// Forward declaration of `SamsungGetAgeSignalsUserStatus` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class SamsungGetAgeSignalsUserStatus; }
 // Forward declaration of `DeclaredAgeRangeResult` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { struct DeclaredAgeRangeResult; }
 // Forward declaration of `AppleAgeRangeDeclarationUserStatusValues` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { enum class AppleAgeRangeDeclarationUserStatusValues; }
 
-#include "PlayAgeRangeDeclarationResult.hpp"
+#include "AppStore.hpp"
+#include "JAppStore.hpp"
+#include "PlayAgeSignalsResult.hpp"
 #include <NitroModules/Promise.hpp>
 #include <NitroModules/JPromise.hpp>
-#include "JPlayAgeRangeDeclarationResult.hpp"
+#include "JPlayAgeSignalsResult.hpp"
 #include <string>
 #include <optional>
-#include "PlayAgeRangeDeclarationUserStatus.hpp"
-#include "JPlayAgeRangeDeclarationUserStatus.hpp"
+#include "PlayAgeSignalsUserStatus.hpp"
+#include "JPlayAgeSignalsUserStatus.hpp"
+#include "AmazonGetUserAgeDataResult.hpp"
+#include "JAmazonGetUserAgeDataResult.hpp"
+#include "AmazonGetUserAgeDataResponseStatus.hpp"
+#include "JAmazonGetUserAgeDataResponseStatus.hpp"
+#include "AmazonGetUserAgeDataUserStatus.hpp"
+#include "JAmazonGetUserAgeDataUserStatus.hpp"
+#include "SamsungGetAgeSignalsResult.hpp"
+#include "JSamsungGetAgeSignalsResult.hpp"
+#include "SamsungGetAgeSignalsUserStatus.hpp"
+#include "JSamsungGetAgeSignalsUserStatus.hpp"
 #include "DeclaredAgeRangeResult.hpp"
 #include "JDeclaredAgeRangeResult.hpp"
 #include "AppleAgeRangeDeclarationUserStatusValues.hpp"
@@ -62,13 +86,50 @@ namespace margelo::nitro::playagerangedeclaration {
   
 
   // Methods
-  std::shared_ptr<Promise<PlayAgeRangeDeclarationResult>> JHybridPlayAgeRangeDeclarationSpec::getPlayAgeRangeDeclaration() {
+  AppStore JHybridPlayAgeRangeDeclarationSpec::detectStore() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JAppStore>()>("detectStore");
+    auto __result = method(_javaPart);
+    return __result->toCpp();
+  }
+  std::shared_ptr<Promise<PlayAgeSignalsResult>> JHybridPlayAgeRangeDeclarationSpec::getPlayAgeRangeDeclaration() {
     static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>()>("getPlayAgeRangeDeclaration");
     auto __result = method(_javaPart);
     return [&]() {
-      auto __promise = Promise<PlayAgeRangeDeclarationResult>::create();
+      auto __promise = Promise<PlayAgeSignalsResult>::create();
       __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
-        auto __result = jni::static_ref_cast<JPlayAgeRangeDeclarationResult>(__boxedResult);
+        auto __result = jni::static_ref_cast<JPlayAgeSignalsResult>(__boxedResult);
+        __promise->resolve(__result->toCpp());
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+  }
+  std::shared_ptr<Promise<AmazonGetUserAgeDataResult>> JHybridPlayAgeRangeDeclarationSpec::getAmazonAgeRangeDeclaration() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>()>("getAmazonAgeRangeDeclaration");
+    auto __result = method(_javaPart);
+    return [&]() {
+      auto __promise = Promise<AmazonGetUserAgeDataResult>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<JAmazonGetUserAgeDataResult>(__boxedResult);
+        __promise->resolve(__result->toCpp());
+      });
+      __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {
+        jni::JniException __jniError(__throwable);
+        __promise->reject(std::make_exception_ptr(__jniError));
+      });
+      return __promise;
+    }();
+  }
+  std::shared_ptr<Promise<SamsungGetAgeSignalsResult>> JHybridPlayAgeRangeDeclarationSpec::getGalaxyAgeRangeDeclaration() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>()>("getGalaxyAgeRangeDeclaration");
+    auto __result = method(_javaPart);
+    return [&]() {
+      auto __promise = Promise<SamsungGetAgeSignalsResult>::create();
+      __result->cthis()->addOnResolvedListener([=](const jni::alias_ref<jni::JObject>& __boxedResult) {
+        auto __result = jni::static_ref_cast<JSamsungGetAgeSignalsResult>(__boxedResult);
         __promise->resolve(__result->toCpp());
       });
       __result->cthis()->addOnRejectedListener([=](const jni::alias_ref<jni::JThrowable>& __throwable) {

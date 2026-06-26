@@ -14,10 +14,10 @@
 
 namespace margelo::nitro::playagerangedeclaration::bridge::swift {
 
-  // pragma MARK: std::function<void(const PlayAgeRangeDeclarationResult& /* result */)>
-  Func_void_PlayAgeRangeDeclarationResult create_Func_void_PlayAgeRangeDeclarationResult(void* NON_NULL swiftClosureWrapper) noexcept {
-    auto swiftClosure = PlayAgeRangeDeclaration::Func_void_PlayAgeRangeDeclarationResult::fromUnsafe(swiftClosureWrapper);
-    return [swiftClosure = std::move(swiftClosure)](const PlayAgeRangeDeclarationResult& result) mutable -> void {
+  // pragma MARK: std::function<void(const PlayAgeSignalsResult& /* result */)>
+  Func_void_PlayAgeSignalsResult create_Func_void_PlayAgeSignalsResult(void* NON_NULL swiftClosureWrapper) noexcept {
+    auto swiftClosure = PlayAgeRangeDeclaration::Func_void_PlayAgeSignalsResult::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](const PlayAgeSignalsResult& result) mutable -> void {
       swiftClosure.call(result);
     };
   }
@@ -27,6 +27,22 @@ namespace margelo::nitro::playagerangedeclaration::bridge::swift {
     auto swiftClosure = PlayAgeRangeDeclaration::Func_void_std__exception_ptr::fromUnsafe(swiftClosureWrapper);
     return [swiftClosure = std::move(swiftClosure)](const std::exception_ptr& error) mutable -> void {
       swiftClosure.call(error);
+    };
+  }
+  
+  // pragma MARK: std::function<void(const AmazonGetUserAgeDataResult& /* result */)>
+  Func_void_AmazonGetUserAgeDataResult create_Func_void_AmazonGetUserAgeDataResult(void* NON_NULL swiftClosureWrapper) noexcept {
+    auto swiftClosure = PlayAgeRangeDeclaration::Func_void_AmazonGetUserAgeDataResult::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](const AmazonGetUserAgeDataResult& result) mutable -> void {
+      swiftClosure.call(result);
+    };
+  }
+  
+  // pragma MARK: std::function<void(const SamsungGetAgeSignalsResult& /* result */)>
+  Func_void_SamsungGetAgeSignalsResult create_Func_void_SamsungGetAgeSignalsResult(void* NON_NULL swiftClosureWrapper) noexcept {
+    auto swiftClosure = PlayAgeRangeDeclaration::Func_void_SamsungGetAgeSignalsResult::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](const SamsungGetAgeSignalsResult& result) mutable -> void {
+      swiftClosure.call(result);
     };
   }
   

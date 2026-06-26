@@ -13,7 +13,10 @@ public protocol HybridPlayAgeRangeDeclarationSpec_protocol: HybridObject {
   
 
   // Methods
-  func getPlayAgeRangeDeclaration() throws -> Promise<PlayAgeRangeDeclarationResult>
+  func detectStore() throws -> AppStore
+  func getPlayAgeRangeDeclaration() throws -> Promise<PlayAgeSignalsResult>
+  func getAmazonAgeRangeDeclaration() throws -> Promise<AmazonGetUserAgeDataResult>
+  func getGalaxyAgeRangeDeclaration() throws -> Promise<SamsungGetAgeSignalsResult>
   func requestDeclaredAgeRange(firstThresholdAge: Double, secondThresholdAge: Double?, thirdThresholdAge: Double?) throws -> Promise<DeclaredAgeRangeResult>
 }
 

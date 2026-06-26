@@ -13,13 +13,22 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-// Forward declaration of `PlayAgeRangeDeclarationResult` to properly resolve imports.
-namespace margelo::nitro::playagerangedeclaration { struct PlayAgeRangeDeclarationResult; }
+// Forward declaration of `AppStore` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class AppStore; }
+// Forward declaration of `PlayAgeSignalsResult` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { struct PlayAgeSignalsResult; }
+// Forward declaration of `AmazonGetUserAgeDataResult` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { struct AmazonGetUserAgeDataResult; }
+// Forward declaration of `SamsungGetAgeSignalsResult` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { struct SamsungGetAgeSignalsResult; }
 // Forward declaration of `DeclaredAgeRangeResult` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { struct DeclaredAgeRangeResult; }
 
-#include "PlayAgeRangeDeclarationResult.hpp"
+#include "AppStore.hpp"
+#include "PlayAgeSignalsResult.hpp"
 #include <NitroModules/Promise.hpp>
+#include "AmazonGetUserAgeDataResult.hpp"
+#include "SamsungGetAgeSignalsResult.hpp"
 #include "DeclaredAgeRangeResult.hpp"
 #include <optional>
 
@@ -54,7 +63,10 @@ namespace margelo::nitro::playagerangedeclaration {
 
     public:
       // Methods
-      virtual std::shared_ptr<Promise<PlayAgeRangeDeclarationResult>> getPlayAgeRangeDeclaration() = 0;
+      virtual AppStore detectStore() = 0;
+      virtual std::shared_ptr<Promise<PlayAgeSignalsResult>> getPlayAgeRangeDeclaration() = 0;
+      virtual std::shared_ptr<Promise<AmazonGetUserAgeDataResult>> getAmazonAgeRangeDeclaration() = 0;
+      virtual std::shared_ptr<Promise<SamsungGetAgeSignalsResult>> getGalaxyAgeRangeDeclaration() = 0;
       virtual std::shared_ptr<Promise<DeclaredAgeRangeResult>> requestDeclaredAgeRange(double firstThresholdAge, std::optional<double> secondThresholdAge, std::optional<double> thirdThresholdAge) = 0;
 
     protected:

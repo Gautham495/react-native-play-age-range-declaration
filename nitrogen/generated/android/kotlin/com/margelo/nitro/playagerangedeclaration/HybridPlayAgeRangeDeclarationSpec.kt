@@ -31,7 +31,19 @@ abstract class HybridPlayAgeRangeDeclarationSpec: HybridObject() {
   // Methods
   @DoNotStrip
   @Keep
-  abstract fun getPlayAgeRangeDeclaration(): Promise<PlayAgeRangeDeclarationResult>
+  abstract fun detectStore(): AppStore
+  
+  @DoNotStrip
+  @Keep
+  abstract fun getPlayAgeRangeDeclaration(): Promise<PlayAgeSignalsResult>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun getAmazonAgeRangeDeclaration(): Promise<AmazonGetUserAgeDataResult>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun getGalaxyAgeRangeDeclaration(): Promise<SamsungGetAgeSignalsResult>
   
   @DoNotStrip
   @Keep

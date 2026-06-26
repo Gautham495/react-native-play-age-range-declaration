@@ -5,19 +5,10 @@ import android.util.Log
 import com.facebook.proguard.annotations.DoNotStrip
 import com.google.android.play.agesignals.AgeSignalsManager
 import com.google.android.play.agesignals.AgeSignalsManagerFactory
-import com.google.android.play.agesignals.AgeSignalsRequest
 import com.google.android.play.agesignals.AgeSignalsResult
-import com.google.android.play.agesignals.model.AgeSignalsVerificationStatus
 import com.google.android.play.agesignals.testing.FakeAgeSignalsManager
 import com.margelo.nitro.core.Promise
 import com.margelo.nitro.NitroModules
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlin.coroutines.resume
-import java.time.LocalDate
-import java.time.ZoneOffset
-import java.util.Date
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 // https://developer.android.com/google/play/age-signals/test-age-signals-api
 
@@ -28,101 +19,28 @@ class PlayAgeRangeDeclaration : HybridPlayAgeRangeDeclarationSpec() {
         get() = NitroModules.applicationContext
             ?: throw IllegalStateException("Application context not available")
 
-  override fun getPlayAgeRangeDeclaration(): Promise<PlayAgeRangeDeclarationResult> {
-    return Promise.async {
-      try {
-        val store = mockStore ?: StoreDetector.detectStore(appContext)
-        when (store) {
-          AppStore.GOOGLE_PLAY -> getGooglePlayAgeDeclaration()
-          AppStore.SAMSUNG_GALAXY_STORE -> SamsungAgeSignalsProvider.getAgeSignals(appContext, _samsungTestOption)
-          AppStore.AMAZON_APPSTORE -> AmazonAgeSignalsProvider.getAgeSignals(appContext, _amazonTestOption)
-          AppStore.UNKNOWN -> PlayAgeRangeDeclarationResult(
-            isEligible = false,
-            installId = null,
-            userStatus = null,
-            error = "UNSUPPORTED_STORE",
-            ageLower = null,
-            ageUpper = null,
-            mostRecentApprovalDate = null
-          )
-        }
-      } catch (e: Exception) {
-        Log.e("PlayAgeRangeDeclaration", "Initialization error", e)
-        PlayAgeRangeDeclarationResult(
-          isEligible = false,
-          installId = null,
-          userStatus = null,
-          error = "AGE_SIGNALS_INIT_ERROR: ${e.message}",
-          ageLower = null,
-          ageUpper = null,
-          mostRecentApprovalDate = null
-        )
-      }
+  override fun detectStore(): AppStore {
+    if (AmazonGetUserAgeDataProvider.isAvailable(appContext)) {
+      return AppStore.AMAZON_APPSTORE
+    } else if (SamsungAgeSignalsProvider.isAvailable(appContext)) {
+      return AppStore.SAMSUNG_GALAXY_STORE
+    } else if (GooglePlayAgeSignalsProvider.isAvailable(appContext)) {
+      return AppStore.GOOGLE_PLAY
     }
+
+    return AppStore.UNKNOWN
   }
 
-  private suspend fun getGooglePlayAgeDeclaration(): PlayAgeRangeDeclarationResult {
-    return try {
-      val manager = getManager(appContext)
-      val request = AgeSignalsRequest.builder().build()
+  override fun getPlayAgeRangeDeclaration(): Promise<PlayAgeSignalsResult> {
+    return Promise.async { GooglePlayAgeSignalsProvider.getAgeSignals(appContext) }
+  }
 
-      suspendCancellableCoroutine { cont ->
-        manager.checkAgeSignals(request)
-          .addOnSuccessListener { r ->
-            val isoDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
-            val approvalDate = r.mostRecentApprovalDate()?.let { isoDateFormat.format(it) }
-            // userStatus will be empty if the user is not in a location where are legally required to show show the age verification prompt
-            // This is different from UNKNOWN where the user is not verified, but is in an applicable region
-            // https://developer.android.com/google/play/age-signals/use-age-signals-api#age-signals-responses
-            val userStatus = when (r.userStatus()) {
-              AgeSignalsVerificationStatus.VERIFIED -> PlayAgeRangeDeclarationUserStatus.VERIFIED
-              AgeSignalsVerificationStatus.SUPERVISED -> PlayAgeRangeDeclarationUserStatus.SUPERVISED
-              AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_PENDING -> PlayAgeRangeDeclarationUserStatus.SUPERVISED_APPROVAL_PENDING
-              AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_DENIED -> PlayAgeRangeDeclarationUserStatus.SUPERVISED_APPROVAL_DENIED
-              AgeSignalsVerificationStatus.UNKNOWN -> PlayAgeRangeDeclarationUserStatus.UNKNOWN
-              else -> null
-            }
-            val isEligible = userStatus != null
+  override fun getAmazonAgeRangeDeclaration(): Promise<AmazonGetUserAgeDataResult> {
+    return Promise.async { AmazonGetUserAgeDataProvider.getAgeSignals(appContext) }
+  }
 
-            cont.resume(
-              PlayAgeRangeDeclarationResult(
-                isEligible = isEligible,
-                installId = r.installId(),
-                ageLower = r.ageLower()?.toDouble(),
-                ageUpper = r.ageUpper()?.toDouble(),
-                mostRecentApprovalDate = approvalDate,
-                userStatus = userStatus,
-                error = null
-              )
-            )
-          }
-          .addOnFailureListener { e ->
-            val msg = e.message ?: "Unknown error"
-            cont.resume(
-              PlayAgeRangeDeclarationResult(
-                isEligible = false,
-                installId = null,
-                userStatus = null,
-                error = "$msg",
-                ageLower = null,
-                ageUpper = null,
-                mostRecentApprovalDate = null,
-              )
-            )
-          }
-      }
-    } catch (e: Exception) {
-      Log.e("PlayAgeRangeDeclaration", "Initialization error", e)
-      PlayAgeRangeDeclarationResult(
-        isEligible = false,
-        installId = null,
-        userStatus = null,
-        error = "AGE_SIGNALS_INIT_ERROR: ${e.message}",
-        ageLower = null,
-        ageUpper = null,
-        mostRecentApprovalDate = null,
-      )
-    }
+  override fun getGalaxyAgeRangeDeclaration(): Promise<SamsungGetAgeSignalsResult> {
+    return Promise.async { SamsungAgeSignalsProvider.getAgeSignals(appContext) }
   }
 
   override fun requestDeclaredAgeRange(firstThresholdAge: Double, secondThresholdAge: Double?, thirdThresholdAge: Double?): Promise<DeclaredAgeRangeResult> {
@@ -132,7 +50,7 @@ class PlayAgeRangeDeclaration : HybridPlayAgeRangeDeclarationSpec() {
         status = null,
         lowerBound = null,
         upperBound = null,
-        parentControls = null
+        parentControls = null,
       )
     }
   }
@@ -164,37 +82,10 @@ class PlayAgeRangeDeclaration : HybridPlayAgeRangeDeclarationSpec() {
   //     )
   //   )
   // }
-  //
-  // To simulate a Samsung or Amazon store scenario, set mockStore and a test option:
-  //   PlayAgeRangeDeclaration.mockStore = AppStore.AMAZON_APPSTORE
-  //   PlayAgeRangeDeclaration.setAmazonTestOption(1)   // 18+ verified user
-  //   PlayAgeRangeDeclaration.mockStore = AppStore.SAMSUNG_GALAXY_STORE
-  //   PlayAgeRangeDeclaration.setSamsungTestOption(1)  // 18+ verified user
 
   // Companion object for managing age signal mocking
   companion object {
     var mockUser: AgeSignalsResult? = null
-
-    // Override store detection for testing Samsung / Amazon code paths
-    @Volatile var mockStore: AppStore? = null
-
-    // Amazon test scenario (1-11). Requires AmazonTestContentProvider registered in app manifest.
-    // See AmazonTestContentProvider.kt for setup instructions and scenario descriptions.
-    @Volatile private var _amazonTestOption: Int? = null
-
-    fun setAmazonTestOption(testOption: Int?) {
-      require(testOption == null || testOption in 1..11) { "amazonTestOption must be between 1 and 11, got $testOption" }
-      _amazonTestOption = testOption
-    }
-
-    // Samsung test scenario (1-9). Requires SamsungTestContentProvider registered in app manifest.
-    // See SamsungTestContentProvider.kt for setup instructions and scenario descriptions.
-    @Volatile private var _samsungTestOption: Int? = null
-
-    fun setSamsungTestOption(testOption: Int?) {
-      require(testOption == null || testOption in 1..9) { "samsungTestOption must be between 1 and 9, got $testOption" }
-      _samsungTestOption = testOption
-    }
 
     // Returns AgeSignalManager or the FakeAgeSignalsManager when a mock user is set
     fun getManager(context: Context): AgeSignalsManager {

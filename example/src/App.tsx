@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 import {
-  getAndroidPlayAgeRangeStatus,
+  getGooglePlayAgeRangeStatus,
   getAppleDeclaredAgeRangeStatus,
   type PlayAgeRangeDeclarationResult,
   type DeclaredAgeRangeResult,
@@ -49,7 +49,7 @@ export default function App() {
       setError(null);
 
       if (Platform.OS === 'android') {
-        const data = await getAndroidPlayAgeRangeStatus();
+        const data = await getGooglePlayAgeRangeStatus();
 
         setAndroidResult(data);
       } else {

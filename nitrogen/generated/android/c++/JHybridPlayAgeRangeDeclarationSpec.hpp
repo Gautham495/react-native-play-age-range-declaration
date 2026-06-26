@@ -54,7 +54,10 @@ namespace margelo::nitro::playagerangedeclaration {
 
   public:
     // Methods
-    std::shared_ptr<Promise<PlayAgeRangeDeclarationResult>> getPlayAgeRangeDeclaration() override;
+    AppStore detectStore() override;
+    std::shared_ptr<Promise<PlayAgeSignalsResult>> getPlayAgeRangeDeclaration() override;
+    std::shared_ptr<Promise<AmazonGetUserAgeDataResult>> getAmazonAgeRangeDeclaration() override;
+    std::shared_ptr<Promise<SamsungGetAgeSignalsResult>> getGalaxyAgeRangeDeclaration() override;
     std::shared_ptr<Promise<DeclaredAgeRangeResult>> requestDeclaredAgeRange(double firstThresholdAge, std::optional<double> secondThresholdAge, std::optional<double> thirdThresholdAge) override;
 
   private:

@@ -1,61 +1,23 @@
 import type { HybridObject } from 'react-native-nitro-modules';
+import type { AmazonGetUserAgeDataResult } from './providers/AmazonGetUserAgeData';
+import type { DeclaredAgeRangeResult } from './providers/AppleDeclaredAgeRange';
+import type { PlayAgeSignalsResult } from './providers/GooglePlayAgeSignals';
+import type { SamsungGetAgeSignalsResult } from './providers/SamsungGetAgeSignals';
 
-export enum PlayAgeRangeDeclarationUserStatus {
-  VERIFIED = 0,
-  SUPERVISED = 1,
-  SUPERVISED_APPROVAL_PENDING = 2,
-  SUPERVISED_APPROVAL_DENIED = 3,
-  UNKNOWN = 4,
-}
-
-// https://developer.android.com/google/play/age-signals/use-age-signals-api#age-signals-responses
-export const PlayAgeRangeDeclarationUserStatusString: Record<
-  PlayAgeRangeDeclarationUserStatus,
-  string
-> = {
-  [PlayAgeRangeDeclarationUserStatus.VERIFIED]: 'VERIFIED',
-  [PlayAgeRangeDeclarationUserStatus.SUPERVISED]: 'SUPERVISED',
-  [PlayAgeRangeDeclarationUserStatus.SUPERVISED_APPROVAL_PENDING]:
-    'SUPERVISED_APPROVAL_PENDING',
-  [PlayAgeRangeDeclarationUserStatus.SUPERVISED_APPROVAL_DENIED]:
-    'SUPERVISED_APPROVAL_DENIED',
-  [PlayAgeRangeDeclarationUserStatus.UNKNOWN]: 'UNKNOWN',
-};
-
-export interface PlayAgeRangeDeclarationResult {
-  isEligible: boolean;
-  installId?: string;
-  userStatus?: PlayAgeRangeDeclarationUserStatus;
-  error?: string;
-  ageLower?: number;
-  ageUpper?: number;
-  mostRecentApprovalDate?: string; // ISO 8601 format (YYYY-MM-DD)
-}
-
-// https://developer.apple.com/documentation/declaredagerange/agerangeservice/agerangedeclaration#Determining-the-age-set-method
-export type AppleAgeRangeDeclarationUserStatusValues =
-  | 'checkedByOtherMethod'
-  | 'governmentIDChecked'
-  | 'guardianCheckedByOtherMethod'
-  | 'guardianDeclared'
-  | 'guardianGovernmentIDChecked'
-  | 'guardianPaymentChecked'
-  | 'paymentChecked'
-  | 'selfDeclared'
-  | 'declined'
-  | 'unknown';
-
-export interface DeclaredAgeRangeResult {
-  isEligible: boolean;
-  status?: AppleAgeRangeDeclarationUserStatusValues;
-  parentControls?: string;
-  lowerBound?: number;
-  upperBound?: number;
+export enum AppStore {
+  UNKNOWN = 0,
+  GOOGLE_PLAY = 1,
+  SAMSUNG_GALAXY_STORE = 2,
+  AMAZON_APPSTORE = 3,
+  APPLE_APPSTORE = 4,
 }
 
 export interface PlayAgeRangeDeclaration
   extends HybridObject<{ ios: 'swift'; android: 'kotlin' }> {
-  getPlayAgeRangeDeclaration(): Promise<PlayAgeRangeDeclarationResult>;
+  detectStore(): AppStore;
+  getPlayAgeRangeDeclaration(): Promise<PlayAgeSignalsResult>;
+  getAmazonAgeRangeDeclaration(): Promise<AmazonGetUserAgeDataResult>;
+  getGalaxyAgeRangeDeclaration(): Promise<SamsungGetAgeSignalsResult>;
   requestDeclaredAgeRange(
     firstThresholdAge: number,
     secondThresholdAge?: number,

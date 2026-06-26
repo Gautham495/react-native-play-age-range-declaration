@@ -14,7 +14,10 @@ namespace margelo::nitro::playagerangedeclaration {
     HybridObject::loadHybridMethods();
     // load custom methods/properties
     registerHybrids(this, [](Prototype& prototype) {
+      prototype.registerHybridMethod("detectStore", &HybridPlayAgeRangeDeclarationSpec::detectStore);
       prototype.registerHybridMethod("getPlayAgeRangeDeclaration", &HybridPlayAgeRangeDeclarationSpec::getPlayAgeRangeDeclaration);
+      prototype.registerHybridMethod("getAmazonAgeRangeDeclaration", &HybridPlayAgeRangeDeclarationSpec::getAmazonAgeRangeDeclaration);
+      prototype.registerHybridMethod("getGalaxyAgeRangeDeclaration", &HybridPlayAgeRangeDeclarationSpec::getGalaxyAgeRangeDeclaration);
       prototype.registerHybridMethod("requestDeclaredAgeRange", &HybridPlayAgeRangeDeclarationSpec::requestDeclaredAgeRange);
     });
   }

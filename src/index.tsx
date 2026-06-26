@@ -1,17 +1,36 @@
 import { NitroModules } from 'react-native-nitro-modules';
 import { Platform } from 'react-native';
 
-import type {
-  DeclaredAgeRangeResult,
-  PlayAgeRangeDeclaration,
-  PlayAgeRangeDeclarationResult,
+import {
+  type PlayAgeRangeDeclaration,
+  AppStore,
 } from './PlayAgeRangeDeclaration.nitro';
+import type {
+  AmazonGetUserAgeDataResponseStatus,
+  AmazonGetUserAgeDataResponseStatusString,
+  AmazonGetUserAgeDataResult,
+  AmazonGetUserAgeDataUserStatus,
+  AmazonGetUserAgeDataUserStatusString,
+} from './providers/AmazonGetUserAgeData';
+import type { DeclaredAgeRangeResult } from './providers/AppleDeclaredAgeRange';
+import type {
+  PlayAgeSignalsResult,
+  PlayAgeSignalsUserStatus,
+  PlayAgeSignalsUserStatusString,
+} from './providers/GooglePlayAgeSignals';
+import type {
+  SamsungGetAgeSignalsResult,
+  SamsungGetAgeSignalsUserStatus,
+  SamsungGetAgeSignalsUserStatusString,
+} from './providers/SamsungGetAgeSignals';
 
 import { ageRangeThresholdManager } from './AgeRangeThresholdManager';
 
 import {
   getIsConsideredOlderThaniOS,
-  getIsConsideredOlderThanAndroid,
+  getIsConsideredOlderThanGooglePlay,
+  getIsConsideredOlderThanAmazon,
+  getIsConsideredOlderThanSamsungGalaxy,
 } from './isConsideredOlderThan';
 const PlayAgeRangeDeclarationHybridObject =
   NitroModules.createHybridObject<PlayAgeRangeDeclaration>(
@@ -28,8 +47,16 @@ export async function getAppleDeclaredAgeRangeStatus(): Promise<DeclaredAgeRange
   );
 }
 
-export async function getAndroidPlayAgeRangeStatus(): Promise<PlayAgeRangeDeclarationResult> {
+export async function getGooglePlayAgeRangeStatus(): Promise<PlayAgeSignalsResult> {
   return await PlayAgeRangeDeclarationHybridObject.getPlayAgeRangeDeclaration();
+}
+
+export async function getAmazonAgeRangeStatus(): Promise<AmazonGetUserAgeDataResult> {
+  return await PlayAgeRangeDeclarationHybridObject.getAmazonAgeRangeDeclaration();
+}
+
+export async function getSamsungGalaxyAgeRangeStatus(): Promise<SamsungGetAgeSignalsResult> {
+  return await PlayAgeRangeDeclarationHybridObject.getGalaxyAgeRangeDeclaration();
 }
 
 export const setAgeRangeThresholds = (
@@ -38,21 +65,43 @@ export const setAgeRangeThresholds = (
   ageRangeThresholdManager.setAgeRangeThresholds(thresholds);
 };
 
-export type { DeclaredAgeRangeResult, PlayAgeRangeDeclarationResult };
+export type {
+  DeclaredAgeRangeResult,
+  PlayAgeSignalsResult,
+  PlayAgeSignalsUserStatus,
+  PlayAgeSignalsUserStatusString,
+  AmazonGetUserAgeDataResult,
+  AmazonGetUserAgeDataResponseStatus,
+  AmazonGetUserAgeDataResponseStatusString,
+  AmazonGetUserAgeDataUserStatus,
+  AmazonGetUserAgeDataUserStatusString,
+  SamsungGetAgeSignalsResult,
+  SamsungGetAgeSignalsUserStatus,
+  SamsungGetAgeSignalsUserStatusString,
+};
 
 export const getIsConsideredOlderThan = async (
   age: number
 ): Promise<boolean> => {
-  if (Platform.OS === 'ios') {
+  const appStore = PlayAgeRangeDeclarationHybridObject.detectStore();
+
+  if (Platform.OS === 'ios' && appStore === AppStore.APPLE_APPSTORE) {
     const ageData = await getAppleDeclaredAgeRangeStatus();
     return getIsConsideredOlderThaniOS(ageData, age);
-  } else {
-    const ageData = await getAndroidPlayAgeRangeStatus();
-    return getIsConsideredOlderThanAndroid(ageData, age);
+  } else if (appStore === AppStore.AMAZON_APPSTORE) {
+    const ageData = await getAmazonAgeRangeStatus();
+    return getIsConsideredOlderThanAmazon(ageData, age);
+  } else if (appStore === AppStore.SAMSUNG_GALAXY_STORE) {
+    const ageData = await getSamsungGalaxyAgeRangeStatus();
+    return getIsConsideredOlderThanSamsungGalaxy(ageData, age);
+  } else if (
+    appStore === AppStore.GOOGLE_PLAY ||
+    appStore === AppStore.UNKNOWN
+  ) {
+    const ageData = await getGooglePlayAgeRangeStatus();
+    return getIsConsideredOlderThanGooglePlay(ageData, age);
   }
-};
 
-export {
-  PlayAgeRangeDeclarationUserStatus,
-  PlayAgeRangeDeclarationUserStatusString,
-} from './PlayAgeRangeDeclaration.nitro';
+  // Default to true if none of the APIs can be used
+  return true;
+};

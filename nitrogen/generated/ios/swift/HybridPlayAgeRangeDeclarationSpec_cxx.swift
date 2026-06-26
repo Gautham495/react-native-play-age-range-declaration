@@ -125,21 +125,71 @@ open class HybridPlayAgeRangeDeclarationSpec_cxx {
 
   // Methods
   @inline(__always)
-  public final func getPlayAgeRangeDeclaration() -> bridge.Result_std__shared_ptr_Promise_PlayAgeRangeDeclarationResult___ {
+  public final func detectStore() -> bridge.Result_AppStore_ {
+    do {
+      let __result = try self.__implementation.detectStore()
+      let __resultCpp = __result
+      return bridge.create_Result_AppStore_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_AppStore_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func getPlayAgeRangeDeclaration() -> bridge.Result_std__shared_ptr_Promise_PlayAgeSignalsResult___ {
     do {
       let __result = try self.__implementation.getPlayAgeRangeDeclaration()
-      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_PlayAgeRangeDeclarationResult__ in
-        let __promise = bridge.create_std__shared_ptr_Promise_PlayAgeRangeDeclarationResult__()
-        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_PlayAgeRangeDeclarationResult__(__promise)
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_PlayAgeSignalsResult__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_PlayAgeSignalsResult__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_PlayAgeSignalsResult__(__promise)
         __result
           .then({ __result in __promiseHolder.resolve(__result) })
           .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
         return __promise
       }()
-      return bridge.create_Result_std__shared_ptr_Promise_PlayAgeRangeDeclarationResult___(__resultCpp)
+      return bridge.create_Result_std__shared_ptr_Promise_PlayAgeSignalsResult___(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__shared_ptr_Promise_PlayAgeRangeDeclarationResult___(__exceptionPtr)
+      return bridge.create_Result_std__shared_ptr_Promise_PlayAgeSignalsResult___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func getAmazonAgeRangeDeclaration() -> bridge.Result_std__shared_ptr_Promise_AmazonGetUserAgeDataResult___ {
+    do {
+      let __result = try self.__implementation.getAmazonAgeRangeDeclaration()
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_AmazonGetUserAgeDataResult__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_AmazonGetUserAgeDataResult__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_AmazonGetUserAgeDataResult__(__promise)
+        __result
+          .then({ __result in __promiseHolder.resolve(__result) })
+          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        return __promise
+      }()
+      return bridge.create_Result_std__shared_ptr_Promise_AmazonGetUserAgeDataResult___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_AmazonGetUserAgeDataResult___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func getGalaxyAgeRangeDeclaration() -> bridge.Result_std__shared_ptr_Promise_SamsungGetAgeSignalsResult___ {
+    do {
+      let __result = try self.__implementation.getGalaxyAgeRangeDeclaration()
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_SamsungGetAgeSignalsResult__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_SamsungGetAgeSignalsResult__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_SamsungGetAgeSignalsResult__(__promise)
+        __result
+          .then({ __result in __promiseHolder.resolve(__result) })
+          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        return __promise
+      }()
+      return bridge.create_Result_std__shared_ptr_Promise_SamsungGetAgeSignalsResult___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_SamsungGetAgeSignalsResult___(__exceptionPtr)
     }
   }
   
