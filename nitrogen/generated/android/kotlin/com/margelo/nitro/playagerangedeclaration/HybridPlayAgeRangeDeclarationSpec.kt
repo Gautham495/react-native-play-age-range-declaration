@@ -51,7 +51,15 @@ abstract class HybridPlayAgeRangeDeclarationSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun setGooglePlayMockUser(config: GooglePlayMockConfig?): Unit
+  abstract fun setGooglePlayMockUser(config: PlayAgeSignalsMockConfig?): Unit
+  
+  @DoNotStrip
+  @Keep
+  abstract fun setAmazonMockScenario(scenario: Double?): Unit
+  
+  @DoNotStrip
+  @Keep
+  abstract fun setSamsungMockScenario(scenario: Double?): Unit
 
   // Default implementation of `HybridObject.toString()`
   override fun toString(): String {

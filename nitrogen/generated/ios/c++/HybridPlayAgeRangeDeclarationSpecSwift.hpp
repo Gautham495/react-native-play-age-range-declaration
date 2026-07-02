@@ -32,8 +32,8 @@ namespace margelo::nitro::playagerangedeclaration { enum class SamsungGetAgeSign
 namespace margelo::nitro::playagerangedeclaration { struct DeclaredAgeRangeResult; }
 // Forward declaration of `AppleAgeRangeDeclarationUserStatusValues` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { enum class AppleAgeRangeDeclarationUserStatusValues; }
-// Forward declaration of `GooglePlayMockConfig` to properly resolve imports.
-namespace margelo::nitro::playagerangedeclaration { struct GooglePlayMockConfig; }
+// Forward declaration of `PlayAgeSignalsMockConfig` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { struct PlayAgeSignalsMockConfig; }
 
 #include "AppStore.hpp"
 #include "PlayAgeSignalsResult.hpp"
@@ -48,7 +48,7 @@ namespace margelo::nitro::playagerangedeclaration { struct GooglePlayMockConfig;
 #include "SamsungGetAgeSignalsUserStatus.hpp"
 #include "DeclaredAgeRangeResult.hpp"
 #include "AppleAgeRangeDeclarationUserStatusValues.hpp"
-#include "GooglePlayMockConfig.hpp"
+#include "PlayAgeSignalsMockConfig.hpp"
 
 #include "PlayAgeRangeDeclaration-Swift-Cxx-Umbrella.hpp"
 
@@ -140,8 +140,20 @@ namespace margelo::nitro::playagerangedeclaration {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline void setGooglePlayMockUser(const std::optional<GooglePlayMockConfig>& config) override {
+    inline void setGooglePlayMockUser(const std::optional<PlayAgeSignalsMockConfig>& config) override {
       auto __result = _swiftPart.setGooglePlayMockUser(config);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+    }
+    inline void setAmazonMockScenario(std::optional<double> scenario) override {
+      auto __result = _swiftPart.setAmazonMockScenario(scenario);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+    }
+    inline void setSamsungMockScenario(std::optional<double> scenario) override {
+      auto __result = _swiftPart.setSamsungMockScenario(scenario);
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

@@ -20,10 +20,10 @@ namespace margelo::nitro::playagerangedeclaration { enum class AppStore; }
 namespace margelo::nitro::playagerangedeclaration { enum class AppleAgeRangeDeclarationUserStatusValues; }
 // Forward declaration of `DeclaredAgeRangeResult` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { struct DeclaredAgeRangeResult; }
-// Forward declaration of `GooglePlayMockConfig` to properly resolve imports.
-namespace margelo::nitro::playagerangedeclaration { struct GooglePlayMockConfig; }
 // Forward declaration of `HybridPlayAgeRangeDeclarationSpec` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { class HybridPlayAgeRangeDeclarationSpec; }
+// Forward declaration of `PlayAgeSignalsMockConfig` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { struct PlayAgeSignalsMockConfig; }
 // Forward declaration of `PlayAgeSignalsResult` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { struct PlayAgeSignalsResult; }
 // Forward declaration of `PlayAgeSignalsUserStatus` to properly resolve imports.
@@ -44,8 +44,8 @@ namespace PlayAgeRangeDeclaration { class HybridPlayAgeRangeDeclarationSpec_cxx;
 #include "AppStore.hpp"
 #include "AppleAgeRangeDeclarationUserStatusValues.hpp"
 #include "DeclaredAgeRangeResult.hpp"
-#include "GooglePlayMockConfig.hpp"
 #include "HybridPlayAgeRangeDeclarationSpec.hpp"
+#include "PlayAgeSignalsMockConfig.hpp"
 #include "PlayAgeSignalsResult.hpp"
 #include "PlayAgeSignalsUserStatus.hpp"
 #include "SamsungGetAgeSignalsResult.hpp"
@@ -328,18 +328,18 @@ namespace margelo::nitro::playagerangedeclaration::bridge::swift {
     return Func_void_DeclaredAgeRangeResult_Wrapper(std::move(value));
   }
   
-  // pragma MARK: std::optional<GooglePlayMockConfig>
+  // pragma MARK: std::optional<PlayAgeSignalsMockConfig>
   /**
-   * Specialized version of `std::optional<GooglePlayMockConfig>`.
+   * Specialized version of `std::optional<PlayAgeSignalsMockConfig>`.
    */
-  using std__optional_GooglePlayMockConfig_ = std::optional<GooglePlayMockConfig>;
-  inline std::optional<GooglePlayMockConfig> create_std__optional_GooglePlayMockConfig_(const GooglePlayMockConfig& value) noexcept {
-    return std::optional<GooglePlayMockConfig>(value);
+  using std__optional_PlayAgeSignalsMockConfig_ = std::optional<PlayAgeSignalsMockConfig>;
+  inline std::optional<PlayAgeSignalsMockConfig> create_std__optional_PlayAgeSignalsMockConfig_(const PlayAgeSignalsMockConfig& value) noexcept {
+    return std::optional<PlayAgeSignalsMockConfig>(value);
   }
-  inline bool has_value_std__optional_GooglePlayMockConfig_(const std::optional<GooglePlayMockConfig>& optional) noexcept {
+  inline bool has_value_std__optional_PlayAgeSignalsMockConfig_(const std::optional<PlayAgeSignalsMockConfig>& optional) noexcept {
     return optional.has_value();
   }
-  inline GooglePlayMockConfig get_std__optional_GooglePlayMockConfig_(const std::optional<GooglePlayMockConfig>& optional) noexcept {
+  inline PlayAgeSignalsMockConfig get_std__optional_PlayAgeSignalsMockConfig_(const std::optional<PlayAgeSignalsMockConfig>& optional) noexcept {
     return optional.value();
   }
   

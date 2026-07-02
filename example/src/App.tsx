@@ -12,10 +12,8 @@ import {
 import {
   getGooglePlayAgeRangeStatus,
   getAppleDeclaredAgeRangeStatus,
-  // type PlayAgeRangeDeclarationResult,
   type PlayAgeSignalsResult,
   type DeclaredAgeRangeResult,
-  // PlayAgeRangeDeclarationUserStatusString,
   PlayAgeSignalsUserStatusString,
   getIsConsideredOlderThan,
   setAgeRangeThresholds,
@@ -60,7 +58,6 @@ export default function App() {
 
       if (Platform.OS === 'android') {
         const data = await getGooglePlayAgeRangeStatus();
-
         setAndroidResult(data);
       } else {
         const data = await getAppleDeclaredAgeRangeStatus();
@@ -116,7 +113,7 @@ export default function App() {
             <Text style={styles.resultText}>
               Is Eligible:{' '}
               {/* { androidResult ? String(androidResult?.isEligible) : ''} {`\n`} */}
-              Install Id: {androidResult ? androidResult?.installId : ''} {`\n`}
+              {/* Install Id: {androidResult ? androidResult?.installId : ''} {`\n`} */}
               User Status:{' '}
               {androidResult && androidResult.userStatus
                 ? PlayAgeSignalsUserStatusString[androidResult?.userStatus]
@@ -128,7 +125,7 @@ export default function App() {
               {`\n`}
               Age Lower: {androidResult ? androidResult?.ageLower : ''} {`\n`}
               Age Upper: {androidResult ? androidResult?.ageUpper : ''} {`\n`}
-              Error: {androidResult ? androidResult?.error : ''} {`\n`}
+              {/* Error: {androidResult ? androidResult?.error : ''} {`\n`} */}
             </Text>
           )}
 

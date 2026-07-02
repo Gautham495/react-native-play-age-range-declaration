@@ -23,8 +23,8 @@ namespace margelo::nitro::playagerangedeclaration { struct AmazonGetUserAgeDataR
 namespace margelo::nitro::playagerangedeclaration { struct SamsungGetAgeSignalsResult; }
 // Forward declaration of `DeclaredAgeRangeResult` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { struct DeclaredAgeRangeResult; }
-// Forward declaration of `GooglePlayMockConfig` to properly resolve imports.
-namespace margelo::nitro::playagerangedeclaration { struct GooglePlayMockConfig; }
+// Forward declaration of `PlayAgeSignalsMockConfig` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { struct PlayAgeSignalsMockConfig; }
 
 #include "AppStore.hpp"
 #include "PlayAgeSignalsResult.hpp"
@@ -33,7 +33,7 @@ namespace margelo::nitro::playagerangedeclaration { struct GooglePlayMockConfig;
 #include "SamsungGetAgeSignalsResult.hpp"
 #include "DeclaredAgeRangeResult.hpp"
 #include <optional>
-#include "GooglePlayMockConfig.hpp"
+#include "PlayAgeSignalsMockConfig.hpp"
 
 namespace margelo::nitro::playagerangedeclaration {
 
@@ -71,7 +71,9 @@ namespace margelo::nitro::playagerangedeclaration {
       virtual std::shared_ptr<Promise<AmazonGetUserAgeDataResult>> getAmazonAgeRangeDeclaration() = 0;
       virtual std::shared_ptr<Promise<SamsungGetAgeSignalsResult>> getGalaxyAgeRangeDeclaration() = 0;
       virtual std::shared_ptr<Promise<DeclaredAgeRangeResult>> requestDeclaredAgeRange(double firstThresholdAge, std::optional<double> secondThresholdAge, std::optional<double> thirdThresholdAge) = 0;
-      virtual void setGooglePlayMockUser(const std::optional<GooglePlayMockConfig>& config) = 0;
+      virtual void setGooglePlayMockUser(const std::optional<PlayAgeSignalsMockConfig>& config) = 0;
+      virtual void setAmazonMockScenario(std::optional<double> scenario) = 0;
+      virtual void setSamsungMockScenario(std::optional<double> scenario) = 0;
 
     protected:
       // Hybrid Setup

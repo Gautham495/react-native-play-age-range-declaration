@@ -18,6 +18,7 @@ object AmazonGetUserAgeDataProvider {
   private const val URI = "content://$AUTHORITY/$PATH_GET_USER_AGE_DATA"
 
   fun isAvailable(context: Context): Boolean {
+    if (PlayAgeRangeDeclaration.amazonTestOption != null) return true
     val installer = getInstallerPackageName(context)
     return installer == AMAZONSTORE
   }
@@ -53,8 +54,15 @@ object AmazonGetUserAgeDataProvider {
   )
 
   fun getAgeSignals(context: Context): AmazonGetUserAgeDataResult {
+    val testOption = PlayAgeRangeDeclaration.amazonTestOption
+    val queryUri = if (testOption != null) {
+      Uri.parse("content://${context.packageName}.amzn_test_appstore/$PATH_GET_USER_AGE_DATA?testOption=$testOption")
+    } else {
+      Uri.parse(URI)
+    }
+
     val cursor = try {
-      context.contentResolver.query(Uri.parse(URI), null, null, null, null)
+      context.contentResolver.query(queryUri, null, null, null, null)
     } catch (e: Exception) {
       return emptyResult()
     }

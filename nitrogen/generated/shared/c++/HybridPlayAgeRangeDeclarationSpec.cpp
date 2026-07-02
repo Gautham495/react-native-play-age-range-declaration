@@ -20,6 +20,8 @@ namespace margelo::nitro::playagerangedeclaration {
       prototype.registerHybridMethod("getGalaxyAgeRangeDeclaration", &HybridPlayAgeRangeDeclarationSpec::getGalaxyAgeRangeDeclaration);
       prototype.registerHybridMethod("requestDeclaredAgeRange", &HybridPlayAgeRangeDeclarationSpec::requestDeclaredAgeRange);
       prototype.registerHybridMethod("setGooglePlayMockUser", &HybridPlayAgeRangeDeclarationSpec::setGooglePlayMockUser);
+      prototype.registerHybridMethod("setAmazonMockScenario", &HybridPlayAgeRangeDeclarationSpec::setAmazonMockScenario);
+      prototype.registerHybridMethod("setSamsungMockScenario", &HybridPlayAgeRangeDeclarationSpec::setSamsungMockScenario);
     });
   }
 

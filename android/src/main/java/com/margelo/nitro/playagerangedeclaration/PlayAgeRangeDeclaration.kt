@@ -58,7 +58,7 @@ class PlayAgeRangeDeclaration : HybridPlayAgeRangeDeclarationSpec() {
     }
   }
 
-  override fun setGooglePlayMockUser(config: GooglePlayMockConfig?) {
+  override fun setGooglePlayMockUser(config: PlayAgeSignalsMockConfig?) {
     if (config == null) {
       mockUser = null
       return
@@ -84,9 +84,19 @@ class PlayAgeRangeDeclaration : HybridPlayAgeRangeDeclarationSpec() {
     mockUser = user.build()
   }
 
+  override fun setAmazonMockScenario(scenario: Double?) {
+    amazonTestOption = scenario?.toInt()
+  }
+
+  override fun setSamsungMockScenario(scenario: Double?) {
+    samsungTestOption = scenario?.toInt()
+  }
+
   // Companion object for managing age signal mocking
   companion object {
     var mockUser: AgeSignalsResult? = null
+    var amazonTestOption: Int? = null
+    var samsungTestOption: Int? = null
 
     // Returns AgeSignalManager or the FakeAgeSignalsManager when a mock user is set
     fun getManager(context: Context): AgeSignalsManager {

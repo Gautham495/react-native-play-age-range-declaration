@@ -28,3 +28,11 @@ export interface PlayAgeSignalsResult {
   ageUpper?: number;
   mostRecentApprovalDate?: string; // ISO 8601 format (YYYY-MM-DD)
 }
+
+export interface PlayAgeSignalsMockConfig {
+  userStatus: PlayAgeSignalsUserStatus;
+  ageLower?: number;
+  ageUpper?: number;
+  installId?: string;
+  mostRecentApprovalDate?: string; // ISO 8601 format (YYYY-MM-DD)
+}

@@ -15,6 +15,7 @@ import {
 import type { DeclaredAgeRangeResult } from './providers/AppleDeclaredAgeRange';
 import {
   type PlayAgeSignalsResult,
+  type PlayAgeSignalsMockConfig,
   PlayAgeSignalsUserStatus,
   PlayAgeSignalsUserStatusString,
 } from './providers/GooglePlayAgeSignals';
@@ -23,8 +24,6 @@ import {
   SamsungGetAgeSignalsUserStatus,
   SamsungGetAgeSignalsUserStatusString,
 } from './providers/SamsungGetAgeSignals';
-
-import type { GooglePlayMockConfig } from './testing/GooglePlayMockConfig';
 
 import { ageRangeThresholdManager } from './AgeRangeThresholdManager';
 
@@ -67,12 +66,22 @@ export const setAgeRangeThresholds = (
   ageRangeThresholdManager.setAgeRangeThresholds(thresholds);
 };
 
-export const setGooglePlayMockUser = (config?: GooglePlayMockConfig): void => {
+export const setGooglePlayMockUser = (
+  config?: PlayAgeSignalsMockConfig
+): void => {
   PlayAgeRangeDeclarationHybridObject.setGooglePlayMockUser(config);
 };
 
+export const setAmazonMockScenario = (scenario?: number): void => {
+  PlayAgeRangeDeclarationHybridObject.setAmazonMockScenario(scenario);
+};
+
+export const setSamsungMockScenario = (scenario?: number): void => {
+  PlayAgeRangeDeclarationHybridObject.setSamsungMockScenario(scenario);
+};
+
 export type {
-  GooglePlayMockConfig,
+  PlayAgeSignalsMockConfig,
   DeclaredAgeRangeResult,
   PlayAgeSignalsResult,
   AmazonGetUserAgeDataResult,

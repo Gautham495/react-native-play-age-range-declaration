@@ -24,6 +24,8 @@ object SamsungAgeSignalsProvider {
   private const val KEY_ASAA_ENABLED = "gs_asaa_enable"
 
   fun isAvailable(context: Context): Boolean {
+    if (PlayAgeRangeDeclaration.samsungTestOption != null) return true
+
     val installer = getInstallerPackageName(context)
 
     if (installer != GALAXYSTORE) return false
@@ -59,11 +61,22 @@ object SamsungAgeSignalsProvider {
   )
 
   fun getAgeSignals(context: Context): SamsungGetAgeSignalsResult {
-    val asaaEnabled = Settings.Secure.getString(context.contentResolver, KEY_ASAA_ENABLED)
-    if (asaaEnabled != "1") return emptyResult()
+    val testOption = PlayAgeRangeDeclaration.samsungTestOption
+    val callUri: Uri
+    val callArg: String?
+
+    if (testOption != null) {
+      callUri = Uri.parse("content://${context.packageName}.samsung_test_provider/$QUERY_SETTINGS")
+      callArg = testOption.toString()
+    } else {
+      val asaaEnabled = Settings.Secure.getString(context.contentResolver, KEY_ASAA_ENABLED)
+      if (asaaEnabled != "1") return emptyResult()
+      callUri = Uri.parse(URI_ASAA_SETTINGS)
+      callArg = null
+    }
 
     val bundle = try {
-      context.contentResolver.call(Uri.parse(URI_ASAA_SETTINGS), METHOD_GET_AGE_SIGNAL_RESULT, null, null)
+      context.contentResolver.call(callUri, METHOD_GET_AGE_SIGNAL_RESULT, callArg, null)
     } catch (e: Exception) {
       return emptyResult(error = e.message)
     }
