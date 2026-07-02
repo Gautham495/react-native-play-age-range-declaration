@@ -90,6 +90,10 @@ class PlayAgeRangeDeclaration: HybridPlayAgeRangeDeclarationSpec {
     }
   }
 
+  func setGooglePlayMockUser(config: GooglePlayMockConfig?) throws {
+    // No-op on iOS — Google Play Age Signals API is Android-only
+  }
+
   func getPlayAgeRangeDeclaration() throws -> Promise<PlayAgeRangeDeclarationResult> {
     return Promise<PlayAgeRangeDeclarationResult>.rejected(
       withError: NSError(

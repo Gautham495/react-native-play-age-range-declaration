@@ -48,6 +48,10 @@ abstract class HybridPlayAgeRangeDeclarationSpec: HybridObject() {
   @DoNotStrip
   @Keep
   abstract fun requestDeclaredAgeRange(firstThresholdAge: Double, secondThresholdAge: Double?, thirdThresholdAge: Double?): Promise<DeclaredAgeRangeResult>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun setGooglePlayMockUser(config: GooglePlayMockConfig?): Unit
 
   // Default implementation of `HybridObject.toString()`
   override fun toString(): String {

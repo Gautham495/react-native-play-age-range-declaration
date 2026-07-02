@@ -27,6 +27,8 @@ namespace margelo::nitro::playagerangedeclaration { enum class SamsungGetAgeSign
 namespace margelo::nitro::playagerangedeclaration { struct DeclaredAgeRangeResult; }
 // Forward declaration of `AppleAgeRangeDeclarationUserStatusValues` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { enum class AppleAgeRangeDeclarationUserStatusValues; }
+// Forward declaration of `GooglePlayMockConfig` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { struct GooglePlayMockConfig; }
 
 #include "AppStore.hpp"
 #include "JAppStore.hpp"
@@ -52,6 +54,8 @@ namespace margelo::nitro::playagerangedeclaration { enum class AppleAgeRangeDecl
 #include "JDeclaredAgeRangeResult.hpp"
 #include "AppleAgeRangeDeclarationUserStatusValues.hpp"
 #include "JAppleAgeRangeDeclarationUserStatusValues.hpp"
+#include "GooglePlayMockConfig.hpp"
+#include "JGooglePlayMockConfig.hpp"
 
 namespace margelo::nitro::playagerangedeclaration {
 
@@ -154,6 +158,10 @@ namespace margelo::nitro::playagerangedeclaration {
       });
       return __promise;
     }();
+  }
+  void JHybridPlayAgeRangeDeclarationSpec::setGooglePlayMockUser(const std::optional<GooglePlayMockConfig>& config) {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<void(jni::alias_ref<JGooglePlayMockConfig> /* config */)>("setGooglePlayMockUser");
+    method(_javaPart, config.has_value() ? JGooglePlayMockConfig::fromCpp(config.value()) : nullptr);
   }
 
 } // namespace margelo::nitro::playagerangedeclaration

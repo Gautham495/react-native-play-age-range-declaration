@@ -225,4 +225,15 @@ open class HybridPlayAgeRangeDeclarationSpec_cxx {
       return bridge.create_Result_std__shared_ptr_Promise_DeclaredAgeRangeResult___(__exceptionPtr)
     }
   }
+  
+  @inline(__always)
+  public final func setGooglePlayMockUser(config: bridge.std__optional_GooglePlayMockConfig_) -> bridge.Result_void_ {
+    do {
+      try self.__implementation.setGooglePlayMockUser(config: config.value)
+      return bridge.create_Result_void_()
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_void_(__exceptionPtr)
+    }
+  }
 }

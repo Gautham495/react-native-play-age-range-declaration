@@ -3,6 +3,7 @@ import type { AmazonGetUserAgeDataResult } from './providers/AmazonGetUserAgeDat
 import type { DeclaredAgeRangeResult } from './providers/AppleDeclaredAgeRange';
 import type { PlayAgeSignalsResult } from './providers/GooglePlayAgeSignals';
 import type { SamsungGetAgeSignalsResult } from './providers/SamsungGetAgeSignals';
+import type { GooglePlayMockConfig } from './testing/GooglePlayMockConfig';
 
 export enum AppStore {
   UNKNOWN = 0,
@@ -23,4 +24,5 @@ export interface PlayAgeRangeDeclaration
     secondThresholdAge?: number,
     thirdThresholdAge?: number
   ): Promise<DeclaredAgeRangeResult>;
+  setGooglePlayMockUser(config?: GooglePlayMockConfig): void;
 }

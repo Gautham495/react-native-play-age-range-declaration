@@ -18,6 +18,7 @@ public protocol HybridPlayAgeRangeDeclarationSpec_protocol: HybridObject {
   func getAmazonAgeRangeDeclaration() throws -> Promise<AmazonGetUserAgeDataResult>
   func getGalaxyAgeRangeDeclaration() throws -> Promise<SamsungGetAgeSignalsResult>
   func requestDeclaredAgeRange(firstThresholdAge: Double, secondThresholdAge: Double?, thirdThresholdAge: Double?) throws -> Promise<DeclaredAgeRangeResult>
+  func setGooglePlayMockUser(config: GooglePlayMockConfig?) throws -> Void
 }
 
 public extension HybridPlayAgeRangeDeclarationSpec_protocol {

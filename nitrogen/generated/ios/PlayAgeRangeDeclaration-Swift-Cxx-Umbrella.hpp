@@ -20,6 +20,8 @@ namespace margelo::nitro::playagerangedeclaration { enum class AppStore; }
 namespace margelo::nitro::playagerangedeclaration { enum class AppleAgeRangeDeclarationUserStatusValues; }
 // Forward declaration of `DeclaredAgeRangeResult` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { struct DeclaredAgeRangeResult; }
+// Forward declaration of `GooglePlayMockConfig` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { struct GooglePlayMockConfig; }
 // Forward declaration of `HybridPlayAgeRangeDeclarationSpec` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { class HybridPlayAgeRangeDeclarationSpec; }
 // Forward declaration of `PlayAgeSignalsResult` to properly resolve imports.
@@ -38,6 +40,7 @@ namespace margelo::nitro::playagerangedeclaration { enum class SamsungGetAgeSign
 #include "AppStore.hpp"
 #include "AppleAgeRangeDeclarationUserStatusValues.hpp"
 #include "DeclaredAgeRangeResult.hpp"
+#include "GooglePlayMockConfig.hpp"
 #include "HybridPlayAgeRangeDeclarationSpec.hpp"
 #include "PlayAgeSignalsResult.hpp"
 #include "PlayAgeSignalsUserStatus.hpp"

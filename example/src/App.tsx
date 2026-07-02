@@ -12,22 +12,32 @@ import {
 import {
   getGooglePlayAgeRangeStatus,
   getAppleDeclaredAgeRangeStatus,
-  type PlayAgeRangeDeclarationResult,
+  // type PlayAgeRangeDeclarationResult,
+  type PlayAgeSignalsResult,
   type DeclaredAgeRangeResult,
-  PlayAgeRangeDeclarationUserStatusString,
+  // PlayAgeRangeDeclarationUserStatusString,
+  PlayAgeSignalsUserStatusString,
   getIsConsideredOlderThan,
   setAgeRangeThresholds,
+  setGooglePlayMockUser,
+  PlayAgeSignalsUserStatus,
 } from 'react-native-play-age-range-declaration';
 
 setAgeRangeThresholds([13, 15]);
 
 export default function App() {
   const [androidResult, setAndroidResult] =
-    useState<PlayAgeRangeDeclarationResult | null>(null);
+    useState<PlayAgeSignalsResult | null>(null);
 
   const [appleResult, setAppleResult] = useState<DeclaredAgeRangeResult | null>(
     null
   );
+
+  setGooglePlayMockUser({
+    userStatus: PlayAgeSignalsUserStatus.SUPERVISED,
+    ageLower: 13,
+    ageUpper: 17,
+  });
 
   const [isConsideredOlderThan18, setIsConsideredOlderThan18] = useState<
     boolean | null
@@ -105,13 +115,11 @@ export default function App() {
           ) : (
             <Text style={styles.resultText}>
               Is Eligible:{' '}
-              {androidResult ? String(androidResult?.isEligible) : ''} {`\n`}
+              {/* { androidResult ? String(androidResult?.isEligible) : ''} {`\n`} */}
               Install Id: {androidResult ? androidResult?.installId : ''} {`\n`}
               User Status:{' '}
               {androidResult && androidResult.userStatus
-                ? PlayAgeRangeDeclarationUserStatusString[
-                    androidResult?.userStatus
-                  ]
+                ? PlayAgeSignalsUserStatusString[androidResult?.userStatus]
                 : ''}
               {'\n'}
               Most Recent Approval Date:{' '}

@@ -6,9 +6,12 @@ import com.facebook.proguard.annotations.DoNotStrip
 import com.google.android.play.agesignals.AgeSignalsManager
 import com.google.android.play.agesignals.AgeSignalsManagerFactory
 import com.google.android.play.agesignals.AgeSignalsResult
+import com.google.android.play.agesignals.model.AgeSignalsVerificationStatus
 import com.google.android.play.agesignals.testing.FakeAgeSignalsManager
 import com.margelo.nitro.core.Promise
 import com.margelo.nitro.NitroModules
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 // https://developer.android.com/google/play/age-signals/test-age-signals-api
 
@@ -55,33 +58,31 @@ class PlayAgeRangeDeclaration : HybridPlayAgeRangeDeclarationSpec() {
     }
   }
 
-  // MOCK: Use setMockUser for testing
-  // https://developer.android.com/google/play/age-signals/test-age-signals-api
-  //
-  // To test different scenarios, you can override the userStatus with one of the following values:
-  // - AgeSignalsVerificationStatus.VERIFIED - User is 18+ (verified adult)
-  // - AgeSignalsVerificationStatus.SUPERVISED - User is supervised (13-17 with parental controls)
-  // - AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_PENDING - Pending approval
-  // - AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_DENIED - Approval denied
-  // - AgeSignalsVerificationStatus.UNKNOWN - User status unknown
-  //
-  // Configure it in any of your native app files (f.ex MainActivity.kt):
-  // TODO: Expose the setMockUser functionality to the native bridge
-  //
-  // import com.margelo.nitro.playagerangedeclaration.PlayAgeRangeDeclaration
-  // import com.margelo.nitro.playagerangedeclaration.PlayAgeRangeMockConfig
-  //
-  // override fun onCreate() {
-  //   PlayAgeRangeDeclaration.setMockUser(
-  //     PlayAgeRangeMockConfig(
-  //       userStatus = AgeSignalsVerificationStatus.SUPERVISED,
-  //       ageLower = 13,
-  //       ageUpper = 17,
-  //       mostRecentApprovalDate = Date.from(LocalDate.of(2025, 2, 1).atStartOfDay(ZoneOffset.UTC).toInstant()),
-  //       installId = "fake_install_id_12345"
-  //     )
-  //   )
-  // }
+  override fun setGooglePlayMockUser(config: GooglePlayMockConfig?) {
+    if (config == null) {
+      mockUser = null
+      return
+    }
+
+    val userStatus = when (config.userStatus) {
+      PlayAgeSignalsUserStatus.VERIFIED -> AgeSignalsVerificationStatus.VERIFIED
+      PlayAgeSignalsUserStatus.SUPERVISED -> AgeSignalsVerificationStatus.SUPERVISED
+      PlayAgeSignalsUserStatus.SUPERVISED_APPROVAL_PENDING -> AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_PENDING
+      PlayAgeSignalsUserStatus.SUPERVISED_APPROVAL_DENIED -> AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_DENIED
+      PlayAgeSignalsUserStatus.UNKNOWN -> AgeSignalsVerificationStatus.UNKNOWN
+    }
+
+    val user = AgeSignalsResult.builder().setInstallId(config.installId ?: "fake_install_id_12345")
+    user.setUserStatus(userStatus)
+    config.ageLower?.let { user.setAgeLower(it.toInt()) }
+    config.ageUpper?.let { user.setAgeUpper(it.toInt()) }
+    config.mostRecentApprovalDate?.let {
+      val date = SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(it)
+      if (date != null) user.setMostRecentApprovalDate(date)
+    }
+
+    mockUser = user.build()
+  }
 
   // Companion object for managing age signal mocking
   companion object {

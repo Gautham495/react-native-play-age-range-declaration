@@ -20,6 +20,8 @@ namespace margelo::nitro::playagerangedeclaration { enum class AppStore; }
 namespace margelo::nitro::playagerangedeclaration { enum class AppleAgeRangeDeclarationUserStatusValues; }
 // Forward declaration of `DeclaredAgeRangeResult` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { struct DeclaredAgeRangeResult; }
+// Forward declaration of `GooglePlayMockConfig` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { struct GooglePlayMockConfig; }
 // Forward declaration of `HybridPlayAgeRangeDeclarationSpec` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { class HybridPlayAgeRangeDeclarationSpec; }
 // Forward declaration of `PlayAgeSignalsResult` to properly resolve imports.
@@ -42,6 +44,7 @@ namespace PlayAgeRangeDeclaration { class HybridPlayAgeRangeDeclarationSpec_cxx;
 #include "AppStore.hpp"
 #include "AppleAgeRangeDeclarationUserStatusValues.hpp"
 #include "DeclaredAgeRangeResult.hpp"
+#include "GooglePlayMockConfig.hpp"
 #include "HybridPlayAgeRangeDeclarationSpec.hpp"
 #include "PlayAgeSignalsResult.hpp"
 #include "PlayAgeSignalsUserStatus.hpp"
@@ -325,6 +328,21 @@ namespace margelo::nitro::playagerangedeclaration::bridge::swift {
     return Func_void_DeclaredAgeRangeResult_Wrapper(std::move(value));
   }
   
+  // pragma MARK: std::optional<GooglePlayMockConfig>
+  /**
+   * Specialized version of `std::optional<GooglePlayMockConfig>`.
+   */
+  using std__optional_GooglePlayMockConfig_ = std::optional<GooglePlayMockConfig>;
+  inline std::optional<GooglePlayMockConfig> create_std__optional_GooglePlayMockConfig_(const GooglePlayMockConfig& value) noexcept {
+    return std::optional<GooglePlayMockConfig>(value);
+  }
+  inline bool has_value_std__optional_GooglePlayMockConfig_(const std::optional<GooglePlayMockConfig>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline GooglePlayMockConfig get_std__optional_GooglePlayMockConfig_(const std::optional<GooglePlayMockConfig>& optional) noexcept {
+    return optional.value();
+  }
+  
   // pragma MARK: std::shared_ptr<HybridPlayAgeRangeDeclarationSpec>
   /**
    * Specialized version of `std::shared_ptr<HybridPlayAgeRangeDeclarationSpec>`.
@@ -380,6 +398,15 @@ namespace margelo::nitro::playagerangedeclaration::bridge::swift {
   }
   inline Result_std__shared_ptr_Promise_DeclaredAgeRangeResult___ create_Result_std__shared_ptr_Promise_DeclaredAgeRangeResult___(const std::exception_ptr& error) noexcept {
     return Result<std::shared_ptr<Promise<DeclaredAgeRangeResult>>>::withError(error);
+  }
+  
+  // pragma MARK: Result<void>
+  using Result_void_ = Result<void>;
+  inline Result_void_ create_Result_void_() noexcept {
+    return Result<void>::withValue();
+  }
+  inline Result_void_ create_Result_void_(const std::exception_ptr& error) noexcept {
+    return Result<void>::withError(error);
   }
 
 } // namespace margelo::nitro::playagerangedeclaration::bridge::swift

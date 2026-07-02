@@ -5,24 +5,26 @@ import {
   type PlayAgeRangeDeclaration,
   AppStore,
 } from './PlayAgeRangeDeclaration.nitro';
-import type {
+import {
+  type AmazonGetUserAgeDataResult,
   AmazonGetUserAgeDataResponseStatus,
   AmazonGetUserAgeDataResponseStatusString,
-  AmazonGetUserAgeDataResult,
   AmazonGetUserAgeDataUserStatus,
   AmazonGetUserAgeDataUserStatusString,
 } from './providers/AmazonGetUserAgeData';
 import type { DeclaredAgeRangeResult } from './providers/AppleDeclaredAgeRange';
-import type {
-  PlayAgeSignalsResult,
+import {
+  type PlayAgeSignalsResult,
   PlayAgeSignalsUserStatus,
   PlayAgeSignalsUserStatusString,
 } from './providers/GooglePlayAgeSignals';
-import type {
-  SamsungGetAgeSignalsResult,
+import {
+  type SamsungGetAgeSignalsResult,
   SamsungGetAgeSignalsUserStatus,
   SamsungGetAgeSignalsUserStatusString,
 } from './providers/SamsungGetAgeSignals';
+
+import type { GooglePlayMockConfig } from './testing/GooglePlayMockConfig';
 
 import { ageRangeThresholdManager } from './AgeRangeThresholdManager';
 
@@ -65,17 +67,25 @@ export const setAgeRangeThresholds = (
   ageRangeThresholdManager.setAgeRangeThresholds(thresholds);
 };
 
+export const setGooglePlayMockUser = (config?: GooglePlayMockConfig): void => {
+  PlayAgeRangeDeclarationHybridObject.setGooglePlayMockUser(config);
+};
+
 export type {
+  GooglePlayMockConfig,
   DeclaredAgeRangeResult,
   PlayAgeSignalsResult,
+  AmazonGetUserAgeDataResult,
+  SamsungGetAgeSignalsResult,
+};
+
+export {
   PlayAgeSignalsUserStatus,
   PlayAgeSignalsUserStatusString,
-  AmazonGetUserAgeDataResult,
   AmazonGetUserAgeDataResponseStatus,
   AmazonGetUserAgeDataResponseStatusString,
   AmazonGetUserAgeDataUserStatus,
   AmazonGetUserAgeDataUserStatusString,
-  SamsungGetAgeSignalsResult,
   SamsungGetAgeSignalsUserStatus,
   SamsungGetAgeSignalsUserStatusString,
 };

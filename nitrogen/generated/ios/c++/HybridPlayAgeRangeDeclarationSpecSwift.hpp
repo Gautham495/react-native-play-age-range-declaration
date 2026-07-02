@@ -32,6 +32,8 @@ namespace margelo::nitro::playagerangedeclaration { enum class SamsungGetAgeSign
 namespace margelo::nitro::playagerangedeclaration { struct DeclaredAgeRangeResult; }
 // Forward declaration of `AppleAgeRangeDeclarationUserStatusValues` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { enum class AppleAgeRangeDeclarationUserStatusValues; }
+// Forward declaration of `GooglePlayMockConfig` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { struct GooglePlayMockConfig; }
 
 #include "AppStore.hpp"
 #include "PlayAgeSignalsResult.hpp"
@@ -46,6 +48,7 @@ namespace margelo::nitro::playagerangedeclaration { enum class AppleAgeRangeDecl
 #include "SamsungGetAgeSignalsUserStatus.hpp"
 #include "DeclaredAgeRangeResult.hpp"
 #include "AppleAgeRangeDeclarationUserStatusValues.hpp"
+#include "GooglePlayMockConfig.hpp"
 
 #include "PlayAgeRangeDeclaration-Swift-Cxx-Umbrella.hpp"
 
@@ -136,6 +139,12 @@ namespace margelo::nitro::playagerangedeclaration {
       }
       auto __value = std::move(__result.value());
       return __value;
+    }
+    inline void setGooglePlayMockUser(const std::optional<GooglePlayMockConfig>& config) override {
+      auto __result = _swiftPart.setGooglePlayMockUser(config);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
     }
 
   private:

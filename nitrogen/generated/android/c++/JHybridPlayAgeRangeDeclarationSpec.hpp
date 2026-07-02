@@ -59,6 +59,7 @@ namespace margelo::nitro::playagerangedeclaration {
     std::shared_ptr<Promise<AmazonGetUserAgeDataResult>> getAmazonAgeRangeDeclaration() override;
     std::shared_ptr<Promise<SamsungGetAgeSignalsResult>> getGalaxyAgeRangeDeclaration() override;
     std::shared_ptr<Promise<DeclaredAgeRangeResult>> requestDeclaredAgeRange(double firstThresholdAge, std::optional<double> secondThresholdAge, std::optional<double> thirdThresholdAge) override;
+    void setGooglePlayMockUser(const std::optional<GooglePlayMockConfig>& config) override;
 
   private:
     jni::global_ref<JHybridPlayAgeRangeDeclarationSpec::JavaPart> _javaPart;
