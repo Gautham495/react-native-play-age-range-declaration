@@ -1,7 +1,6 @@
 package com.margelo.nitro.playagerangedeclaration
 
 import android.content.Context
-import android.util.Log
 import com.facebook.proguard.annotations.DoNotStrip
 import com.google.android.play.agesignals.AgeSignalsManager
 import com.google.android.play.agesignals.AgeSignalsManagerFactory
@@ -103,28 +102,6 @@ class PlayAgeRangeDeclaration : HybridPlayAgeRangeDeclarationSpec() {
       return mockUser?.let {
         FakeAgeSignalsManager().apply { setNextAgeSignalsResult(it) }
       } ?: AgeSignalsManagerFactory.create(context)
-    }
-
-    // Configure a mocked user
-    fun setMockUser(config: PlayAgeRangeMockConfig?) {
-      // Reset mock if no configuration is provided
-      if(config == null) {
-        mockUser = null
-        return
-      }
-
-      // Initialize the mocked user builder
-      val user = AgeSignalsResult.builder().setInstallId("fake_install_id_12345")
-
-      // Apply configuration properties to the builder
-      config.userStatus.let { user.setUserStatus(it) }
-      config.ageLower?.let { user.setAgeLower(it) }
-      config.ageUpper?.let { user.setAgeUpper(it) }
-      config.installId?.let { user.setInstallId(it) }
-      config.mostRecentApprovalDate?.let { user.setMostRecentApprovalDate(it) }
-
-      // Finalize and store the mocked user instance
-      mockUser = user.build()
     }
   }
 }
