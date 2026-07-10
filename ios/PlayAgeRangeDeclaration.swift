@@ -102,8 +102,14 @@ class PlayAgeRangeDeclaration: HybridPlayAgeRangeDeclarationSpec {
     // No-op on iOS — Samsung Galaxy Store Age API is Android-only
   }
 
-  func detectStore() throws {
-    // No-op on iOS — Detect store is Android-only
+  func detectStore() throws -> AppStore {
+    throw NSError(
+      domain: "DetectStore",
+      code: -1,
+      userInfo: [
+        NSLocalizedDescriptionKey: "Not implemented"
+      ]
+    )
   }
 
   func getAmazonAgeRangeDeclaration()  throws -> Promise<AmazonGetUserAgeDataResult> {
@@ -118,7 +124,7 @@ class PlayAgeRangeDeclaration: HybridPlayAgeRangeDeclarationSpec {
   func getGalaxyAgeRangeDeclaration()  throws -> Promise<SamsungGetAgeSignalsResult> {
     return Promise<SamsungGetAgeSignalsResult>.rejected(
       withError: NSError(
-        domain: "SamsungGetAgeSignalsResult", code: -1,
+        domain: "PlayAgeRangeDeclaration", code: -1,
         userInfo: [NSLocalizedDescriptionKey: "Not implemented"]
       )
     )
