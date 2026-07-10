@@ -116,7 +116,7 @@ class PlayAgeRangeDeclaration: HybridPlayAgeRangeDeclarationSpec {
   }
 
   func getGalaxyAgeRangeDeclaration()  throws -> Promise<SamsungGetAgeSignalsResult> {
-    return Promise<AmazonGetUserAgeDataResult>.rejected(
+    return Promise<SamsungGetAgeSignalsResult>.rejected(
       withError: NSError(
         domain: "SamsungGetAgeSignalsResult", code: -1,
         userInfo: [NSLocalizedDescriptionKey: "Not implemented"]
