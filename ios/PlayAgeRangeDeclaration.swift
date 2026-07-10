@@ -102,8 +102,8 @@ class PlayAgeRangeDeclaration: HybridPlayAgeRangeDeclarationSpec {
     // No-op on iOS — Samsung Galaxy Store Age API is Android-only
   }
 
-  func detectStore() throws {
-    // No-op on iOS — Detect store is Android-only
+  func detectStore() -> AppStore {
+    return .appleAppstore
   }
 
   func getAmazonAgeRangeDeclaration()  throws -> Promise<AmazonGetUserAgeDataResult> {
