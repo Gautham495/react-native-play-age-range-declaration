@@ -16,9 +16,11 @@ import android.net.Uri
 //       android:authorities="${applicationId}.amzn_test_appstore"
 //       android:exported="false" />
 //
-// Then activate a scenario in native code (e.g. MainActivity.kt):
-//   PlayAgeRangeDeclaration.setAmazonTestOption(1)  // 18+ verified user
-//   PlayAgeRangeDeclaration.setAmazonTestOption(null) // disable, use real API
+// Then activate a scenario from JS:
+//   setAmazonMockScenario(1)         // 18+ verified user
+//   setAmazonMockScenario(undefined) // disable, use real API
+// or from native code:
+//   PlayAgeRangeDeclaration.amazonMockScenario = 1
 //
 // testOption values:
 //   1  - VERIFIED (18+)
@@ -27,7 +29,7 @@ import android.net.Uri
 //   4  - SUPERVISED (13-15)
 //   5  - SUPERVISED (16-17)
 //   6  - CONSENT_NOT_GRANTED
-//   7  - Law not applicable (empty userStatus, isEligible = false)
+//   7  - Law not applicable (SUCCESS with empty userStatus)
 //   8  - APP_NOT_OWNED error
 //   9  - INTERNAL_TRANSIENT_ERROR
 //   10 - INTERNAL_ERROR

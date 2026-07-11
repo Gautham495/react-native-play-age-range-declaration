@@ -21,7 +21,7 @@ object AmazonGetUserAgeDataProvider : StoreAgeSignalsProvider {
   override val store = AppStore.AMAZON_APPSTORE
 
   override fun isAvailable(context: Context): Boolean {
-    if (PlayAgeRangeDeclaration.amazonTestOption != null) return true
+    if (PlayAgeRangeDeclaration.amazonMockScenario != null) return true
 
     return getInstallerPackageName(context) == AMAZONSTORE
   }
@@ -57,10 +57,11 @@ object AmazonGetUserAgeDataProvider : StoreAgeSignalsProvider {
   )
 
   fun getAgeSignals(context: Context): AmazonGetUserAgeDataResult {
-    val testOption = PlayAgeRangeDeclaration.amazonTestOption
-    val queryUri = if (testOption != null) {
+    val mockScenario = PlayAgeRangeDeclaration.amazonMockScenario
+    val queryUri = if (mockScenario != null) {
       // Route to the app-local AmazonTestContentProvider (see that class for scenarios).
-      Uri.parse("content://${context.packageName}.amzn_test_appstore/$PATH_GET_USER_AGE_DATA?testOption=$testOption")
+      // "testOption" is Amazon's own query-parameter name for test scenarios.
+      Uri.parse("content://${context.packageName}.amzn_test_appstore/$PATH_GET_USER_AGE_DATA?testOption=$mockScenario")
     } else {
       Uri.parse(URI)
     }

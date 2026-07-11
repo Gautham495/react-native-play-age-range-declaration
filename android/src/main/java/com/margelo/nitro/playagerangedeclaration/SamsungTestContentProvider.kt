@@ -16,9 +16,11 @@ import android.os.Bundle
 //       android:authorities="${applicationId}.samsung_test_provider"
 //       android:exported="false" />
 //
-// Then activate a scenario in native code (e.g. MainActivity.kt):
-//   PlayAgeRangeDeclaration.setSamsungTestOption(1)  // 18+ verified user
-//   PlayAgeRangeDeclaration.setSamsungTestOption(null)  // disable, use real API
+// Then activate a scenario from JS:
+//   setSamsungMockScenario(1)         // 18+ verified user
+//   setSamsungMockScenario(undefined) // disable, use real API
+// or from native code:
+//   PlayAgeRangeDeclaration.samsungMockScenario = 1
 //
 // testOption values:
 //   1  - VERIFIED (18+)

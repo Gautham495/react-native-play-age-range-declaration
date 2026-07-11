@@ -106,29 +106,29 @@ class PlayAgeRangeDeclaration: HybridPlayAgeRangeDeclarationSpec {
     return .appleAppstore
   }
 
-  func getAmazonAgeRangeDeclaration()  throws -> Promise<AmazonGetUserAgeDataResult> {
+  func getAmazonUserAgeData() throws -> Promise<AmazonGetUserAgeDataResult> {
     return Promise<AmazonGetUserAgeDataResult>.rejected(
       withError: NSError(
-        domain: "AmazonAgeRangeDeclaration", code: -1,
-        userInfo: [NSLocalizedDescriptionKey: "Not implemented"]
+        domain: "PlayAgeRangeDeclaration", code: -1,
+        userInfo: [NSLocalizedDescriptionKey: "Amazon Appstore age signals are not available on iOS"]
       )
     )
   }
 
-  func getGalaxyAgeRangeDeclaration()  throws -> Promise<SamsungGetAgeSignalsResult> {
+  func getSamsungAgeSignals() throws -> Promise<SamsungGetAgeSignalsResult> {
     return Promise<SamsungGetAgeSignalsResult>.rejected(
       withError: NSError(
-        domain: "SamsungGetAgeSignalsResult", code: -1,
-        userInfo: [NSLocalizedDescriptionKey: "Not implemented"]
+        domain: "PlayAgeRangeDeclaration", code: -1,
+        userInfo: [NSLocalizedDescriptionKey: "Samsung Galaxy Store age signals are not available on iOS"]
       )
     )
   }
 
-  func getPlayAgeRangeDeclaration() throws -> Promise<PlayAgeSignalsResult> {
+  func getGooglePlayAgeSignals() throws -> Promise<PlayAgeSignalsResult> {
     return Promise<PlayAgeSignalsResult>.rejected(
       withError: NSError(
         domain: "PlayAgeRangeDeclaration", code: -1,
-        userInfo: [NSLocalizedDescriptionKey: "Not implemented"]
+        userInfo: [NSLocalizedDescriptionKey: "Google Play age signals are not available on iOS"]
       )
     )
   }

@@ -2,11 +2,8 @@ package com.margelo.nitro.playagerangedeclaration
 
 import android.content.Context
 import com.facebook.proguard.annotations.DoNotStrip
-import com.google.android.play.agesignals.AgeSignalsManager
-import com.google.android.play.agesignals.AgeSignalsManagerFactory
 import com.google.android.play.agesignals.AgeSignalsResult
 import com.google.android.play.agesignals.model.AgeSignalsVerificationStatus
-import com.google.android.play.agesignals.testing.FakeAgeSignalsManager
 import com.margelo.nitro.core.Promise
 import com.margelo.nitro.NitroModules
 import java.text.SimpleDateFormat
@@ -24,18 +21,19 @@ class PlayAgeRangeDeclaration : HybridPlayAgeRangeDeclarationSpec() {
   override fun detectStore(): AppStore =
     providers.firstOrNull { it.isAvailable(appContext) }?.store ?: AppStore.UNKNOWN
 
-  override fun getPlayAgeRangeDeclaration(): Promise<PlayAgeSignalsResult> {
+  override fun getGooglePlayAgeSignals(): Promise<PlayAgeSignalsResult> {
     return Promise.async { GooglePlayAgeSignalsProvider.getAgeSignals(appContext) }
   }
 
-  override fun getAmazonAgeRangeDeclaration(): Promise<AmazonGetUserAgeDataResult> {
+  override fun getAmazonUserAgeData(): Promise<AmazonGetUserAgeDataResult> {
     return Promise.async { AmazonGetUserAgeDataProvider.getAgeSignals(appContext) }
   }
 
-  override fun getGalaxyAgeRangeDeclaration(): Promise<SamsungGetAgeSignalsResult> {
+  override fun getSamsungAgeSignals(): Promise<SamsungGetAgeSignalsResult> {
     return Promise.async { SamsungGetAgeSignalsProvider.getAgeSignals(appContext) }
   }
 
+  // Apple's Declared Age Range API is iOS-only; report not-eligible on Android.
   override fun requestDeclaredAgeRange(firstThresholdAge: Double, secondThresholdAge: Double?, thirdThresholdAge: Double?): Promise<DeclaredAgeRangeResult> {
     return Promise.async {
       DeclaredAgeRangeResult(
@@ -50,7 +48,7 @@ class PlayAgeRangeDeclaration : HybridPlayAgeRangeDeclarationSpec() {
 
   override fun setGooglePlayMockUser(config: PlayAgeSignalsMockConfig?) {
     if (config == null) {
-      mockUser = null
+      googlePlayMockUser = null
       return
     }
 
@@ -75,15 +73,15 @@ class PlayAgeRangeDeclaration : HybridPlayAgeRangeDeclarationSpec() {
         ?.let { date -> user.setMostRecentApprovalDate(date) }
     }
 
-    mockUser = user.build()
+    googlePlayMockUser = user.build()
   }
 
   override fun setAmazonMockScenario(scenario: Double?) {
-    amazonTestOption = scenario?.toInt()
+    amazonMockScenario = scenario?.toInt()
   }
 
   override fun setSamsungMockScenario(scenario: Double?) {
-    samsungTestOption = scenario?.toInt()
+    samsungMockScenario = scenario?.toInt()
   }
 
   companion object {
@@ -98,15 +96,8 @@ class PlayAgeRangeDeclaration : HybridPlayAgeRangeDeclarationSpec() {
     )
 
     // Mock state, set from JS via setGooglePlayMockUser / set*MockScenario.
-    var mockUser: AgeSignalsResult? = null
-    var amazonTestOption: Int? = null
-    var samsungTestOption: Int? = null
-
-    // Returns the real AgeSignalsManager, or a FakeAgeSignalsManager when a mock user is set.
-    fun getManager(context: Context): AgeSignalsManager {
-      return mockUser?.let {
-        FakeAgeSignalsManager().apply { setNextAgeSignalsResult(it) }
-      } ?: AgeSignalsManagerFactory.create(context)
-    }
+    var googlePlayMockUser: AgeSignalsResult? = null
+    var amazonMockScenario: Int? = null
+    var samsungMockScenario: Int? = null
   }
 }

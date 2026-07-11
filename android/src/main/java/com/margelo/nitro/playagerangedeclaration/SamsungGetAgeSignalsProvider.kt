@@ -27,7 +27,7 @@ object SamsungGetAgeSignalsProvider : StoreAgeSignalsProvider {
   override val store = AppStore.SAMSUNG_GALAXY_STORE
 
   override fun isAvailable(context: Context): Boolean {
-    if (PlayAgeRangeDeclaration.samsungTestOption != null) return true
+    if (PlayAgeRangeDeclaration.samsungMockScenario != null) return true
 
     if (getInstallerPackageName(context) != GALAXYSTORE) return false
 
@@ -64,14 +64,14 @@ object SamsungGetAgeSignalsProvider : StoreAgeSignalsProvider {
   )
 
   fun getAgeSignals(context: Context): SamsungGetAgeSignalsResult {
-    val testOption = PlayAgeRangeDeclaration.samsungTestOption
+    val mockScenario = PlayAgeRangeDeclaration.samsungMockScenario
     val callUri: Uri
     val callArg: String?
 
-    if (testOption != null) {
+    if (mockScenario != null) {
       // Route to the app-local SamsungTestContentProvider (see that class for scenarios).
       callUri = Uri.parse("content://${context.packageName}.samsung_test_provider/$QUERY_SETTINGS")
-      callArg = testOption.toString()
+      callArg = mockScenario.toString()
     } else {
       // ASAA only serves age signals when Samsung's regulatory-compliance flag
       // is enabled for this device.

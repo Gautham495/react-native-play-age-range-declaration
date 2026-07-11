@@ -3,9 +3,11 @@ package com.margelo.nitro.playagerangedeclaration
 import android.content.Context
 import android.util.Log
 import com.google.android.play.agesignals.AgeSignalsException
+import com.google.android.play.agesignals.AgeSignalsManager
+import com.google.android.play.agesignals.AgeSignalsManagerFactory
 import com.google.android.play.agesignals.AgeSignalsRequest
 import com.google.android.play.agesignals.model.AgeSignalsVerificationStatus
-import com.margelo.nitro.playagerangedeclaration.PlayAgeRangeDeclaration.Companion.getManager
+import com.google.android.play.agesignals.testing.FakeAgeSignalsManager
 import kotlinx.coroutines.suspendCancellableCoroutine
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -19,9 +21,16 @@ object GooglePlayAgeSignalsProvider : StoreAgeSignalsProvider {
   override val store = AppStore.GOOGLE_PLAY
 
   override fun isAvailable(context: Context): Boolean {
-    if (PlayAgeRangeDeclaration.mockUser != null) return true
+    if (PlayAgeRangeDeclaration.googlePlayMockUser != null) return true
 
     return getInstallerPackageName(context) == PLAYSTORE
+  }
+
+  // Returns the real AgeSignalsManager, or a FakeAgeSignalsManager when a mock user is set.
+  private fun getManager(context: Context): AgeSignalsManager {
+    return PlayAgeRangeDeclaration.googlePlayMockUser?.let {
+      FakeAgeSignalsManager().apply { setNextAgeSignalsResult(it) }
+    } ?: AgeSignalsManagerFactory.create(context)
   }
 
   private fun emptyResult(error: String? = null) = PlayAgeSignalsResult(

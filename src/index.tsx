@@ -64,7 +64,7 @@ export async function getGooglePlayAgeRangeStatus(): Promise<
   AgeSignalsResult<PlayAgeSignalsResult>
 > {
   return normalizeGooglePlayResult(
-    await PlayAgeRangeDeclarationHybridObject.getPlayAgeRangeDeclaration()
+    await PlayAgeRangeDeclarationHybridObject.getGooglePlayAgeSignals()
   );
 }
 
@@ -75,8 +75,7 @@ const AMAZON_MAX_TRANSIENT_RETRIES = 2;
 export async function getAmazonAgeRangeStatus(): Promise<
   AgeSignalsResult<AmazonGetUserAgeDataResult>
 > {
-  let raw =
-    await PlayAgeRangeDeclarationHybridObject.getAmazonAgeRangeDeclaration();
+  let raw = await PlayAgeRangeDeclarationHybridObject.getAmazonUserAgeData();
 
   for (
     let retry = 0;
@@ -85,8 +84,7 @@ export async function getAmazonAgeRangeStatus(): Promise<
       AmazonGetUserAgeDataResponseStatus.INTERNAL_TRANSIENT_ERROR;
     retry++
   ) {
-    raw =
-      await PlayAgeRangeDeclarationHybridObject.getAmazonAgeRangeDeclaration();
+    raw = await PlayAgeRangeDeclarationHybridObject.getAmazonUserAgeData();
   }
 
   return normalizeAmazonResult(raw);
@@ -96,7 +94,7 @@ export async function getSamsungGalaxyAgeRangeStatus(): Promise<
   AgeSignalsResult<SamsungGetAgeSignalsResult>
 > {
   return normalizeSamsungResult(
-    await PlayAgeRangeDeclarationHybridObject.getGalaxyAgeRangeDeclaration()
+    await PlayAgeRangeDeclarationHybridObject.getSamsungAgeSignals()
   );
 }
 

@@ -108,24 +108,24 @@ namespace margelo::nitro::playagerangedeclaration {
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<Promise<PlayAgeSignalsResult>> getPlayAgeRangeDeclaration() override {
-      auto __result = _swiftPart.getPlayAgeRangeDeclaration();
+    inline std::shared_ptr<Promise<PlayAgeSignalsResult>> getGooglePlayAgeSignals() override {
+      auto __result = _swiftPart.getGooglePlayAgeSignals();
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<Promise<AmazonGetUserAgeDataResult>> getAmazonAgeRangeDeclaration() override {
-      auto __result = _swiftPart.getAmazonAgeRangeDeclaration();
+    inline std::shared_ptr<Promise<AmazonGetUserAgeDataResult>> getAmazonUserAgeData() override {
+      auto __result = _swiftPart.getAmazonUserAgeData();
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
       auto __value = std::move(__result.value());
       return __value;
     }
-    inline std::shared_ptr<Promise<SamsungGetAgeSignalsResult>> getGalaxyAgeRangeDeclaration() override {
-      auto __result = _swiftPart.getGalaxyAgeRangeDeclaration();
+    inline std::shared_ptr<Promise<SamsungGetAgeSignalsResult>> getSamsungAgeSignals() override {
+      auto __result = _swiftPart.getSamsungAgeSignals();
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }

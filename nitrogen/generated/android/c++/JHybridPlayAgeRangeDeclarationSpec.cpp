@@ -95,8 +95,8 @@ namespace margelo::nitro::playagerangedeclaration {
     auto __result = method(_javaPart);
     return __result->toCpp();
   }
-  std::shared_ptr<Promise<PlayAgeSignalsResult>> JHybridPlayAgeRangeDeclarationSpec::getPlayAgeRangeDeclaration() {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>()>("getPlayAgeRangeDeclaration");
+  std::shared_ptr<Promise<PlayAgeSignalsResult>> JHybridPlayAgeRangeDeclarationSpec::getGooglePlayAgeSignals() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>()>("getGooglePlayAgeSignals");
     auto __result = method(_javaPart);
     return [&]() {
       auto __promise = Promise<PlayAgeSignalsResult>::create();
@@ -111,8 +111,8 @@ namespace margelo::nitro::playagerangedeclaration {
       return __promise;
     }();
   }
-  std::shared_ptr<Promise<AmazonGetUserAgeDataResult>> JHybridPlayAgeRangeDeclarationSpec::getAmazonAgeRangeDeclaration() {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>()>("getAmazonAgeRangeDeclaration");
+  std::shared_ptr<Promise<AmazonGetUserAgeDataResult>> JHybridPlayAgeRangeDeclarationSpec::getAmazonUserAgeData() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>()>("getAmazonUserAgeData");
     auto __result = method(_javaPart);
     return [&]() {
       auto __promise = Promise<AmazonGetUserAgeDataResult>::create();
@@ -127,8 +127,8 @@ namespace margelo::nitro::playagerangedeclaration {
       return __promise;
     }();
   }
-  std::shared_ptr<Promise<SamsungGetAgeSignalsResult>> JHybridPlayAgeRangeDeclarationSpec::getGalaxyAgeRangeDeclaration() {
-    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>()>("getGalaxyAgeRangeDeclaration");
+  std::shared_ptr<Promise<SamsungGetAgeSignalsResult>> JHybridPlayAgeRangeDeclarationSpec::getSamsungAgeSignals() {
+    static const auto method = _javaPart->javaClassStatic()->getMethod<jni::local_ref<JPromise::javaobject>()>("getSamsungAgeSignals");
     auto __result = method(_javaPart);
     return [&]() {
       auto __promise = Promise<SamsungGetAgeSignalsResult>::create();

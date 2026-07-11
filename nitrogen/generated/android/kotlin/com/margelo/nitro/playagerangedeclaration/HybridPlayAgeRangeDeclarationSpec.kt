@@ -35,15 +35,15 @@ abstract class HybridPlayAgeRangeDeclarationSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
-  abstract fun getPlayAgeRangeDeclaration(): Promise<PlayAgeSignalsResult>
+  abstract fun getGooglePlayAgeSignals(): Promise<PlayAgeSignalsResult>
   
   @DoNotStrip
   @Keep
-  abstract fun getAmazonAgeRangeDeclaration(): Promise<AmazonGetUserAgeDataResult>
+  abstract fun getAmazonUserAgeData(): Promise<AmazonGetUserAgeDataResult>
   
   @DoNotStrip
   @Keep
-  abstract fun getGalaxyAgeRangeDeclaration(): Promise<SamsungGetAgeSignalsResult>
+  abstract fun getSamsungAgeSignals(): Promise<SamsungGetAgeSignalsResult>
   
   @DoNotStrip
   @Keep

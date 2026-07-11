@@ -137,9 +137,9 @@ open class HybridPlayAgeRangeDeclarationSpec_cxx {
   }
   
   @inline(__always)
-  public final func getPlayAgeRangeDeclaration() -> bridge.Result_std__shared_ptr_Promise_PlayAgeSignalsResult___ {
+  public final func getGooglePlayAgeSignals() -> bridge.Result_std__shared_ptr_Promise_PlayAgeSignalsResult___ {
     do {
-      let __result = try self.__implementation.getPlayAgeRangeDeclaration()
+      let __result = try self.__implementation.getGooglePlayAgeSignals()
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_PlayAgeSignalsResult__ in
         let __promise = bridge.create_std__shared_ptr_Promise_PlayAgeSignalsResult__()
         let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_PlayAgeSignalsResult__(__promise)
@@ -156,9 +156,9 @@ open class HybridPlayAgeRangeDeclarationSpec_cxx {
   }
   
   @inline(__always)
-  public final func getAmazonAgeRangeDeclaration() -> bridge.Result_std__shared_ptr_Promise_AmazonGetUserAgeDataResult___ {
+  public final func getAmazonUserAgeData() -> bridge.Result_std__shared_ptr_Promise_AmazonGetUserAgeDataResult___ {
     do {
-      let __result = try self.__implementation.getAmazonAgeRangeDeclaration()
+      let __result = try self.__implementation.getAmazonUserAgeData()
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_AmazonGetUserAgeDataResult__ in
         let __promise = bridge.create_std__shared_ptr_Promise_AmazonGetUserAgeDataResult__()
         let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_AmazonGetUserAgeDataResult__(__promise)
@@ -175,9 +175,9 @@ open class HybridPlayAgeRangeDeclarationSpec_cxx {
   }
   
   @inline(__always)
-  public final func getGalaxyAgeRangeDeclaration() -> bridge.Result_std__shared_ptr_Promise_SamsungGetAgeSignalsResult___ {
+  public final func getSamsungAgeSignals() -> bridge.Result_std__shared_ptr_Promise_SamsungGetAgeSignalsResult___ {
     do {
-      let __result = try self.__implementation.getGalaxyAgeRangeDeclaration()
+      let __result = try self.__implementation.getSamsungAgeSignals()
       let __resultCpp = { () -> bridge.std__shared_ptr_Promise_SamsungGetAgeSignalsResult__ in
         let __promise = bridge.create_std__shared_ptr_Promise_SamsungGetAgeSignalsResult__()
         let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_SamsungGetAgeSignalsResult__(__promise)

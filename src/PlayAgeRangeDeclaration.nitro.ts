@@ -18,9 +18,9 @@ export enum AppStore {
 export interface PlayAgeRangeDeclaration
   extends HybridObject<{ ios: 'swift'; android: 'kotlin' }> {
   detectStore(): AppStore;
-  getPlayAgeRangeDeclaration(): Promise<PlayAgeSignalsResult>;
-  getAmazonAgeRangeDeclaration(): Promise<AmazonGetUserAgeDataResult>;
-  getGalaxyAgeRangeDeclaration(): Promise<SamsungGetAgeSignalsResult>;
+  getGooglePlayAgeSignals(): Promise<PlayAgeSignalsResult>;
+  getAmazonUserAgeData(): Promise<AmazonGetUserAgeDataResult>;
+  getSamsungAgeSignals(): Promise<SamsungGetAgeSignalsResult>;
   requestDeclaredAgeRange(
     firstThresholdAge: number,
     secondThresholdAge?: number,

@@ -15,9 +15,9 @@ namespace margelo::nitro::playagerangedeclaration {
     // load custom methods/properties
     registerHybrids(this, [](Prototype& prototype) {
       prototype.registerHybridMethod("detectStore", &HybridPlayAgeRangeDeclarationSpec::detectStore);
-      prototype.registerHybridMethod("getPlayAgeRangeDeclaration", &HybridPlayAgeRangeDeclarationSpec::getPlayAgeRangeDeclaration);
-      prototype.registerHybridMethod("getAmazonAgeRangeDeclaration", &HybridPlayAgeRangeDeclarationSpec::getAmazonAgeRangeDeclaration);
-      prototype.registerHybridMethod("getGalaxyAgeRangeDeclaration", &HybridPlayAgeRangeDeclarationSpec::getGalaxyAgeRangeDeclaration);
+      prototype.registerHybridMethod("getGooglePlayAgeSignals", &HybridPlayAgeRangeDeclarationSpec::getGooglePlayAgeSignals);
+      prototype.registerHybridMethod("getAmazonUserAgeData", &HybridPlayAgeRangeDeclarationSpec::getAmazonUserAgeData);
+      prototype.registerHybridMethod("getSamsungAgeSignals", &HybridPlayAgeRangeDeclarationSpec::getSamsungAgeSignals);
       prototype.registerHybridMethod("requestDeclaredAgeRange", &HybridPlayAgeRangeDeclarationSpec::requestDeclaredAgeRange);
       prototype.registerHybridMethod("setGooglePlayMockUser", &HybridPlayAgeRangeDeclarationSpec::setGooglePlayMockUser);
       prototype.registerHybridMethod("setAmazonMockScenario", &HybridPlayAgeRangeDeclarationSpec::setAmazonMockScenario);
