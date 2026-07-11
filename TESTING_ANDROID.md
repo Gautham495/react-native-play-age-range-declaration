@@ -1,137 +1,111 @@
-# Testing Android Age Signals
+# Testing Age Signals (Android)
 
-This guide explains how to test Android Age Signals using Google's `FakeAgeSignalsManager`. This allows you to test different user verification scenarios without requiring a real device with Play Console installed.
+All three Android store APIs can be mocked **from JavaScript**, so you can test every scenario on any device or emulator — no store account, supervised user, or published app required.
 
-## Overview
+While a mock is active, `detectStore()` reports the mocked store, so `getIsConsideredOlderThan` routes to it automatically. Only activate one store's mock at a time; pass `undefined` to any mock setter to go back to the real API.
 
-The library includes support for testing Android Age Signals using Google's `FakeAgeSignalsManager`. This testing utility enables you to simulate various user verification statuses and test your app's behavior without needing:
-- A physical Android device with Play Console installed
-- Android 15+ (or Android 16+ depending on API availability)
-- An app published on Google Play Console
+## Google Play — `setGooglePlayMockUser`
 
-## Using FakeAgeSignalsManager
+Backed by Google's official [`FakeAgeSignalsManager`](https://developer.android.com/google/play/age-signals/test-age-signals-api). No manifest changes needed.
 
-To test different scenarios, modify the code in `android/src/main/java/com/margelo/nitro/playagerangedeclaration/PlayAgeRangeDeclaration.kt`:
+```ts
+import {
+  setGooglePlayMockUser,
+  PlayAgeSignalsUserStatus,
+} from 'react-native-play-age-range-declaration';
 
-```kotlin
-// MOCK: Using FakeAgeSignalsManager for testing
-// https://developer.android.com/google/play/age-signals/test-age-signals-api
-// 
-// To test different scenarios, change the AgeSignalsVerificationStatus:
-// - AgeSignalsVerificationStatus.VERIFIED - User is 18+ (verified adult)
-// - AgeSignalsVerificationStatus.SUPERVISED - User is supervised (13-17 with parental controls)
-// - AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_PENDING - Pending approval
-// - AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_DENIED - Approval denied
-// - AgeSignalsVerificationStatus.UNKNOWN - User status unknown
+setGooglePlayMockUser({
+  userStatus: PlayAgeSignalsUserStatus.SUPERVISED,
+  ageLower: 13,
+  ageUpper: 15,
+  mostRecentApprovalDate: '2026-01-01', // optional, YYYY-MM-DD
+  installId: 'my_test_install_id', // optional
+});
 
-val fakeVerifiedUser = AgeSignalsResult.builder()
-  .setUserStatus(AgeSignalsVerificationStatus.VERIFIED) // Change this to test different scenarios
-  .setAgeLower(13)
-  .setAgeUpper(17)
-  .setMostRecentApprovalDate(
-    Date.from(LocalDate.of(2025, 2, 1).atStartOfDay(ZoneOffset.UTC).toInstant())
-  )
-  .setInstallId("fake_install_id_12345")
-  .build()
-
-val manager = FakeAgeSignalsManager()
-manager.setNextAgeSignalsResult(fakeVerifiedUser)
+setGooglePlayMockUser(undefined); // disable, use the real API
 ```
 
-## Available Verification Statuses
+| `userStatus`                  | Simulates                                              |
+| ----------------------------- | ------------------------------------------------------ |
+| `VERIFIED`                    | 18+ user, age verified by Google                       |
+| `DECLARED`                    | User (or guardian) declared their age                  |
+| `SUPERVISED`                  | Supervised account; parent set the age                 |
+| `SUPERVISED_APPROVAL_PENDING` | Significant change awaiting parent approval            |
+| `SUPERVISED_APPROVAL_DENIED`  | Parent denied one or more significant changes          |
+| `UNKNOWN`                     | Applicable region, but age could not be determined     |
 
-You can test the following `AgeSignalsVerificationStatus` values:
+## Amazon Appstore — `setAmazonMockScenario`
 
-| Status | Description | Use Case |
-|--------|-------------|----------|
-| `VERIFIED` | User is 18+ (verified adult) | Test adult user experience |
-| `SUPERVISED` | User is supervised (13-17 with parental controls) | Test supervised teen experience |
-| `SUPERVISED_APPROVAL_PENDING` | Pending approval | Test pending approval state |
-| `SUPERVISED_APPROVAL_DENIED` | Approval denied | Test denied approval state |
-| `UNKNOWN` | User status unknown | Test fallback/default behavior |
+Implements [Amazon's 11 test scenarios](https://developer.amazon.com/docs/app-submission/test-getuseragedata-api.html) via a local test ContentProvider. Register it once in your app's `AndroidManifest.xml` (the example app already does):
 
-## Example: Testing Different Scenarios
-
-### Test Verified Adult User
-
-```kotlin
-val verifiedAdult = AgeSignalsResult.builder()
-  .setUserStatus(AgeSignalsVerificationStatus.VERIFIED)
-  .setAgeLower(18)
-  .setAgeUpper(18)
-  .setInstallId("verified_adult_123")
-  .build()
-
-val manager = FakeAgeSignalsManager()
-manager.setNextAgeSignalsResult(verifiedAdult)
+```xml
+<provider
+    android:name="com.margelo.nitro.playagerangedeclaration.AmazonTestContentProvider"
+    android:authorities="${applicationId}.amzn_test_appstore"
+    android:exported="false" />
 ```
 
-### Test Supervised Teen
-
-```kotlin
-val supervisedTeen = AgeSignalsResult.builder()
-  .setUserStatus(AgeSignalsVerificationStatus.SUPERVISED)
-  .setAgeLower(13)
-  .setAgeUpper(17)
-  .setMostRecentApprovalDate(
-    Date.from(LocalDate.of(2025, 1, 15).atStartOfDay(ZoneOffset.UTC).toInstant())
-  )
-  .setInstallId("supervised_teen_456")
-  .build()
-
-val manager = FakeAgeSignalsManager()
-manager.setNextAgeSignalsResult(supervisedTeen)
+```ts
+setAmazonMockScenario(4); // SUPERVISED (13-15)
+setAmazonMockScenario(undefined); // disable, use the real API
 ```
 
-### Test Pending Approval
+| Scenario | Simulates                                    |
+| -------- | -------------------------------------------- |
+| 1        | `VERIFIED` (18+)                             |
+| 2        | `UNKNOWN` (indeterminate age)                |
+| 3        | `SUPERVISED` (0–12)                          |
+| 4        | `SUPERVISED` (13–15)                         |
+| 5        | `SUPERVISED` (16–17)                         |
+| 6        | `CONSENT_NOT_GRANTED`                        |
+| 7        | Law not applicable (`SUCCESS`, empty status) |
+| 8        | `APP_NOT_OWNED` error                        |
+| 9        | `INTERNAL_TRANSIENT_ERROR`                   |
+| 10       | `INTERNAL_ERROR`                             |
+| 11       | `FEATURE_NOT_SUPPORTED`                      |
 
-```kotlin
-val pendingApproval = AgeSignalsResult.builder()
-  .setUserStatus(AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_PENDING)
-  .setAgeLower(13)
-  .setAgeUpper(17)
-  .setInstallId("pending_approval_789")
-  .build()
+## Samsung Galaxy Store — `setSamsungMockScenario`
 
-val manager = FakeAgeSignalsManager()
-manager.setNextAgeSignalsResult(pendingApproval)
+Implements the [Samsung ASAA test scenarios](https://developer.samsung.com/galaxy-store/galaxy-store-content-provider-api/get-age-signals.html) via a local test ContentProvider:
+
+```xml
+<provider
+    android:name="com.margelo.nitro.playagerangedeclaration.SamsungTestContentProvider"
+    android:authorities="${applicationId}.samsung_test_provider"
+    android:exported="false" />
 ```
 
-### Test Denied Approval
-
-```kotlin
-val deniedApproval = AgeSignalsResult.builder()
-  .setUserStatus(AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_DENIED)
-  .setAgeLower(13)
-  .setAgeUpper(17)
-  .setInstallId("denied_approval_012")
-  .build()
-
-val manager = FakeAgeSignalsManager()
-manager.setNextAgeSignalsResult(deniedApproval)
+```ts
+setSamsungMockScenario(4); // SUPERVISED (13-15)
+setSamsungMockScenario(undefined); // disable, use the real API
 ```
 
-### Test Unknown Status
+| Scenario | Simulates                                     |
+| -------- | --------------------------------------------- |
+| 1        | `VERIFIED` (18+)                              |
+| 2        | `UNKNOWN` (indeterminate age)                 |
+| 3        | `SUPERVISED` (0–12)                           |
+| 4        | `SUPERVISED` (13–15)                          |
+| 5        | `SUPERVISED` (16–17)                          |
+| 6        | `SUPERVISED_APPROVAL_PENDING`                 |
+| 7        | `SUPERVISED_APPROVAL_DENIED`                  |
+| 8        | Unsupported-method error (`result_code = 1`)  |
+| 9        | Device not registered error (`result_code = 1`) |
 
-```kotlin
-val unknownStatus = AgeSignalsResult.builder()
-  .setUserStatus(AgeSignalsVerificationStatus.UNKNOWN)
-  .setInstallId("unknown_status_345")
-  .build()
+The test providers are `exported="false"`, so they are only reachable from within your own app. They are safe to ship, though you can also register them only in `src/debug/AndroidManifest.xml` to keep release builds clean.
 
-val manager = FakeAgeSignalsManager()
-manager.setNextAgeSignalsResult(unknownStatus)
-```
-
-
-## Production Requirements
+## Production requirements (real APIs)
 
 > [!NOTE]
-> The real API requires:
-> - Android device with Play Console installed
-> - Android 15+ (or Android 16+ depending on API availability)
-> - App published on Google Play Console (for production testing)
+> The real APIs require:
+>
+> - The app installed from the store being tested (installer package detection)
+> - **Google Play**: Play Store installed, Android 15+ (SDK beta)
+> - **Samsung**: Galaxy Store 4.6.03.1+ with a registered Samsung account and ASAA enabled
+> - **Amazon**: app installed from the Amazon Appstore and enabled by Amazon
 
-## Additional Resources
+## Additional resources
 
-For more information, see the [official Android documentation](https://developer.android.com/google/play/age-signals/test-age-signals-api).
+- [Google Play — Test the Age Signals API](https://developer.android.com/google/play/age-signals/test-age-signals-api)
+- [Amazon — Test the GetUserAgeData API](https://developer.amazon.com/docs/app-submission/test-getuseragedata-api.html)
+- [Samsung — Get Age Signals](https://developer.samsung.com/galaxy-store/galaxy-store-content-provider-api/get-age-signals.html)

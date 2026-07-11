@@ -9,6 +9,8 @@
 A **React Native Nitro Module** providing a unified API for **age-appropriate experiences** across platforms — bridging:
 
 - 🟢 **Google Play Age Signals API** (Android)
+- 🟠 **Amazon Appstore GetUserAgeData API** (Android)
+- 🟣 **Samsung Galaxy Store Age Signals API** (Android)
 - 🔵 **Apple Declared Age Range API** (iOS 26+)
 
 ---
@@ -27,9 +29,12 @@ npm install react-native-play-age-range-declaration react-native-nitro-modules
 
 > [!NOTE]
 >
-> - The APIs for Apple's Declared Age Range and the android play age works in iOS 26 and in Android 15+ as I have tested in real device and I have attached a gif showing the workings of it.
+> - Apple's Declared Age Range API requires **iOS 26+**; Google Play Age Signals requires **Android 15+** with the Play Store installed (both tested on real devices — see the demos below).
+> - Amazon Appstore and Samsung Galaxy Store age signals respond when the app is installed from that store. Every store can also be **mocked from JS** for development — see [TESTING_ANDROID.md](TESTING_ANDROID.md).
 
 ## Demo
+
+<!-- TODO: Re-record demo videos to show the Android store selector (Google Play / Amazon / Samsung) and mock scenarios. Replace the GIFs below, keeping the same paths. -->
 
 <table>
   <tr>
@@ -50,24 +55,28 @@ npm install react-native-play-age-range-declaration react-native-nitro-modules
 
 ## 🧠 Overview
 
-| Platform    | API Used                                                     | Purpose                                            |
-| ----------- | ------------------------------------------------------------ | -------------------------------------------------- |
-| **Android** | Play Age Signals API (`com.google.android.play:age-signals`) | Detect user supervision / verified status          |
-| **iOS**     | Declared Age Range API (`AgeRangeService.requestAgeRange`)   | Get user’s declared age range (e.g., 13–15, 16–17) |
+| Store                    | API Used                                                     | Purpose                                            |
+| ------------------------ | ------------------------------------------------------------ | -------------------------------------------------- |
+| **Google Play**          | Play Age Signals API (`com.google.android.play:age-signals`) | Detect user supervision / verified status          |
+| **Amazon Appstore**      | `GetUserAgeData` ContentProvider                              | Age range + parental-consent status                |
+| **Samsung Galaxy Store** | ASAA `getAgeSignalResult` ContentProvider                     | Detect user supervision / verified status          |
+| **Apple App Store**      | Declared Age Range API (`AgeRangeService.requestAgeRange`)   | Get user’s declared age range (e.g., 13–15, 16–17) |
+
+The store the app was installed from is detected natively (`detectStore()`), and `getIsConsideredOlderThan` routes to the matching API automatically.
 
 ---
 
 ## Configuration
 
-iOS: Add the below entitlement to your project:
+**iOS**: Add the below entitlement to your project:
 
-com.apple.developer.declared-age-range
+`com.apple.developer.declared-age-range`
 
-Android: No extra configuration needed, but for this API to work, you have to have play console installed in your android device.
+**Android**: No extra configuration is needed — the library's manifest already declares the Samsung ASAA permission and the `<queries>` entries for the Amazon and Samsung ContentProviders. Each real API only responds when the app was installed from that store (Play Store, Amazon Appstore, or Galaxy Store).
 
-## Android Testing
+## Testing & Mocking
 
-View this Read me file to test in the android side - [TESTING_ANDROID.md](TESTING_ANDROID.md)
+Every store's API can be mocked from JS, so you can develop and test on any device or emulator — see [TESTING_ANDROID.md](TESTING_ANDROID.md).
 
 ---
 
@@ -125,10 +134,11 @@ if (canAccessGatedContent) {
 
 **Behavior:**
 
-- Returns `true` if the user is not in an applicable region where we are legally required to show the age verification prompt
-- Returns `true` if the user is older than or equal to the specified age
-- Returns `true` if the user has parental approval to view content
-- Returns `false` in all other cases
+- Detects the installing store natively and queries that store's age API (Google Play is used when the installer is unknown)
+- Returns `true` if the user is not in an applicable region where the store is legally required to provide age signals
+- Returns `true` if the user's age-range lower bound (verified, declared, or set by a parent) is at or above the specified age
+- Returns `true` if the store call failed — the check fails open so the app keeps working
+- Returns `false` in all other cases (age unknown in an applicable region, parental consent revoked, or age range below the threshold)
 
 **Example: Gating content based on age**
 
@@ -143,7 +153,7 @@ const checkAgeRestriction = async () => {
 
 // In your component
 {
-  !isLoading && checkAgeRestriction ? (
+  !isLoading && canAccessContent ? (
     <AgeGatedContent />
   ) : (
     <AgeRestrictionMessage />
@@ -152,6 +162,8 @@ const checkAgeRestriction = async () => {
 ```
 
 ### Full Example
+
+The example below fetches the current store's status plus three age gates. For a complete demo with an Android store selector and every mock scenario, see [example/src/App.tsx](example/src/App.tsx).
 
 ```tsx
 import { useState } from 'react';
@@ -166,11 +178,11 @@ import {
 } from 'react-native';
 
 import {
-  getAndroidPlayAgeRangeStatus,
+  getGooglePlayAgeRangeStatus,
   getAppleDeclaredAgeRangeStatus,
-  type PlayAgeRangeDeclarationResult,
+  type AgeSignalsResult,
   type DeclaredAgeRangeResult,
-  PlayAgeRangeDeclarationUserStatusString,
+  AgeSignalsUserStatusString,
   getIsConsideredOlderThan,
   setAgeRangeThresholds,
 } from 'react-native-play-age-range-declaration';
@@ -178,8 +190,9 @@ import {
 setAgeRangeThresholds([13, 15]);
 
 export default function App() {
-  const [androidResult, setAndroidResult] =
-    useState<PlayAgeRangeDeclarationResult | null>(null);
+  const [androidResult, setAndroidResult] = useState<AgeSignalsResult | null>(
+    null
+  );
 
   const [appleResult, setAppleResult] = useState<DeclaredAgeRangeResult | null>(
     null
@@ -205,7 +218,7 @@ export default function App() {
       setError(null);
 
       if (Platform.OS === 'android') {
-        const data = await getAndroidPlayAgeRangeStatus();
+        const data = await getGooglePlayAgeRangeStatus();
 
         setAndroidResult(data);
       } else {
@@ -260,23 +273,16 @@ export default function App() {
             </Text>
           ) : (
             <Text style={styles.resultText}>
-              Is Eligible:{' '}
-              {androidResult ? String(androidResult?.isEligible) : ''} {`\n`}
-              Install Id: {androidResult ? androidResult?.installId : ''} {`\n`}
               User Status:{' '}
-              {androidResult && androidResult.userStatus
-                ? PlayAgeRangeDeclarationUserStatusString[
-                    androidResult?.userStatus
-                  ]
-                : ''}
+              {androidResult && androidResult.userStatus != null
+                ? AgeSignalsUserStatusString[androidResult.userStatus]
+                : '(no signal)'}
               {'\n'}
               Most Recent Approval Date:{' '}
-              {androidResult ? androidResult?.mostRecentApprovalDate : ''}
-              {''}
-              {`\n`}
-              Age Lower: {androidResult ? androidResult?.ageLower : ''} {`\n`}
-              Age Upper: {androidResult ? androidResult?.ageUpper : ''} {`\n`}
-              Error: {androidResult ? androidResult?.error : ''} {`\n`}
+              {androidResult?.mostRecentApprovalDate ?? '—'} {`\n`}
+              Age Lower: {androidResult?.ageLower ?? '—'} {`\n`}
+              Age Upper: {androidResult?.ageUpper ?? '—'} {`\n`}
+              Error: {androidResult?.error ?? '—'} {`\n`}
             </Text>
           )}
 
@@ -379,12 +385,61 @@ const styles = StyleSheet.create({
 
 ---
 
-## 🔍 Understanding `isEligible`
+## 🏪 Per-store APIs & normalized results
 
-Both result types include an `isEligible` boolean field that indicates whether age-related features are available and applicable for the current user:
+Each store has its own fetcher; all three Android fetchers resolve to the same **normalized `AgeSignalsResult`**, so one code path handles every store. The store's unmodified response is kept in `raw`:
+
+| Store                                | Fetcher                             |
+| ------------------------------------ | ----------------------------------- |
+| Google Play (and unknown installers) | `getGooglePlayAgeRangeStatus()`     |
+| Amazon Appstore                      | `getAmazonAgeRangeStatus()`         |
+| Samsung Galaxy Store                 | `getSamsungGalaxyAgeRangeStatus()`  |
+| Apple App Store                      | `getAppleDeclaredAgeRangeStatus()`  |
+
+```ts
+interface AgeSignalsResult<Raw> {
+  store: AppStore;
+  userStatus?: AgeSignalsUserStatus; // VERIFIED | DECLARED | SUPERVISED | SUPERVISED_APPROVAL_PENDING | SUPERVISED_APPROVAL_DENIED | CONSENT_NOT_GRANTED | UNKNOWN
+  ageLower?: number; // inclusive lower bound of the age range
+  ageUpper?: number; // inclusive upper bound; undefined for 18+ users
+  mostRecentApprovalDate?: string; // ISO 8601 (YYYY-MM-DD)
+  error?: string; // set when the store call failed
+  raw: Raw; // the untouched store API response
+}
+```
+
+`userStatus === undefined` means the store returned no signal — the user is not in a region where an age-verification law applies (or, on Google Play, did not consent to share their age). `getIsConsideredOlderThan` treats both this and failed store calls as "older" so the app keeps working for users the laws don't cover.
+
+---
+
+## 🧪 Mocking store responses
+
+Every store's flow can be tested on any device or emulator — see [TESTING_ANDROID.md](TESTING_ANDROID.md) for the full scenario tables:
+
+```ts
+setGooglePlayMockUser({
+  userStatus: PlayAgeSignalsUserStatus.SUPERVISED,
+  ageLower: 13,
+  ageUpper: 15,
+});
+setAmazonMockScenario(4); // Amazon test scenario (1–11)
+setSamsungMockScenario(4); // Samsung test scenario (1–9)
+
+// Pass undefined to disable a mock and use the real API again.
+```
+
+While a mock is active, `detectStore()` reports that store, so `getIsConsideredOlderThan` routes to it — only activate one store's mock at a time.
+
+---
+
+## 🔍 Understanding eligibility
+
+Apple's `DeclaredAgeRangeResult` reports applicability via an `isEligible` boolean:
 
 - **`true`**: The user is in a region where age verification is legally required.
-- **`false`**: The user is not in an applicable region, if isEligible is false we should be allow to let users view age gated content _(Not verified by a laywer)_
+- **`false`**: The user is not in an applicable region; `getIsConsideredOlderThan` lets these users view age-gated content _(not verified by a lawyer)_.
+
+On Android, the equivalent signal is a normalized `AgeSignalsResult` whose `userStatus` is `undefined`.
 
 ---
 
@@ -392,10 +447,12 @@ Both result types include an `isEligible` boolean field that indicates whether a
 
 | Platform          | Status                  |
 | ----------------- | ----------------------- |
-| **Android**       | ✅ Supported (SDK Beta) |
-| **iOS 26+**       | ✅ Supported            |
-| **iOS Simulator** | ⚠️ Not supported        |
-| **AOSP Emulator** | ⚠️ Not supported        |
+| **Google Play (Android 15+)** | ✅ Supported (Age Signals SDK Beta)                                  |
+| **Amazon Appstore**           | ✅ Supported                                                         |
+| **Samsung Galaxy Store**      | ✅ Supported (Galaxy Store 4.6.03.1+)                                |
+| **iOS 26+ (App Store)**       | ✅ Supported                                                         |
+| **iOS Simulator**             | ⚠️ Real API not supported                                            |
+| **Emulators**                 | ⚠️ Real APIs not supported — use the [mock APIs](TESTING_ANDROID.md) |
 
 ---
 
