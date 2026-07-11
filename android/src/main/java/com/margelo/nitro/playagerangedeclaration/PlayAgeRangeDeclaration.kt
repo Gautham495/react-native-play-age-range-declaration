@@ -21,17 +21,8 @@ class PlayAgeRangeDeclaration : HybridPlayAgeRangeDeclarationSpec() {
         get() = NitroModules.applicationContext
             ?: throw IllegalStateException("Application context not available")
 
-  override fun detectStore(): AppStore {
-    if (AmazonGetUserAgeDataProvider.isAvailable(appContext)) {
-      return AppStore.AMAZON_APPSTORE
-    } else if (SamsungAgeSignalsProvider.isAvailable(appContext)) {
-      return AppStore.SAMSUNG_GALAXY_STORE
-    } else if (GooglePlayAgeSignalsProvider.isAvailable(appContext)) {
-      return AppStore.GOOGLE_PLAY
-    }
-
-    return AppStore.UNKNOWN
-  }
+  override fun detectStore(): AppStore =
+    providers.firstOrNull { it.isAvailable(appContext) }?.store ?: AppStore.UNKNOWN
 
   override fun getPlayAgeRangeDeclaration(): Promise<PlayAgeSignalsResult> {
     return Promise.async { GooglePlayAgeSignalsProvider.getAgeSignals(appContext) }
@@ -42,7 +33,7 @@ class PlayAgeRangeDeclaration : HybridPlayAgeRangeDeclarationSpec() {
   }
 
   override fun getGalaxyAgeRangeDeclaration(): Promise<SamsungGetAgeSignalsResult> {
-    return Promise.async { SamsungAgeSignalsProvider.getAgeSignals(appContext) }
+    return Promise.async { SamsungGetAgeSignalsProvider.getAgeSignals(appContext) }
   }
 
   override fun requestDeclaredAgeRange(firstThresholdAge: Double, secondThresholdAge: Double?, thirdThresholdAge: Double?): Promise<DeclaredAgeRangeResult> {
@@ -65,19 +56,23 @@ class PlayAgeRangeDeclaration : HybridPlayAgeRangeDeclarationSpec() {
 
     val userStatus = when (config.userStatus) {
       PlayAgeSignalsUserStatus.VERIFIED -> AgeSignalsVerificationStatus.VERIFIED
+      PlayAgeSignalsUserStatus.DECLARED -> AgeSignalsVerificationStatus.DECLARED
       PlayAgeSignalsUserStatus.SUPERVISED -> AgeSignalsVerificationStatus.SUPERVISED
       PlayAgeSignalsUserStatus.SUPERVISED_APPROVAL_PENDING -> AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_PENDING
       PlayAgeSignalsUserStatus.SUPERVISED_APPROVAL_DENIED -> AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_DENIED
       PlayAgeSignalsUserStatus.UNKNOWN -> AgeSignalsVerificationStatus.UNKNOWN
     }
 
-    val user = AgeSignalsResult.builder().setInstallId(config.installId ?: "fake_install_id_12345")
-    user.setUserStatus(userStatus)
+    val user = AgeSignalsResult.builder()
+      .setInstallId(config.installId ?: "fake_install_id_12345")
+      .setUserStatus(userStatus)
     config.ageLower?.let { user.setAgeLower(it.toInt()) }
     config.ageUpper?.let { user.setAgeUpper(it.toInt()) }
     config.mostRecentApprovalDate?.let {
-      val date = SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(it)
-      if (date != null) user.setMostRecentApprovalDate(date)
+      // Ignore unparseable dates rather than crash the JS caller.
+      runCatching { SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(it) }
+        .getOrNull()
+        ?.let { date -> user.setMostRecentApprovalDate(date) }
     }
 
     mockUser = user.build()
@@ -91,13 +86,23 @@ class PlayAgeRangeDeclaration : HybridPlayAgeRangeDeclarationSpec() {
     samsungTestOption = scenario?.toInt()
   }
 
-  // Companion object for managing age signal mocking
   companion object {
+    /**
+     * Store detection precedence: most specific stores first. Google Play is
+     * last because it is also the JS-side fallback when no store matches.
+     */
+    val providers = listOf(
+      AmazonGetUserAgeDataProvider,
+      SamsungGetAgeSignalsProvider,
+      GooglePlayAgeSignalsProvider,
+    )
+
+    // Mock state, set from JS via setGooglePlayMockUser / set*MockScenario.
     var mockUser: AgeSignalsResult? = null
     var amazonTestOption: Int? = null
     var samsungTestOption: Int? = null
 
-    // Returns AgeSignalManager or the FakeAgeSignalsManager when a mock user is set
+    // Returns the real AgeSignalsManager, or a FakeAgeSignalsManager when a mock user is set.
     fun getManager(context: Context): AgeSignalsManager {
       return mockUser?.let {
         FakeAgeSignalsManager().apply { setNextAgeSignalsResult(it) }

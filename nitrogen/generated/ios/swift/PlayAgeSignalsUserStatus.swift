@@ -27,6 +27,8 @@ public extension PlayAgeSignalsUserStatus {
         self = .supervisedApprovalDenied
       case "UNKNOWN":
         self = .unknown
+      case "DECLARED":
+        self = .declared
       default:
         return nil
     }
@@ -47,6 +49,8 @@ public extension PlayAgeSignalsUserStatus {
         return "SUPERVISED_APPROVAL_DENIED"
       case .unknown:
         return "UNKNOWN"
+      case .declared:
+        return "DECLARED"
     }
   }
 }

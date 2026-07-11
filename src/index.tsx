@@ -6,6 +6,15 @@ import {
   AppStore,
 } from './PlayAgeRangeDeclaration.nitro';
 import {
+  type AgeSignalsResult,
+  AgeSignalsUserStatus,
+  AgeSignalsUserStatusString,
+  AppStoreString,
+  normalizeAmazonResult,
+  normalizeGooglePlayResult,
+  normalizeSamsungResult,
+} from './AgeSignals';
+import {
   type AmazonGetUserAgeDataResult,
   AmazonGetUserAgeDataResponseStatus,
   AmazonGetUserAgeDataResponseStatusString,
@@ -29,14 +38,17 @@ import { ageRangeThresholdManager } from './AgeRangeThresholdManager';
 
 import {
   getIsConsideredOlderThaniOS,
-  getIsConsideredOlderThanGooglePlay,
-  getIsConsideredOlderThanAmazon,
-  getIsConsideredOlderThanSamsungGalaxy,
+  getIsConsideredOlderThanAgeSignals,
 } from './isConsideredOlderThan';
+
 const PlayAgeRangeDeclarationHybridObject =
   NitroModules.createHybridObject<PlayAgeRangeDeclaration>(
     'PlayAgeRangeDeclaration'
   );
+
+/** The store this app was installed from, detected natively. */
+export const detectStore = (): AppStore =>
+  PlayAgeRangeDeclarationHybridObject.detectStore();
 
 export async function getAppleDeclaredAgeRangeStatus(): Promise<DeclaredAgeRangeResult> {
   const thresholds = ageRangeThresholdManager.getThresholds();
@@ -48,16 +60,44 @@ export async function getAppleDeclaredAgeRangeStatus(): Promise<DeclaredAgeRange
   );
 }
 
-export async function getGooglePlayAgeRangeStatus(): Promise<PlayAgeSignalsResult> {
-  return await PlayAgeRangeDeclarationHybridObject.getPlayAgeRangeDeclaration();
+export async function getGooglePlayAgeRangeStatus(): Promise<
+  AgeSignalsResult<PlayAgeSignalsResult>
+> {
+  return normalizeGooglePlayResult(
+    await PlayAgeRangeDeclarationHybridObject.getPlayAgeRangeDeclaration()
+  );
 }
 
-export async function getAmazonAgeRangeStatus(): Promise<AmazonGetUserAgeDataResult> {
-  return await PlayAgeRangeDeclarationHybridObject.getAmazonAgeRangeDeclaration();
+// Amazon advises at most two retries for INTERNAL_TRANSIENT_ERROR:
+// https://developer.amazon.com/docs/app-submission/user-age-verification.html
+const AMAZON_MAX_TRANSIENT_RETRIES = 2;
+
+export async function getAmazonAgeRangeStatus(): Promise<
+  AgeSignalsResult<AmazonGetUserAgeDataResult>
+> {
+  let raw =
+    await PlayAgeRangeDeclarationHybridObject.getAmazonAgeRangeDeclaration();
+
+  for (
+    let retry = 0;
+    retry < AMAZON_MAX_TRANSIENT_RETRIES &&
+    raw.responseStatus ===
+      AmazonGetUserAgeDataResponseStatus.INTERNAL_TRANSIENT_ERROR;
+    retry++
+  ) {
+    raw =
+      await PlayAgeRangeDeclarationHybridObject.getAmazonAgeRangeDeclaration();
+  }
+
+  return normalizeAmazonResult(raw);
 }
 
-export async function getSamsungGalaxyAgeRangeStatus(): Promise<SamsungGetAgeSignalsResult> {
-  return await PlayAgeRangeDeclarationHybridObject.getGalaxyAgeRangeDeclaration();
+export async function getSamsungGalaxyAgeRangeStatus(): Promise<
+  AgeSignalsResult<SamsungGetAgeSignalsResult>
+> {
+  return normalizeSamsungResult(
+    await PlayAgeRangeDeclarationHybridObject.getGalaxyAgeRangeDeclaration()
+  );
 }
 
 export const setAgeRangeThresholds = (
@@ -80,7 +120,42 @@ export const setSamsungMockScenario = (scenario?: number): void => {
   PlayAgeRangeDeclarationHybridObject.setSamsungMockScenario(scenario);
 };
 
+/**
+ * How each Android store's age signals are fetched. UNKNOWN falls back to
+ * Google Play — by far the most common installer — so behavior doesn't
+ * regress when the installer can't be determined (sideloads, emulators).
+ */
+const ageSignalsFetchersByStore: Partial<
+  Record<AppStore, () => Promise<AgeSignalsResult<unknown>>>
+> = {
+  [AppStore.GOOGLE_PLAY]: getGooglePlayAgeRangeStatus,
+  [AppStore.AMAZON_APPSTORE]: getAmazonAgeRangeStatus,
+  [AppStore.SAMSUNG_GALAXY_STORE]: getSamsungGalaxyAgeRangeStatus,
+  [AppStore.UNKNOWN]: getGooglePlayAgeRangeStatus,
+};
+
+export const getIsConsideredOlderThan = async (
+  age: number
+): Promise<boolean> => {
+  const appStore = detectStore();
+
+  if (Platform.OS === 'ios') {
+    if (appStore === AppStore.APPLE_APPSTORE) {
+      const ageData = await getAppleDeclaredAgeRangeStatus();
+      return getIsConsideredOlderThaniOS(ageData, age);
+    }
+    // No usable age API — default to older.
+    return true;
+  }
+
+  const fetchAgeSignals =
+    ageSignalsFetchersByStore[appStore] ?? getGooglePlayAgeRangeStatus;
+  const ageData = await fetchAgeSignals();
+  return getIsConsideredOlderThanAgeSignals(ageData, age);
+};
+
 export type {
+  AgeSignalsResult,
   PlayAgeSignalsMockConfig,
   DeclaredAgeRangeResult,
   PlayAgeSignalsResult,
@@ -89,6 +164,10 @@ export type {
 };
 
 export {
+  AppStore,
+  AppStoreString,
+  AgeSignalsUserStatus,
+  AgeSignalsUserStatusString,
   PlayAgeSignalsUserStatus,
   PlayAgeSignalsUserStatusString,
   AmazonGetUserAgeDataResponseStatus,
@@ -97,30 +176,4 @@ export {
   AmazonGetUserAgeDataUserStatusString,
   SamsungGetAgeSignalsUserStatus,
   SamsungGetAgeSignalsUserStatusString,
-};
-
-export const getIsConsideredOlderThan = async (
-  age: number
-): Promise<boolean> => {
-  const appStore = PlayAgeRangeDeclarationHybridObject.detectStore();
-
-  if (Platform.OS === 'ios' && appStore === AppStore.APPLE_APPSTORE) {
-    const ageData = await getAppleDeclaredAgeRangeStatus();
-    return getIsConsideredOlderThaniOS(ageData, age);
-  } else if (appStore === AppStore.AMAZON_APPSTORE) {
-    const ageData = await getAmazonAgeRangeStatus();
-    return getIsConsideredOlderThanAmazon(ageData, age);
-  } else if (appStore === AppStore.SAMSUNG_GALAXY_STORE) {
-    const ageData = await getSamsungGalaxyAgeRangeStatus();
-    return getIsConsideredOlderThanSamsungGalaxy(ageData, age);
-  } else if (
-    appStore === AppStore.GOOGLE_PLAY ||
-    appStore === AppStore.UNKNOWN
-  ) {
-    const ageData = await getGooglePlayAgeRangeStatus();
-    return getIsConsideredOlderThanGooglePlay(ageData, age);
-  }
-
-  // Default to true if none of the APIs can be used
-  return true;
 };

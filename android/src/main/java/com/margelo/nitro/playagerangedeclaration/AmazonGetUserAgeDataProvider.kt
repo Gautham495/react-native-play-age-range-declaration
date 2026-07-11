@@ -2,25 +2,28 @@ package com.margelo.nitro.playagerangedeclaration
 
 import android.content.Context
 import android.net.Uri
-import com.google.android.play.agesignals.model.AgeSignalsVerificationStatus
+import android.util.Log
 
 // https://developer.amazon.com/docs/app-submission/user-age-verification.html
-object AmazonGetUserAgeDataProvider {
-  private const val AMAZONSTORE: String = "com.amazon.venezia";
+object AmazonGetUserAgeDataProvider : StoreAgeSignalsProvider {
+  private const val TAG = "PlayAgeRangeDeclaration"
+  private const val AMAZONSTORE = "com.amazon.venezia"
   private const val AUTHORITY = "amzn_appstore"
   private const val PATH_GET_USER_AGE_DATA = "getUserAgeData"
-  private const val COLUMN_RESPONSE_STATUS: String = "responseStatus"
-  private const val COLUMN_USER_STATUS: String = "userStatus"
-  private const val COLUMN_USER_ID: String = "userId"
-  private const val COLUMN_MOST_RECENT_APPROVAL_DATE: String = "mostRecentApprovalDate"
-  private const val COLUMN_AGE_LOWER: String = "ageLower"
-  private const val COLUMN_AGE_UPPER: String = "ageUpper"
+  private const val COLUMN_RESPONSE_STATUS = "responseStatus"
+  private const val COLUMN_USER_STATUS = "userStatus"
+  private const val COLUMN_USER_ID = "userId"
+  private const val COLUMN_MOST_RECENT_APPROVAL_DATE = "mostRecentApprovalDate"
+  private const val COLUMN_AGE_LOWER = "ageLower"
+  private const val COLUMN_AGE_UPPER = "ageUpper"
   private const val URI = "content://$AUTHORITY/$PATH_GET_USER_AGE_DATA"
 
-  fun isAvailable(context: Context): Boolean {
+  override val store = AppStore.AMAZON_APPSTORE
+
+  override fun isAvailable(context: Context): Boolean {
     if (PlayAgeRangeDeclaration.amazonTestOption != null) return true
-    val installer = getInstallerPackageName(context)
-    return installer == AMAZONSTORE
+
+    return getInstallerPackageName(context) == AMAZONSTORE
   }
 
   private fun mapUserStatus(userStatus: String?): AmazonGetUserAgeDataUserStatus? {
@@ -33,8 +36,8 @@ object AmazonGetUserAgeDataProvider {
     }
   }
 
-  private fun mapResponseStatus(userStatus: String?): AmazonGetUserAgeDataResponseStatus? {
-    return when (userStatus) {
+  private fun mapResponseStatus(responseStatus: String?): AmazonGetUserAgeDataResponseStatus? {
+    return when (responseStatus) {
       "SUCCESS" -> AmazonGetUserAgeDataResponseStatus.SUCCESS
       "APP_NOT_OWNED" -> AmazonGetUserAgeDataResponseStatus.APP_NOT_OWNED
       "INTERNAL_TRANSIENT_ERROR" -> AmazonGetUserAgeDataResponseStatus.INTERNAL_TRANSIENT_ERROR
@@ -44,7 +47,7 @@ object AmazonGetUserAgeDataProvider {
     }
   }
 
-  private fun emptyResult(error: String? = null, responseStatus: AmazonGetUserAgeDataResponseStatus? = null) = AmazonGetUserAgeDataResult(
+  private fun emptyResult(responseStatus: AmazonGetUserAgeDataResponseStatus? = null) = AmazonGetUserAgeDataResult(
     responseStatus = responseStatus,
     userId = null,
     userStatus = null,
@@ -56,6 +59,7 @@ object AmazonGetUserAgeDataProvider {
   fun getAgeSignals(context: Context): AmazonGetUserAgeDataResult {
     val testOption = PlayAgeRangeDeclaration.amazonTestOption
     val queryUri = if (testOption != null) {
+      // Route to the app-local AmazonTestContentProvider (see that class for scenarios).
       Uri.parse("content://${context.packageName}.amzn_test_appstore/$PATH_GET_USER_AGE_DATA?testOption=$testOption")
     } else {
       Uri.parse(URI)
@@ -64,52 +68,34 @@ object AmazonGetUserAgeDataProvider {
     val cursor = try {
       context.contentResolver.query(queryUri, null, null, null, null)
     } catch (e: Exception) {
+      Log.e(TAG, "Amazon GetUserAgeData query failed", e)
       return emptyResult()
-    }
-
-    if (cursor == null) {
-      return emptyResult()
-    }
+    } ?: return emptyResult()
 
     return cursor.use { c ->
-      if (!c.moveToFirst()) {
-        return@use emptyResult()
-      }
+      if (!c.moveToFirst()) return@use emptyResult()
 
       try {
-        val responseStatusIdx = c.getColumnIndexOrThrow(COLUMN_RESPONSE_STATUS)
-        val responseStatus = c.getString(responseStatusIdx)
-        val mappedResponseStatus = mapResponseStatus(responseStatus)
-        if (mappedResponseStatus != AmazonGetUserAgeDataResponseStatus.SUCCESS) {
-          return@use emptyResult(responseStatus = mappedResponseStatus)
+        val responseStatus = mapResponseStatus(c.getString(c.getColumnIndexOrThrow(COLUMN_RESPONSE_STATUS)))
+        // Any non-SUCCESS response carries no user data; all other columns are null.
+        if (responseStatus != AmazonGetUserAgeDataResponseStatus.SUCCESS) {
+          return@use emptyResult(responseStatus = responseStatus)
         }
 
-        val userStatusIdx = c.getColumnIndexOrThrow(COLUMN_USER_STATUS)
-        val userStatus = c.getString(userStatusIdx)
-        val mappedUserStatus = mapUserStatus(userStatus)
-
         val ageLowerIdx = c.getColumnIndexOrThrow(COLUMN_AGE_LOWER)
-        val ageLower = if (!c.isNull(ageLowerIdx)) c.getInt(ageLowerIdx).toDouble() else null
-
         val ageUpperIdx = c.getColumnIndexOrThrow(COLUMN_AGE_UPPER)
-        val ageUpper = if (!c.isNull(ageUpperIdx)) c.getInt(ageUpperIdx).toDouble() else null
 
-        val userIdx = c.getColumnIndexOrThrow(COLUMN_USER_ID)
-        val userId = c.getString(userIdx)
-
-        val approvalDateIdx = c.getColumnIndexOrThrow(COLUMN_MOST_RECENT_APPROVAL_DATE)
-        val mostRecentApprovalDate = c.getString(approvalDateIdx)
-
-        return@use AmazonGetUserAgeDataResult(
-          responseStatus = mappedResponseStatus,
-          userStatus = mappedUserStatus,
-          ageLower = ageLower,
-          ageUpper = ageUpper,
-          mostRecentApprovalDate = mostRecentApprovalDate,
-          userId = userId,
+        AmazonGetUserAgeDataResult(
+          responseStatus = responseStatus,
+          userStatus = mapUserStatus(c.getString(c.getColumnIndexOrThrow(COLUMN_USER_STATUS))),
+          ageLower = if (c.isNull(ageLowerIdx)) null else c.getInt(ageLowerIdx).toDouble(),
+          ageUpper = if (c.isNull(ageUpperIdx)) null else c.getInt(ageUpperIdx).toDouble(),
+          userId = c.getString(c.getColumnIndexOrThrow(COLUMN_USER_ID)),
+          mostRecentApprovalDate = c.getString(c.getColumnIndexOrThrow(COLUMN_MOST_RECENT_APPROVAL_DATE)),
         )
       } catch (e: Exception) {
-        return@use emptyResult(error = e.message)
+        Log.e(TAG, "Amazon GetUserAgeData response parsing failed", e)
+        emptyResult()
       }
     }
   }

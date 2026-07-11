@@ -4,10 +4,11 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
-
+import android.util.Log
 
 // https://developer.samsung.com/galaxy-store/galaxy-store-content-provider-api/get-age-signals.html
-object SamsungAgeSignalsProvider {
+object SamsungGetAgeSignalsProvider : StoreAgeSignalsProvider {
+  private const val TAG = "PlayAgeRangeDeclaration"
   private const val GALAXYSTORE = "com.sec.android.app.samsungapps"
   private const val ASAA_META = "$GALAXYSTORE.AccountabilityActProvider.version"
   private const val ASAA_AUTHORITY = "$GALAXYSTORE.provider.ASAA"
@@ -23,13 +24,15 @@ object SamsungAgeSignalsProvider {
   private const val KEY_RESULT_INSTALLID = "installID"
   private const val KEY_ASAA_ENABLED = "gs_asaa_enable"
 
-  fun isAvailable(context: Context): Boolean {
+  override val store = AppStore.SAMSUNG_GALAXY_STORE
+
+  override fun isAvailable(context: Context): Boolean {
     if (PlayAgeRangeDeclaration.samsungTestOption != null) return true
 
-    val installer = getInstallerPackageName(context)
+    if (getInstallerPackageName(context) != GALAXYSTORE) return false
 
-    if (installer != GALAXYSTORE) return false
-
+    // The Galaxy Store must ship an ASAA provider of version >= 1.0
+    // (Galaxy Store 4.6.03.1 or higher).
     val version = runCatching {
       context.packageManager
         .getApplicationInfo(GALAXYSTORE, PackageManager.GET_META_DATA)
@@ -50,7 +53,7 @@ object SamsungAgeSignalsProvider {
     }
   }
 
-  private fun emptyResult(error: String? = null, resultCode: Double? = null, resultMessage: String? = null) = SamsungGetAgeSignalsResult(
+  private fun emptyResult(resultCode: Double? = null, resultMessage: String? = null) = SamsungGetAgeSignalsResult(
     result_code = resultCode,
     result_message = resultMessage,
     installID = null,
@@ -66,9 +69,12 @@ object SamsungAgeSignalsProvider {
     val callArg: String?
 
     if (testOption != null) {
+      // Route to the app-local SamsungTestContentProvider (see that class for scenarios).
       callUri = Uri.parse("content://${context.packageName}.samsung_test_provider/$QUERY_SETTINGS")
       callArg = testOption.toString()
     } else {
+      // ASAA only serves age signals when Samsung's regulatory-compliance flag
+      // is enabled for this device.
       val asaaEnabled = Settings.Secure.getString(context.contentResolver, KEY_ASAA_ENABLED)
       if (asaaEnabled != "1") return emptyResult()
       callUri = Uri.parse(URI_ASAA_SETTINGS)
@@ -78,12 +84,9 @@ object SamsungAgeSignalsProvider {
     val bundle = try {
       context.contentResolver.call(callUri, METHOD_GET_AGE_SIGNAL_RESULT, callArg, null)
     } catch (e: Exception) {
-      return emptyResult(error = e.message)
-    }
-
-    if (bundle == null) {
+      Log.e(TAG, "Samsung getAgeSignalResult call failed", e)
       return emptyResult()
-    }
+    } ?: return emptyResult()
 
     val resultCode = bundle.getInt(KEY_RESULT_CODE, 1)
     if (resultCode != 0) {
@@ -91,13 +94,11 @@ object SamsungAgeSignalsProvider {
       return emptyResult(resultCode = resultCode.toDouble(), resultMessage = message)
     }
 
-    val userStatus = mapUserStatus(bundle.getString(KEY_RESULT_USER_STATUS))
-
     return SamsungGetAgeSignalsResult(
       result_code = resultCode.toDouble(),
       result_message = null,
       installID = bundle.getString(KEY_RESULT_INSTALLID),
-      userStatus = userStatus,
+      userStatus = mapUserStatus(bundle.getString(KEY_RESULT_USER_STATUS)),
       ageLower = bundle.getString(KEY_RESULT_AGE_LOWER)?.toDoubleOrNull(),
       ageUpper = bundle.getString(KEY_RESULT_AGE_UPPER)?.toDoubleOrNull(),
       mostRecentApprovalDate = bundle.getString(KEY_RESULT_APPROVAL_DATE),

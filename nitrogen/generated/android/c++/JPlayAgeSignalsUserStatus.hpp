@@ -57,6 +57,9 @@ namespace margelo::nitro::playagerangedeclaration {
         case PlayAgeSignalsUserStatus::UNKNOWN:
           static const auto fieldUNKNOWN = clazz->getStaticField<JPlayAgeSignalsUserStatus>("UNKNOWN");
           return clazz->getStaticFieldValue(fieldUNKNOWN);
+        case PlayAgeSignalsUserStatus::DECLARED:
+          static const auto fieldDECLARED = clazz->getStaticField<JPlayAgeSignalsUserStatus>("DECLARED");
+          return clazz->getStaticFieldValue(fieldDECLARED);
         default:
           std::string stringValue = std::to_string(static_cast<int>(value));
           throw std::invalid_argument("Invalid enum value (" + stringValue + "!");

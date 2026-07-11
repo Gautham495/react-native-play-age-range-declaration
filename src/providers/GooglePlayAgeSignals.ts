@@ -5,6 +5,8 @@ export enum PlayAgeSignalsUserStatus {
   SUPERVISED_APPROVAL_PENDING = 2,
   SUPERVISED_APPROVAL_DENIED = 3,
   UNKNOWN = 4,
+  // The user, or their parent/guardian, declared the age (age-signals 0.0.3+).
+  DECLARED = 5,
 }
 
 export const PlayAgeSignalsUserStatusString: Record<
@@ -18,6 +20,7 @@ export const PlayAgeSignalsUserStatusString: Record<
   [PlayAgeSignalsUserStatus.SUPERVISED_APPROVAL_DENIED]:
     'SUPERVISED_APPROVAL_DENIED',
   [PlayAgeSignalsUserStatus.UNKNOWN]: 'UNKNOWN',
+  [PlayAgeSignalsUserStatus.DECLARED]: 'DECLARED',
 };
 
 export interface PlayAgeSignalsResult {

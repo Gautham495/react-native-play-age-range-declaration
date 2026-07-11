@@ -2,6 +2,7 @@ package com.margelo.nitro.playagerangedeclaration
 
 import android.content.Context
 import android.util.Log
+import com.google.android.play.agesignals.AgeSignalsException
 import com.google.android.play.agesignals.AgeSignalsRequest
 import com.google.android.play.agesignals.model.AgeSignalsVerificationStatus
 import com.margelo.nitro.playagerangedeclaration.PlayAgeRangeDeclaration.Companion.getManager
@@ -10,13 +11,17 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import kotlin.coroutines.resume
 
-object GooglePlayAgeSignalsProvider {
+// https://developer.android.com/google/play/age-signals/use-age-signals-api
+object GooglePlayAgeSignalsProvider : StoreAgeSignalsProvider {
+  private const val TAG = "PlayAgeRangeDeclaration"
   private const val PLAYSTORE = "com.android.vending"
 
-  fun isAvailable(context: Context): Boolean {
-    val installer = getInstallerPackageName(context)
+  override val store = AppStore.GOOGLE_PLAY
 
-    return installer == PLAYSTORE
+  override fun isAvailable(context: Context): Boolean {
+    if (PlayAgeRangeDeclaration.mockUser != null) return true
+
+    return getInstallerPackageName(context) == PLAYSTORE
   }
 
   private fun emptyResult(error: String? = null) = PlayAgeSignalsResult(
@@ -31,6 +36,7 @@ object GooglePlayAgeSignalsProvider {
   private fun mapUserStatus(userStatus: Int?): PlayAgeSignalsUserStatus? {
     return when (userStatus) {
       AgeSignalsVerificationStatus.VERIFIED -> PlayAgeSignalsUserStatus.VERIFIED
+      AgeSignalsVerificationStatus.DECLARED -> PlayAgeSignalsUserStatus.DECLARED
       AgeSignalsVerificationStatus.SUPERVISED -> PlayAgeSignalsUserStatus.SUPERVISED
       AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_PENDING -> PlayAgeSignalsUserStatus.SUPERVISED_APPROVAL_PENDING
       AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_DENIED -> PlayAgeSignalsUserStatus.SUPERVISED_APPROVAL_DENIED
@@ -49,8 +55,9 @@ object GooglePlayAgeSignalsProvider {
           .addOnSuccessListener { r ->
             val isoDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
             val approvalDate = r.mostRecentApprovalDate()?.let { isoDateFormat.format(it) }
-            // userStatus will be empty if the user is not in a location where are legally required to show show the age verification prompt
-            // This is different from UNKNOWN where the user is not verified, but is in an applicable region
+            // userStatus is empty when the user is not in a region where age
+            // verification is legally required. This is different from UNKNOWN,
+            // where the user is in an applicable region but not verified.
             // https://developer.android.com/google/play/age-signals/use-age-signals-api#age-signals-responses
             val userStatus = mapUserStatus(r.userStatus())
 
@@ -66,14 +73,18 @@ object GooglePlayAgeSignalsProvider {
             )
           }
           .addOnFailureListener { e ->
+            // Prefix the AgeSignalsException error code so callers can tell
+            // retryable from non-retryable failures (see "Handle API errors"
+            // in the Age Signals docs).
+            val code = (e as? AgeSignalsException)?.errorCode
             val msg = e.message ?: "Unknown error"
             cont.resume(
-              emptyResult(error = msg)
+              emptyResult(error = if (code != null) "[$code] $msg" else msg)
             )
           }
       }
     } catch (e: Exception) {
-      Log.e("PlayAgeRangeDeclaration", "Initialization error", e)
+      Log.e(TAG, "Age Signals initialization error", e)
       emptyResult(error = "AGE_SIGNALS_INIT_ERROR: ${e.message}")
     }
   }

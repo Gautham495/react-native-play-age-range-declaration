@@ -29,6 +29,7 @@ namespace margelo::nitro::playagerangedeclaration {
     SUPERVISED_APPROVAL_PENDING      SWIFT_NAME(supervisedApprovalPending) = 2,
     SUPERVISED_APPROVAL_DENIED      SWIFT_NAME(supervisedApprovalDenied) = 3,
     UNKNOWN      SWIFT_NAME(unknown) = 4,
+    DECLARED      SWIFT_NAME(declared) = 5,
   } CLOSED_ENUM;
 
 } // namespace margelo::nitro::playagerangedeclaration
@@ -58,7 +59,7 @@ namespace margelo::nitro {
         return false;
       }
       // Check if we are within the bounds of the enum.
-      return integer >= 0 && integer <= 4;
+      return integer >= 0 && integer <= 5;
     }
   };
 

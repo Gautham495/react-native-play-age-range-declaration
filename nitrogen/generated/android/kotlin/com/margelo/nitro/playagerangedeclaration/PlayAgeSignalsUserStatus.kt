@@ -20,7 +20,8 @@ enum class PlayAgeSignalsUserStatus(@DoNotStrip @Keep val value: Int) {
   SUPERVISED(1),
   SUPERVISED_APPROVAL_PENDING(2),
   SUPERVISED_APPROVAL_DENIED(3),
-  UNKNOWN(4);
+  UNKNOWN(4),
+  DECLARED(5);
 
   companion object
 }
