@@ -31,11 +31,35 @@ abstract class HybridPlayAgeRangeDeclarationSpec: HybridObject() {
   // Methods
   @DoNotStrip
   @Keep
-  abstract fun getPlayAgeRangeDeclaration(): Promise<PlayAgeRangeDeclarationResult>
+  abstract fun detectStore(): AppStore
+  
+  @DoNotStrip
+  @Keep
+  abstract fun getGooglePlayAgeSignals(): Promise<PlayAgeSignalsResult>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun getAmazonUserAgeData(): Promise<AmazonGetUserAgeDataResult>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun getSamsungAgeSignals(): Promise<SamsungGetAgeSignalsResult>
   
   @DoNotStrip
   @Keep
   abstract fun requestDeclaredAgeRange(firstThresholdAge: Double, secondThresholdAge: Double?, thirdThresholdAge: Double?): Promise<DeclaredAgeRangeResult>
+  
+  @DoNotStrip
+  @Keep
+  abstract fun setGooglePlayMockUser(config: PlayAgeSignalsMockConfig?): Unit
+  
+  @DoNotStrip
+  @Keep
+  abstract fun setAmazonMockScenario(scenario: Double?): Unit
+  
+  @DoNotStrip
+  @Keep
+  abstract fun setSamsungMockScenario(scenario: Double?): Unit
 
   // Default implementation of `HybridObject.toString()`
   override fun toString(): String {

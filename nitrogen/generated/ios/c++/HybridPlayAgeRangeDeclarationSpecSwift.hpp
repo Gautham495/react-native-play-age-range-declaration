@@ -12,22 +12,43 @@
 // Forward declaration of `HybridPlayAgeRangeDeclarationSpec_cxx` to properly resolve imports.
 namespace PlayAgeRangeDeclaration { class HybridPlayAgeRangeDeclarationSpec_cxx; }
 
-// Forward declaration of `PlayAgeRangeDeclarationResult` to properly resolve imports.
-namespace margelo::nitro::playagerangedeclaration { struct PlayAgeRangeDeclarationResult; }
-// Forward declaration of `PlayAgeRangeDeclarationUserStatus` to properly resolve imports.
-namespace margelo::nitro::playagerangedeclaration { enum class PlayAgeRangeDeclarationUserStatus; }
+// Forward declaration of `AppStore` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class AppStore; }
+// Forward declaration of `PlayAgeSignalsResult` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { struct PlayAgeSignalsResult; }
+// Forward declaration of `PlayAgeSignalsUserStatus` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class PlayAgeSignalsUserStatus; }
+// Forward declaration of `AmazonGetUserAgeDataResult` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { struct AmazonGetUserAgeDataResult; }
+// Forward declaration of `AmazonGetUserAgeDataResponseStatus` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class AmazonGetUserAgeDataResponseStatus; }
+// Forward declaration of `AmazonGetUserAgeDataUserStatus` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class AmazonGetUserAgeDataUserStatus; }
+// Forward declaration of `SamsungGetAgeSignalsResult` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { struct SamsungGetAgeSignalsResult; }
+// Forward declaration of `SamsungGetAgeSignalsUserStatus` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class SamsungGetAgeSignalsUserStatus; }
 // Forward declaration of `DeclaredAgeRangeResult` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { struct DeclaredAgeRangeResult; }
 // Forward declaration of `AppleAgeRangeDeclarationUserStatusValues` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { enum class AppleAgeRangeDeclarationUserStatusValues; }
+// Forward declaration of `PlayAgeSignalsMockConfig` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { struct PlayAgeSignalsMockConfig; }
 
-#include "PlayAgeRangeDeclarationResult.hpp"
+#include "AppStore.hpp"
+#include "PlayAgeSignalsResult.hpp"
 #include <NitroModules/Promise.hpp>
 #include <string>
 #include <optional>
-#include "PlayAgeRangeDeclarationUserStatus.hpp"
+#include "PlayAgeSignalsUserStatus.hpp"
+#include "AmazonGetUserAgeDataResult.hpp"
+#include "AmazonGetUserAgeDataResponseStatus.hpp"
+#include "AmazonGetUserAgeDataUserStatus.hpp"
+#include "SamsungGetAgeSignalsResult.hpp"
+#include "SamsungGetAgeSignalsUserStatus.hpp"
 #include "DeclaredAgeRangeResult.hpp"
 #include "AppleAgeRangeDeclarationUserStatusValues.hpp"
+#include "PlayAgeSignalsMockConfig.hpp"
 
 #include "PlayAgeRangeDeclaration-Swift-Cxx-Umbrella.hpp"
 
@@ -79,8 +100,32 @@ namespace margelo::nitro::playagerangedeclaration {
 
   public:
     // Methods
-    inline std::shared_ptr<Promise<PlayAgeRangeDeclarationResult>> getPlayAgeRangeDeclaration() override {
-      auto __result = _swiftPart.getPlayAgeRangeDeclaration();
+    inline AppStore detectStore() override {
+      auto __result = _swiftPart.detectStore();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<Promise<PlayAgeSignalsResult>> getGooglePlayAgeSignals() override {
+      auto __result = _swiftPart.getGooglePlayAgeSignals();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<Promise<AmazonGetUserAgeDataResult>> getAmazonUserAgeData() override {
+      auto __result = _swiftPart.getAmazonUserAgeData();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
+    inline std::shared_ptr<Promise<SamsungGetAgeSignalsResult>> getSamsungAgeSignals() override {
+      auto __result = _swiftPart.getSamsungAgeSignals();
       if (__result.hasError()) [[unlikely]] {
         std::rethrow_exception(__result.error());
       }
@@ -94,6 +139,24 @@ namespace margelo::nitro::playagerangedeclaration {
       }
       auto __value = std::move(__result.value());
       return __value;
+    }
+    inline void setGooglePlayMockUser(const std::optional<PlayAgeSignalsMockConfig>& config) override {
+      auto __result = _swiftPart.setGooglePlayMockUser(config);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+    }
+    inline void setAmazonMockScenario(std::optional<double> scenario) override {
+      auto __result = _swiftPart.setAmazonMockScenario(scenario);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+    }
+    inline void setSamsungMockScenario(std::optional<double> scenario) override {
+      auto __result = _swiftPart.setSamsungMockScenario(scenario);
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
     }
 
   private:

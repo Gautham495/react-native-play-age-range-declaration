@@ -1,2 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Samsung Galaxy Store Age Signals API -->
+    <uses-permission android:name="com.sec.android.app.samsungapps.accesspermission.ASAA_PROVIDER.READ" />
+
+    <queries>
+        <!-- Samsung Galaxy Store ContentProvider -->
+        <provider android:authorities="com.sec.android.app.samsungapps.provider.ASAA" />
+        <!-- Amazon Appstore ContentProvider -->
+        <provider android:authorities="amzn_appstore" />
+    </queries>
 </manifest>

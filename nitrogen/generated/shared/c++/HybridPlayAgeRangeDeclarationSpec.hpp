@@ -13,15 +13,27 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-// Forward declaration of `PlayAgeRangeDeclarationResult` to properly resolve imports.
-namespace margelo::nitro::playagerangedeclaration { struct PlayAgeRangeDeclarationResult; }
+// Forward declaration of `AppStore` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class AppStore; }
+// Forward declaration of `PlayAgeSignalsResult` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { struct PlayAgeSignalsResult; }
+// Forward declaration of `AmazonGetUserAgeDataResult` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { struct AmazonGetUserAgeDataResult; }
+// Forward declaration of `SamsungGetAgeSignalsResult` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { struct SamsungGetAgeSignalsResult; }
 // Forward declaration of `DeclaredAgeRangeResult` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { struct DeclaredAgeRangeResult; }
+// Forward declaration of `PlayAgeSignalsMockConfig` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { struct PlayAgeSignalsMockConfig; }
 
-#include "PlayAgeRangeDeclarationResult.hpp"
+#include "AppStore.hpp"
+#include "PlayAgeSignalsResult.hpp"
 #include <NitroModules/Promise.hpp>
+#include "AmazonGetUserAgeDataResult.hpp"
+#include "SamsungGetAgeSignalsResult.hpp"
 #include "DeclaredAgeRangeResult.hpp"
 #include <optional>
+#include "PlayAgeSignalsMockConfig.hpp"
 
 namespace margelo::nitro::playagerangedeclaration {
 
@@ -54,8 +66,14 @@ namespace margelo::nitro::playagerangedeclaration {
 
     public:
       // Methods
-      virtual std::shared_ptr<Promise<PlayAgeRangeDeclarationResult>> getPlayAgeRangeDeclaration() = 0;
+      virtual AppStore detectStore() = 0;
+      virtual std::shared_ptr<Promise<PlayAgeSignalsResult>> getGooglePlayAgeSignals() = 0;
+      virtual std::shared_ptr<Promise<AmazonGetUserAgeDataResult>> getAmazonUserAgeData() = 0;
+      virtual std::shared_ptr<Promise<SamsungGetAgeSignalsResult>> getSamsungAgeSignals() = 0;
       virtual std::shared_ptr<Promise<DeclaredAgeRangeResult>> requestDeclaredAgeRange(double firstThresholdAge, std::optional<double> secondThresholdAge, std::optional<double> thirdThresholdAge) = 0;
+      virtual void setGooglePlayMockUser(const std::optional<PlayAgeSignalsMockConfig>& config) = 0;
+      virtual void setAmazonMockScenario(std::optional<double> scenario) = 0;
+      virtual void setSamsungMockScenario(std::optional<double> scenario) = 0;
 
     protected:
       // Hybrid Setup
