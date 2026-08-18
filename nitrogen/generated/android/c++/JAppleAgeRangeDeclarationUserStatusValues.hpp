@@ -15,7 +15,7 @@ namespace margelo::nitro::playagerangedeclaration {
   using namespace facebook;
 
   /**
-   * The C++ JNI bridge between the C++ enum "AppleAgeRangeDeclarationUserStatusValues" and the the Kotlin enum "AppleAgeRangeDeclarationUserStatusValues".
+   * The C++ JNI bridge between the C++ enum "AppleAgeRangeDeclarationUserStatusValues" and the Kotlin enum "AppleAgeRangeDeclarationUserStatusValues".
    */
   struct JAppleAgeRangeDeclarationUserStatusValues final: public jni::JavaClass<JAppleAgeRangeDeclarationUserStatusValues> {
   public:

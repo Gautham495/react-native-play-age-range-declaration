@@ -1,33 +1,128 @@
-name: Create GitHub Release on npm Publish
+name: Release
 
 on:
   push:
     branches:
       - main
 
+# Only one release job at a time. If two commits land back-to-back, the
+# second waits for the first to finish instead of racing on the version bump.
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
-  publish-release:
-    name: Sync GitHub Release with npm
+  release:
+    name: Publish to npm and GitHub
     runs-on: ubuntu-latest
+
+    # Skip the release commit this workflow itself creates.
+    if: "!contains(github.event.head_commit.message, 'chore: release v')"
+
     permissions:
-      contents: write
+      contents: write # push tag + create GitHub Release
+      id-token: write # npm provenance
+
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
+          # Use a PAT so the push we make below re-triggers other workflows
+          # if you ever want it to. GITHUB_TOKEN pushes deliberately do not.
+          token: ${{ secrets.GH_TOKEN }}
 
-      - name: Extract package version
-        id: pkg
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Enable Corepack + Yarn
         run: |
-          VERSION=$(jq -r .version package.json)
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          corepack enable
+          corepack prepare yarn@stable --activate
+
+      - name: Configure Yarn for CI
+        run: |
+          if [ -f .yarnrc.yml ]; then mv .yarnrc.yml .yarnrc.yml.backup; fi
+          cat > .yarnrc.yml << 'EOF'
+          nodeLinker: node-modules
+          enableGlobalCache: false
+          EOF
+
+      - name: Install dependencies
+        run: yarn install --no-immutable
+
+      # ---- Quality gates ----------------------------------------------------
+
+      - name: Typecheck
+        run: yarn typecheck
+
+      - name: Lint
+        run: yarn lint
+
+      # ---- Build ------------------------------------------------------------
+
+      - name: Build package
+        run: yarn prepare
+
+      - name: Verify dist
+        run: |
+          ls -la lib/
+          # Check for the outputs from react-native-builder-bob
+          test -f lib/module/index.js && test -f lib/typescript/src/index.d.ts
+
+      # ---- Bump version -----------------------------------------------------
+
+      - name: Configure Git identity
+        run: |
+          git config user.name "Gautham495"
+          git config user.email "kinggautham495@gmail.com"
+
+      - name: Bump patch version
+        id: bump
+        run: |
+          NEW_VERSION=$(node -e "
+            const fs = require('fs');
+            const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+            const v = pkg.version.split('.');
+            v[2] = String(parseInt(v[2], 10) + 1);
+            pkg.version = v.join('.');
+            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+            console.log(pkg.version);
+          ")
+          echo "version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$NEW_VERSION" >> "$GITHUB_OUTPUT"
+          echo "Bumped to $NEW_VERSION"
+
+      # ---- Publish to npm FIRST --------------------------------------------
+      #
+      # Publish before pushing the tag. If npm fails, we don't leave a tag
+      # in git that points at a version that was never published.
+      #
+      - name: Publish to npm
+        run: npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # ---- Only now push the commit + tag ----------------------------------
+
+      - name: Commit, tag, and push
+        run: |
+          git add package.json
+          git commit -m "chore: release ${{ steps.bump.outputs.tag }}"
+          git tag "${{ steps.bump.outputs.tag }}"
+          git push origin main
+          git push origin "${{ steps.bump.outputs.tag }}"
+
+      # ---- Create the GitHub Release for the SAME tag ----------------------
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: "v${{ steps.pkg.outputs.version }}"
-          name: "Release ${{ steps.pkg.outputs.version }}"
+          tag_name: ${{ steps.bump.outputs.tag }}
+          name: Release ${{ steps.bump.outputs.version }}
           generate_release_notes: true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Use the built-in one now
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

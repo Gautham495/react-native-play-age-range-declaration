@@ -75,8 +75,7 @@ View this Read me file to test in the android side - [TESTING_ANDROID.md](TESTIN
 
 ### Initialize the package
 
-> [!NOTE]
-> **iOS Only**: `setAgeRangeThresholds` is only required for iOS. Android does not require this initialization.
+> [!NOTE] > **iOS Only**: `setAgeRangeThresholds` is only required for iOS. Android does not require this initialization.
 
 Before using `getIsConsideredOlderThan` on iOS, or `getAppleDeclaredAgeRangeStatus` you must initialize the package by calling `setAgeRangeThresholds` with an array of age thresholds. This should include the different ages that gate content in your app
 
@@ -101,10 +100,9 @@ setAgeRangeThresholds([13, 15]); // Two thresholds at 13 and 15
 setAgeRangeThresholds([13, 15, 17]); // Three thresholds at 13, 15, and 17
 ```
 
-> [!WARNING]
-> **iOS Permission Re-prompt**: If you change the age thresholds after the user has already granted permission, iOS will re-prompt the user for permission. It's recommended to set the thresholds once at app startup and keep them consistent.
+> [!WARNING] > **iOS Permission Re-prompt**: If you change the age thresholds after the user has already granted permission, iOS will re-prompt the user for permission. It's recommended to set the thresholds once at app startup and keep them consistent.
 
-<img alt="android" src="./docs/img/ios-re-approval.png"  height="600" width="375"/>
+<img alt="android" src="./docs/img/ios_re_approval.png"  height="600" width="375"/>
 
 ### Checking if the user is allowed to access age-gated content
 

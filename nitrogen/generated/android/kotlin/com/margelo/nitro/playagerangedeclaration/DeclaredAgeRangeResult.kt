@@ -47,7 +47,7 @@ data class DeclaredAgeRangeResult(
   }
 
   override fun hashCode(): Int {
-    return arrayOf(
+    return arrayOf<Any?>(
       isEligible,
       status,
       parentControls,

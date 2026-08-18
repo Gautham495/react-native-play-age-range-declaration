@@ -55,7 +55,7 @@ data class PlayAgeRangeDeclarationResult(
   }
 
   override fun hashCode(): Int {
-    return arrayOf(
+    return arrayOf<Any?>(
       isEligible,
       installId,
       userStatus,
