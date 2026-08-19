@@ -37,7 +37,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-  - PlayAgeRangeDeclaration (2.0.49):
+  - PlayAgeRangeDeclaration (3.0.0):
     - hermes-engine
     - NitroModules
     - RCTRequired
@@ -1932,7 +1932,7 @@ SPEC CHECKSUMS:
   glog: 3cf7cb46f743c4bc758ae3e6d9c15bd1b4cfd6d4
   hermes-engine: 6a26e94b4a974cbadc751eed9caa12624c38f226
   NitroModules: 49b1952f34e45c227e4a20d0b6510502fe6737d3
-  PlayAgeRangeDeclaration: 0a73e552c994a1f4e0066f3b5c3f8d6901240664
+  PlayAgeRangeDeclaration: 9722491bc9913d9b7208ef8d4a5a748e5b436f5c
   RCT-Folly: 82921e585c0400eda46fac1068297aa9dfb035e4
   RCTDeprecation: 6d66040b74f4be203495adda55b49c1a25190291
   RCTRequired: ebf172e0b04196922ba4640458f9926c1bb34012

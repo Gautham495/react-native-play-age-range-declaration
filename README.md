@@ -34,8 +34,6 @@ npm install react-native-play-age-range-declaration react-native-nitro-modules
 
 ## Demo
 
-<!-- TODO: Re-record demo videos to show the Android store selector (Google Play / Amazon / Samsung) and mock scenarios. Replace the GIFs below, keeping the same paths. -->
-
 <table>
   <tr>
     <th align="center">🍏 iOS Demo</th>
@@ -43,10 +41,10 @@ npm install react-native-play-age-range-declaration react-native-nitro-modules
   </tr>
   <tr>
     <td align="center">
-    <img alt="android" src="./docs/videos/iOS.gif"  height="650" width="300"/>
+    <img alt="android" src="https://github.com/user-attachments/assets/5ba78da9-e95c-4a82-a933-558878f21aa9"  height="650" width="300"/>
     </td>
     <td align="center">
-     <img alt="android" src="./docs/videos/android.gif"  height="650" width="300"/>
+     <img alt="android" src="https://github.com/user-attachments/assets/b764b840-e152-410e-b2a7-b757e6552b66"  height="650" width="300"/>
     </td>
   </tr>
 </table>
@@ -58,8 +56,8 @@ npm install react-native-play-age-range-declaration react-native-nitro-modules
 | Store                    | API Used                                                     | Purpose                                            |
 | ------------------------ | ------------------------------------------------------------ | -------------------------------------------------- |
 | **Google Play**          | Play Age Signals API (`com.google.android.play:age-signals`) | Detect user supervision / verified status          |
-| **Amazon Appstore**      | `GetUserAgeData` ContentProvider                              | Age range + parental-consent status                |
-| **Samsung Galaxy Store** | ASAA `getAgeSignalResult` ContentProvider                     | Detect user supervision / verified status          |
+| **Amazon Appstore**      | `GetUserAgeData` ContentProvider                             | Age range + parental-consent status                |
+| **Samsung Galaxy Store** | ASAA `getAgeSignalResult` ContentProvider                    | Detect user supervision / verified status          |
 | **Apple App Store**      | Declared Age Range API (`AgeRangeService.requestAgeRange`)   | Get user’s declared age range (e.g., 13–15, 16–17) |
 
 The store the app was installed from is detected natively (`detectStore()`), and `getIsConsideredOlderThan` routes to the matching API automatically.
@@ -111,7 +109,7 @@ setAgeRangeThresholds([13, 15, 17]); // Three thresholds at 13, 15, and 17
 
 > [!WARNING] > **iOS Permission Re-prompt**: If you change the age thresholds after the user has already granted permission, iOS will re-prompt the user for permission. It's recommended to set the thresholds once at app startup and keep them consistent.
 
-<img alt="android" src="./docs/img/ios_re_approval.png"  height="600" width="375"/>
+<img alt="android" src="https://github.com/user-attachments/assets/9a455ef5-f31e-4055-a899-155e72dcb4af"  height="600" width="375"/>
 
 ### Checking if the user is allowed to access age-gated content
 
@@ -387,12 +385,12 @@ const styles = StyleSheet.create({
 
 Each store has its own fetcher; all three Android fetchers resolve to the same **normalized `AgeSignalsResult`**, so one code path handles every store. The store's unmodified response is kept in `raw`:
 
-| Store                                | Fetcher                             |
-| ------------------------------------ | ----------------------------------- |
-| Google Play (and unknown installers) | `getGooglePlayAgeRangeStatus()`     |
-| Amazon Appstore                      | `getAmazonAgeRangeStatus()`         |
-| Samsung Galaxy Store                 | `getSamsungGalaxyAgeRangeStatus()`  |
-| Apple App Store                      | `getAppleDeclaredAgeRangeStatus()`  |
+| Store                                | Fetcher                            |
+| ------------------------------------ | ---------------------------------- |
+| Google Play (and unknown installers) | `getGooglePlayAgeRangeStatus()`    |
+| Amazon Appstore                      | `getAmazonAgeRangeStatus()`        |
+| Samsung Galaxy Store                 | `getSamsungGalaxyAgeRangeStatus()` |
+| Apple App Store                      | `getAppleDeclaredAgeRangeStatus()` |
 
 ```ts
 interface AgeSignalsResult<Raw> {
@@ -443,8 +441,8 @@ On Android, the equivalent signal is a normalized `AgeSignalsResult` whose `user
 
 ## 🧩 Supported Platforms
 
-| Platform          | Status                  |
-| ----------------- | ----------------------- |
+| Platform                      | Status                                                               |
+| ----------------------------- | -------------------------------------------------------------------- |
 | **Google Play (Android 15+)** | ✅ Supported (Age Signals SDK Beta)                                  |
 | **Amazon Appstore**           | ✅ Supported                                                         |
 | **Samsung Galaxy Store**      | ✅ Supported (Galaxy Store 4.6.03.1+)                                |
