@@ -5,6 +5,13 @@ import NitroModules
 
 class PlayAgeRangeDeclaration: HybridPlayAgeRangeDeclarationSpec {
 
+  func isEligibleForAgeFeatures() throws -> Promise<Bool> {
+    return Promise.async {
+      guard #available(iOS 26.2, *) else { return false }
+      return try await AgeRangeService.shared.isEligibleForAgeFeatures
+    }
+  }
+
   func requestDeclaredAgeRange(
     firstThresholdAge: Double,
     secondThresholdAge: Double?,
@@ -12,23 +19,22 @@ class PlayAgeRangeDeclaration: HybridPlayAgeRangeDeclarationSpec {
   ) throws -> Promise<DeclaredAgeRangeResult> {
 
     return Promise.async {
+      // On iOS < 26.2 the API doesn't exist. Return a structured ineligible
+      // result rather than throwing — the JS layer can tell "we can't ask"
+      // from "we asked and got no answer" by looking at isEligible.
       guard #available(iOS 26.2, *) else {
-        throw NSError(
-          domain: "PlayAgeRangeDeclaration", code: 1,
-          userInfo: [NSLocalizedDescriptionKey: "Declared Age Range API requires iOS 26.2"]
+        return DeclaredAgeRangeResult(
+          isEligible: false,
+          status: nil,
+          parentControls: nil,
+          lowerBound: nil,
+          upperBound: nil
         )
       }
 
-      // isEligibleForAgeFeatures is a synchronous property, not async/throws
-    guard try await AgeRangeService.shared.isEligibleForAgeFeatures else {
-  return DeclaredAgeRangeResult(
-    isEligible: false,
-    status: nil,
-    parentControls: nil,
-    lowerBound: nil,
-    upperBound: nil
-  )
-}
+      // NOTE: Deliberately no isEligibleForAgeFeatures pre-check here.
+      // Callers who want that gate should call isEligibleForAgeFeatures()
+      // first; this method always tries to present the sheet.
 
       guard let viewController = await Self.topViewController() else {
         throw NSError(
@@ -47,27 +53,25 @@ class PlayAgeRangeDeclaration: HybridPlayAgeRangeDeclarationSpec {
       )
 
       switch response {
-     case .sharing(let declaration):
-  let status: AppleAgeRangeDeclarationUserStatusValues
-  if let declarationStatus = declaration.ageRangeDeclaration {
-    // String(describing:) on the Apple enum gives "selfDeclared", "guardianDeclared", etc.
-    // which matches the keys in fromString
-    status = AppleAgeRangeDeclarationUserStatusValues(
-      fromString: String(describing: declarationStatus)
-    ) ?? .unknown
-  } else {
-    status = .unknown
-  }
+      case .sharing(let declaration):
+        let status: AppleAgeRangeDeclarationUserStatusValues
+        if let declarationStatus = declaration.ageRangeDeclaration {
+          status = AppleAgeRangeDeclarationUserStatusValues(
+            fromString: String(describing: declarationStatus)
+          ) ?? .unknown
+        } else {
+          status = .unknown
+        }
 
-  let controlsRawValue = declaration.activeParentalControls.rawValue
+        let controlsRawValue = declaration.activeParentalControls.rawValue
 
-  return DeclaredAgeRangeResult(
-    isEligible: true,
-    status: status,
-    parentControls: "\(controlsRawValue)",
-    lowerBound: declaration.lowerBound.map { Double($0) },
-    upperBound: declaration.upperBound.map { Double($0) }
-  )
+        return DeclaredAgeRangeResult(
+          isEligible: true,
+          status: status,
+          parentControls: "\(controlsRawValue)",
+          lowerBound: declaration.lowerBound.map { Double($0) },
+          upperBound: declaration.upperBound.map { Double($0) }
+        )
 
       case .declinedSharing:
         return DeclaredAgeRangeResult(

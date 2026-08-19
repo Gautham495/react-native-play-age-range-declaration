@@ -21,6 +21,18 @@ export interface PlayAgeRangeDeclaration
   getGooglePlayAgeSignals(): Promise<PlayAgeSignalsResult>;
   getAmazonUserAgeData(): Promise<AmazonGetUserAgeDataResult>;
   getSamsungAgeSignals(): Promise<SamsungGetAgeSignalsResult>;
+  /**
+   * iOS only. Whether the current user/device is eligible for Apple's
+   * Declared Age Range API — i.e. requestDeclaredAgeRange can present the
+   * sheet. Always false on Android and on iOS < 26.2.
+   */
+  isEligibleForAgeFeatures(): Promise<boolean>;
+  /**
+   * iOS only. Unconditionally presents the Declared Age Range sheet on
+   * iOS 26.2+ (does NOT pre-check eligibility — call
+   * isEligibleForAgeFeatures() first if you want that). On iOS < 26.2 or on
+   * Android, resolves to { isEligible: false, ... } rather than throwing.
+   */
   requestDeclaredAgeRange(
     firstThresholdAge: number,
     secondThresholdAge?: number,

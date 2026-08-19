@@ -11,7 +11,7 @@ A **React Native Nitro Module** providing a unified API for **age-appropriate ex
 - 🟢 **Google Play Age Signals API** (Android)
 - 🟠 **Amazon Appstore GetUserAgeData API** (Android)
 - 🟣 **Samsung Galaxy Store Age Signals API** (Android)
-- 🔵 **Apple Declared Age Range API** (iOS 26+)
+- 🔵 **Apple Declared Age Range API** (iOS 26.2+; tested on 26.5)
 
 ---
 
@@ -29,7 +29,8 @@ npm install react-native-play-age-range-declaration react-native-nitro-modules
 
 > [!NOTE]
 >
-> - Apple's Declared Age Range API requires **iOS 26+**; Google Play Age Signals requires **Android 15+** with the Play Store installed (both tested on real devices — see the demos below).
+> - Apple's Declared Age Range API requires **iOS 26.2+** (tested on iOS 26.5); Google Play Age Signals requires **Android 15+** with the Play Store installed (both tested on real devices — see the demos below).
+> - Uses **`com.google.android.play:age-signals` 0.0.4**, which splits the old `userStatus` into `ageRangeSource` + `significantChangeStatus`. The library maps this back to the same `PlayAgeSignalsUserStatus` enum, so the JS API is unchanged.
 > - Amazon Appstore and Samsung Galaxy Store age signals respond when the app is installed from that store. Every store can also be **mocked from JS** for development — see [TESTING_ANDROID.md](TESTING_ANDROID.md).
 
 ## Demo
@@ -156,6 +157,35 @@ const checkAgeRestriction = async () => {
   );
 }
 ```
+
+### iOS: Checking eligibility before requesting the sheet
+
+Apple's Declared Age Range API is only available to eligible users (iOS 26.2+, applicable region, signed-in Apple Account, etc.). The library exposes eligibility as a **separate call** from the request itself, so you can decide what to do on ineligible devices without triggering any UI:
+
+```tsx
+import {
+  isEligibleForAppleAgeRange,
+  isEligibleForAppleAgeRangeInAppStore,
+  getAppleDeclaredAgeRangeStatus,
+} from 'react-native-play-age-range-declaration';
+
+// Pure pre-flight check — no UI, no side effects.
+// false on Android and on iOS < 26.2.
+const eligible = await isEligibleForAppleAgeRange();
+
+// Same, but also gates on the app being installed from the App Store —
+// matches the conditions getIsConsideredOlderThan uses internally.
+const eligibleInAppStore = await isEligibleForAppleAgeRangeInAppStore();
+
+if (eligible) {
+  const result = await getAppleDeclaredAgeRangeStatus();
+  // …use result
+}
+```
+
+**Why two functions?** `getAppleDeclaredAgeRangeStatus` does **not** pre-check eligibility — it always tries to present the sheet on iOS 26.2+. If the device is ineligible or on an older iOS, it resolves to `{ isEligible: false, ... }` rather than throwing. This lets callers who want to always prompt (e.g. re-request after settings change) bypass the gate, and callers who want the gate can call `isEligibleForAppleAgeRange()` first.
+
+`getIsConsideredOlderThan` is unaffected — it still uses the store gate internally.
 
 ### Full Example
 
@@ -446,7 +476,7 @@ On Android, the equivalent signal is a normalized `AgeSignalsResult` whose `user
 | **Google Play (Android 15+)** | ✅ Supported (Age Signals SDK Beta)                                  |
 | **Amazon Appstore**           | ✅ Supported                                                         |
 | **Samsung Galaxy Store**      | ✅ Supported (Galaxy Store 4.6.03.1+)                                |
-| **iOS 26+ (App Store)**       | ✅ Supported                                                         |
+| **iOS 26.2+ (App Store)**     | ✅ Supported (tested on 26.5)                                        |
 | **iOS Simulator**             | ⚠️ Real API not supported                                            |
 | **Emulators**                 | ⚠️ Real APIs not supported — use the [mock APIs](TESTING_ANDROID.md) |
 

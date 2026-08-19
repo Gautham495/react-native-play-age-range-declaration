@@ -50,6 +50,38 @@ const PlayAgeRangeDeclarationHybridObject =
 export const detectStore = (): AppStore =>
   PlayAgeRangeDeclarationHybridObject.detectStore();
 
+/**
+ * Whether the current user/device is eligible for Apple's Declared Age
+ * Range API (iOS 26.2+, applicable region, Apple Account signed in, etc.).
+ * Always false on Android.
+ *
+ * This is a pre-flight check — calling it does NOT present any UI.
+ * getAppleDeclaredAgeRangeStatus does not run this internally, so if you
+ * want to skip the request on ineligible devices, gate on this first.
+ */
+export async function isEligibleForAppleAgeRange(): Promise<boolean> {
+  if (Platform.OS !== 'ios') return false;
+  return await PlayAgeRangeDeclarationHybridObject.isEligibleForAgeFeatures();
+}
+
+/**
+ * Same as isEligibleForAppleAgeRange but also gates on the app being
+ * installed from the Apple App Store (matches getIsConsideredOlderThan's
+ * store gate). Use this if you want the same conditions
+ * getIsConsideredOlderThan uses before hitting the sheet.
+ */
+export async function isEligibleForAppleAgeRangeInAppStore(): Promise<boolean> {
+  if (Platform.OS !== 'ios') return false;
+  if (detectStore() !== AppStore.APPLE_APPSTORE) return false;
+  return await PlayAgeRangeDeclarationHybridObject.isEligibleForAgeFeatures();
+}
+
+/**
+ * Presents Apple's Declared Age Range sheet. Does NOT pre-check eligibility
+ * — call isEligibleForAppleAgeRange() first if you want that gate. On
+ * ineligible devices (iOS < 26.2, wrong region, no Apple Account) this
+ * resolves to { isEligible: false, ... } rather than throwing.
+ */
 export async function getAppleDeclaredAgeRangeStatus(): Promise<DeclaredAgeRangeResult> {
   const thresholds = ageRangeThresholdManager.getThresholds();
 

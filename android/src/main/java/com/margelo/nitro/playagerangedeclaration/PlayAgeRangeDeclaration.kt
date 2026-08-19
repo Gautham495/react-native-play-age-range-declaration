@@ -139,4 +139,9 @@ class PlayAgeRangeDeclaration : HybridPlayAgeRangeDeclarationSpec() {
       )
     }
   }
+
+  // Apple's eligibility check is iOS-only; Android is never eligible.
+  override fun isEligibleForAgeFeatures(): Promise<Boolean> {
+    return Promise.async { false }
+  }
 }

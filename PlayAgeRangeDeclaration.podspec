@@ -13,7 +13,6 @@ Pod::Spec.new do |s|
   s.platforms    = { :ios => min_ios_version_supported }
   s.source       = { :git => "https://github.com/Gautham495/react-native-play-age-range-declaration.git", :tag => "#{s.version}" }
 
-
   s.source_files = [
     "ios/**/*.{swift}",
     "ios/**/*.{m,mm}",
