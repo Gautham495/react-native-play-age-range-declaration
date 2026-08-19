@@ -1,6 +1,6 @@
 {
   "name": "react-native-play-age-range-declaration",
-  "version": "3.0.1",
+  "version": "3.0.4",
   "description": "React Native Nitro Module to access Google Play's Age Signals API & Apple's Declared Age Range API",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",
@@ -46,7 +46,9 @@
   "keywords": [
     "react-native",
     "ios",
-    "android"
+    "android",
+    "Play's Age Signals",
+    "Declared Age Range"
   ],
   "repository": {
     "type": "git",
