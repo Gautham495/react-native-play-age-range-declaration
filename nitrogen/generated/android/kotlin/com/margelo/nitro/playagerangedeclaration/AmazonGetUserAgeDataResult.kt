@@ -51,7 +51,7 @@ data class AmazonGetUserAgeDataResult(
   }
 
   override fun hashCode(): Int {
-    return arrayOf(
+    return arrayOf<Any?>(
       responseStatus,
       userStatus,
       ageLower,

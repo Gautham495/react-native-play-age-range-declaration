@@ -52,7 +52,6 @@ data class PlayAgeSignalsResult(
 
   override fun hashCode(): Int {
     return arrayOf<Any?>(
-      isEligible,
       installId,
       userStatus,
       error,

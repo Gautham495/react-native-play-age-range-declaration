@@ -55,7 +55,7 @@ data class SamsungGetAgeSignalsResult(
   }
 
   override fun hashCode(): Int {
-    return arrayOf(
+    return arrayOf<Any?>(
       result_code,
       result_message,
       installID,

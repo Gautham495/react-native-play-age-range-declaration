@@ -47,7 +47,7 @@ data class PlayAgeSignalsMockConfig(
   }
 
   override fun hashCode(): Int {
-    return arrayOf(
+    return arrayOf<Any?>(
       userStatus,
       ageLower,
       ageUpper,

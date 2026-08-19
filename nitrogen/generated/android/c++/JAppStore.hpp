@@ -15,7 +15,7 @@ namespace margelo::nitro::playagerangedeclaration {
   using namespace facebook;
 
   /**
-   * The C++ JNI bridge between the C++ enum "AppStore" and the the Kotlin enum "AppStore".
+   * The C++ JNI bridge between the C++ enum "AppStore" and the Kotlin enum "AppStore".
    */
   struct JAppStore final: public jni::JavaClass<JAppStore> {
   public:

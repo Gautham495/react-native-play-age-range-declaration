@@ -15,16 +15,14 @@
 #include <optional>
 #include <string>
 
-namespace margelo::nitro::playagerangedeclaration
-{
+namespace margelo::nitro::playagerangedeclaration {
 
   using namespace facebook;
 
   /**
-   * The C++ JNI bridge between the C++ struct "PlayAgeRangeDeclarationResult" and the Kotlin data class "PlayAgeRangeDeclarationResult".
+   * The C++ JNI bridge between the C++ struct "PlayAgeSignalsResult" and the Kotlin data class "PlayAgeSignalsResult".
    */
-  struct JPlayAgeSignalsResult final : public jni::JavaClass<JPlayAgeSignalsResult>
-  {
+  struct JPlayAgeSignalsResult final: public jni::JavaClass<JPlayAgeSignalsResult> {
   public:
     static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/playagerangedeclaration/PlayAgeSignalsResult;";
 
@@ -34,8 +32,7 @@ namespace margelo::nitro::playagerangedeclaration
      */
     [[maybe_unused]]
     [[nodiscard]]
-    PlayAgeSignalsResult toCpp() const
-    {
+    PlayAgeSignalsResult toCpp() const {
       static const auto clazz = javaClassStatic();
       static const auto fieldInstallId = clazz->getField<jni::JString>("installId");
       jni::local_ref<jni::JString> installId = this->getFieldValue(fieldInstallId);
@@ -50,12 +47,13 @@ namespace margelo::nitro::playagerangedeclaration
       static const auto fieldMostRecentApprovalDate = clazz->getField<jni::JString>("mostRecentApprovalDate");
       jni::local_ref<jni::JString> mostRecentApprovalDate = this->getFieldValue(fieldMostRecentApprovalDate);
       return PlayAgeSignalsResult(
-          installId != nullptr ? std::make_optional(installId->toStdString()) : std::nullopt,
-          userStatus != nullptr ? std::make_optional(userStatus->toCpp()) : std::nullopt,
-          error != nullptr ? std::make_optional(error->toStdString()) : std::nullopt,
-          ageLower != nullptr ? std::make_optional(ageLower->value()) : std::nullopt,
-          ageUpper != nullptr ? std::make_optional(ageUpper->value()) : std::nullopt,
-          mostRecentApprovalDate != nullptr ? std::make_optional(mostRecentApprovalDate->toStdString()) : std::nullopt);
+        installId != nullptr ? std::make_optional(installId->toStdString()) : std::nullopt,
+        userStatus != nullptr ? std::make_optional(userStatus->toCpp()) : std::nullopt,
+        error != nullptr ? std::make_optional(error->toStdString()) : std::nullopt,
+        ageLower != nullptr ? std::make_optional(ageLower->value()) : std::nullopt,
+        ageUpper != nullptr ? std::make_optional(ageUpper->value()) : std::nullopt,
+        mostRecentApprovalDate != nullptr ? std::make_optional(mostRecentApprovalDate->toStdString()) : std::nullopt
+      );
     }
 
   public:
@@ -63,19 +61,19 @@ namespace margelo::nitro::playagerangedeclaration
      * Create a Java/Kotlin-based struct by copying all values from the given C++ struct to Java.
      */
     [[maybe_unused]]
-    static jni::local_ref<JPlayAgeSignalsResult::javaobject> fromCpp(const PlayAgeSignalsResult &value)
-    {
+    static jni::local_ref<JPlayAgeSignalsResult::javaobject> fromCpp(const PlayAgeSignalsResult& value) {
       using JSignature = JPlayAgeSignalsResult(jni::alias_ref<jni::JString>, jni::alias_ref<JPlayAgeSignalsUserStatus>, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JString>);
       static const auto clazz = javaClassStatic();
       static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
       return create(
-          clazz,
-          value.installId.has_value() ? jni::make_jstring(value.installId.value()) : nullptr,
-          value.userStatus.has_value() ? JPlayAgeSignalsUserStatus::fromCpp(value.userStatus.value()) : nullptr,
-          value.error.has_value() ? jni::make_jstring(value.error.value()) : nullptr,
-          value.ageLower.has_value() ? jni::JDouble::valueOf(value.ageLower.value()) : nullptr,
-          value.ageUpper.has_value() ? jni::JDouble::valueOf(value.ageUpper.value()) : nullptr,
-          value.mostRecentApprovalDate.has_value() ? jni::make_jstring(value.mostRecentApprovalDate.value()) : nullptr);
+        clazz,
+        value.installId.has_value() ? jni::make_jstring(value.installId.value()) : nullptr,
+        value.userStatus.has_value() ? JPlayAgeSignalsUserStatus::fromCpp(value.userStatus.value()) : nullptr,
+        value.error.has_value() ? jni::make_jstring(value.error.value()) : nullptr,
+        value.ageLower.has_value() ? jni::JDouble::valueOf(value.ageLower.value()) : nullptr,
+        value.ageUpper.has_value() ? jni::JDouble::valueOf(value.ageUpper.value()) : nullptr,
+        value.mostRecentApprovalDate.has_value() ? jni::make_jstring(value.mostRecentApprovalDate.value()) : nullptr
+      );
     }
   };
 

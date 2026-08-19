@@ -10,16 +10,14 @@
 #include <fbjni/fbjni.h>
 #include "PlayAgeSignalsUserStatus.hpp"
 
-namespace margelo::nitro::playagerangedeclaration
-{
+namespace margelo::nitro::playagerangedeclaration {
 
   using namespace facebook;
 
   /**
-   * The C++ JNI bridge between the C++ enum "PlayAgeRangeDeclarationUserStatus" and the Kotlin enum "PlayAgeRangeDeclarationUserStatus".
+   * The C++ JNI bridge between the C++ enum "PlayAgeSignalsUserStatus" and the Kotlin enum "PlayAgeSignalsUserStatus".
    */
-  struct JPlayAgeSignalsUserStatus final : public jni::JavaClass<JPlayAgeSignalsUserStatus>
-  {
+  struct JPlayAgeSignalsUserStatus final: public jni::JavaClass<JPlayAgeSignalsUserStatus> {
   public:
     static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/playagerangedeclaration/PlayAgeSignalsUserStatus;";
 
@@ -29,8 +27,7 @@ namespace margelo::nitro::playagerangedeclaration
      */
     [[maybe_unused]]
     [[nodiscard]]
-    PlayAgeSignalsUserStatus toCpp() const
-    {
+    PlayAgeSignalsUserStatus toCpp() const {
       static const auto clazz = javaClassStatic();
       static const auto fieldOrdinal = clazz->getField<int>("value");
       int ordinal = this->getFieldValue(fieldOrdinal);
@@ -42,32 +39,30 @@ namespace margelo::nitro::playagerangedeclaration
      * Create a Java/Kotlin-based enum with the given C++ enum's value.
      */
     [[maybe_unused]]
-    static jni::alias_ref<JPlayAgeSignalsUserStatus> fromCpp(PlayAgeSignalsUserStatus value)
-    {
+    static jni::alias_ref<JPlayAgeSignalsUserStatus> fromCpp(PlayAgeSignalsUserStatus value) {
       static const auto clazz = javaClassStatic();
-      switch (value)
-      {
-      case PlayAgeSignalsUserStatus::VERIFIED:
-        static const auto fieldVERIFIED = clazz->getStaticField<JPlayAgeSignalsUserStatus>("VERIFIED");
-        return clazz->getStaticFieldValue(fieldVERIFIED);
-      case PlayAgeSignalsUserStatus::SUPERVISED:
-        static const auto fieldSUPERVISED = clazz->getStaticField<JPlayAgeSignalsUserStatus>("SUPERVISED");
-        return clazz->getStaticFieldValue(fieldSUPERVISED);
-      case PlayAgeSignalsUserStatus::SUPERVISED_APPROVAL_PENDING:
-        static const auto fieldSUPERVISED_APPROVAL_PENDING = clazz->getStaticField<JPlayAgeSignalsUserStatus>("SUPERVISED_APPROVAL_PENDING");
-        return clazz->getStaticFieldValue(fieldSUPERVISED_APPROVAL_PENDING);
-      case PlayAgeSignalsUserStatus::SUPERVISED_APPROVAL_DENIED:
-        static const auto fieldSUPERVISED_APPROVAL_DENIED = clazz->getStaticField<JPlayAgeSignalsUserStatus>("SUPERVISED_APPROVAL_DENIED");
-        return clazz->getStaticFieldValue(fieldSUPERVISED_APPROVAL_DENIED);
-      case PlayAgeSignalsUserStatus::UNKNOWN:
-        static const auto fieldUNKNOWN = clazz->getStaticField<JPlayAgeSignalsUserStatus>("UNKNOWN");
-        return clazz->getStaticFieldValue(fieldUNKNOWN);
-      case PlayAgeSignalsUserStatus::DECLARED:
-        static const auto fieldDECLARED = clazz->getStaticField<JPlayAgeSignalsUserStatus>("DECLARED");
-        return clazz->getStaticFieldValue(fieldDECLARED);
-      default:
-        std::string stringValue = std::to_string(static_cast<int>(value));
-        throw std::invalid_argument("Invalid enum value (" + stringValue + "!");
+      switch (value) {
+        case PlayAgeSignalsUserStatus::VERIFIED:
+          static const auto fieldVERIFIED = clazz->getStaticField<JPlayAgeSignalsUserStatus>("VERIFIED");
+          return clazz->getStaticFieldValue(fieldVERIFIED);
+        case PlayAgeSignalsUserStatus::SUPERVISED:
+          static const auto fieldSUPERVISED = clazz->getStaticField<JPlayAgeSignalsUserStatus>("SUPERVISED");
+          return clazz->getStaticFieldValue(fieldSUPERVISED);
+        case PlayAgeSignalsUserStatus::SUPERVISED_APPROVAL_PENDING:
+          static const auto fieldSUPERVISED_APPROVAL_PENDING = clazz->getStaticField<JPlayAgeSignalsUserStatus>("SUPERVISED_APPROVAL_PENDING");
+          return clazz->getStaticFieldValue(fieldSUPERVISED_APPROVAL_PENDING);
+        case PlayAgeSignalsUserStatus::SUPERVISED_APPROVAL_DENIED:
+          static const auto fieldSUPERVISED_APPROVAL_DENIED = clazz->getStaticField<JPlayAgeSignalsUserStatus>("SUPERVISED_APPROVAL_DENIED");
+          return clazz->getStaticFieldValue(fieldSUPERVISED_APPROVAL_DENIED);
+        case PlayAgeSignalsUserStatus::UNKNOWN:
+          static const auto fieldUNKNOWN = clazz->getStaticField<JPlayAgeSignalsUserStatus>("UNKNOWN");
+          return clazz->getStaticFieldValue(fieldUNKNOWN);
+        case PlayAgeSignalsUserStatus::DECLARED:
+          static const auto fieldDECLARED = clazz->getStaticField<JPlayAgeSignalsUserStatus>("DECLARED");
+          return clazz->getStaticFieldValue(fieldDECLARED);
+        default:
+          std::string stringValue = std::to_string(static_cast<int>(value));
+          throw std::invalid_argument("Invalid enum value (" + stringValue + "!");
       }
     }
   };

@@ -22,7 +22,7 @@ namespace margelo::nitro::playagerangedeclaration {
   using namespace facebook;
 
   /**
-   * The C++ JNI bridge between the C++ struct "AmazonGetUserAgeDataResult" and the the Kotlin data class "AmazonGetUserAgeDataResult".
+   * The C++ JNI bridge between the C++ struct "AmazonGetUserAgeDataResult" and the Kotlin data class "AmazonGetUserAgeDataResult".
    */
   struct JAmazonGetUserAgeDataResult final: public jni::JavaClass<JAmazonGetUserAgeDataResult> {
   public:

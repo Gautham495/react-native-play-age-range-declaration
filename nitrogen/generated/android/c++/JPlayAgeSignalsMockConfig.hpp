@@ -20,7 +20,7 @@ namespace margelo::nitro::playagerangedeclaration {
   using namespace facebook;
 
   /**
-   * The C++ JNI bridge between the C++ struct "PlayAgeSignalsMockConfig" and the the Kotlin data class "PlayAgeSignalsMockConfig".
+   * The C++ JNI bridge between the C++ struct "PlayAgeSignalsMockConfig" and the Kotlin data class "PlayAgeSignalsMockConfig".
    */
   struct JPlayAgeSignalsMockConfig final: public jni::JavaClass<JPlayAgeSignalsMockConfig> {
   public:
