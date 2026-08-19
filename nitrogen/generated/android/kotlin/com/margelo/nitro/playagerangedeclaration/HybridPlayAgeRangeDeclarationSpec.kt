@@ -48,6 +48,10 @@ abstract class HybridPlayAgeRangeDeclarationSpec: HybridObject() {
   
   @DoNotStrip
   @Keep
+  abstract fun isEligibleForAgeFeatures(): Promise<Boolean>
+  
+  @DoNotStrip
+  @Keep
   abstract fun requestDeclaredAgeRange(firstThresholdAge: Double, secondThresholdAge: Double?, thirdThresholdAge: Double?): Promise<DeclaredAgeRangeResult>
   
   @DoNotStrip

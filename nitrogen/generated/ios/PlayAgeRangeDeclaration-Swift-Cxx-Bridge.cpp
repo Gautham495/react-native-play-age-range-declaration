@@ -46,6 +46,14 @@ namespace margelo::nitro::playagerangedeclaration::bridge::swift {
     };
   }
   
+  // pragma MARK: std::function<void(bool /* result */)>
+  Func_void_bool create_Func_void_bool(void* NON_NULL swiftClosureWrapper) noexcept {
+    auto swiftClosure = PlayAgeRangeDeclaration::Func_void_bool::fromUnsafe(swiftClosureWrapper);
+    return [swiftClosure = std::move(swiftClosure)](bool result) mutable -> void {
+      swiftClosure.call(result);
+    };
+  }
+  
   // pragma MARK: std::function<void(const DeclaredAgeRangeResult& /* result */)>
   Func_void_DeclaredAgeRangeResult create_Func_void_DeclaredAgeRangeResult(void* NON_NULL swiftClosureWrapper) noexcept {
     auto swiftClosure = PlayAgeRangeDeclaration::Func_void_DeclaredAgeRangeResult::fromUnsafe(swiftClosureWrapper);

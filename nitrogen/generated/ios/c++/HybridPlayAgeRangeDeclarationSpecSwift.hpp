@@ -132,6 +132,14 @@ namespace margelo::nitro::playagerangedeclaration {
       auto __value = std::move(__result.value());
       return __value;
     }
+    inline std::shared_ptr<Promise<bool>> isEligibleForAgeFeatures() override {
+      auto __result = _swiftPart.isEligibleForAgeFeatures();
+      if (__result.hasError()) [[unlikely]] {
+        std::rethrow_exception(__result.error());
+      }
+      auto __value = std::move(__result.value());
+      return __value;
+    }
     inline std::shared_ptr<Promise<DeclaredAgeRangeResult>> requestDeclaredAgeRange(double firstThresholdAge, std::optional<double> secondThresholdAge, std::optional<double> thirdThresholdAge) override {
       auto __result = _swiftPart.requestDeclaredAgeRange(std::forward<decltype(firstThresholdAge)>(firstThresholdAge), secondThresholdAge, thirdThresholdAge);
       if (__result.hasError()) [[unlikely]] {
