@@ -2,7 +2,6 @@ package com.margelo.nitro.playagerangedeclaration
 
 import android.app.Activity
 import android.content.Context
-import android.util.Log
 import com.facebook.proguard.annotations.DoNotStrip
 import com.facebook.react.bridge.ReactApplicationContext
 import com.google.android.play.agesignals.AgeSignalsAccessRequest
@@ -111,7 +110,7 @@ class PlayAgeRangeDeclaration : HybridPlayAgeRangeDeclarationSpec() {
         status = null,
         lowerBound = null,
         upperBound = null,
-        parentControls = null
+        parentControls = null,
       )
     }
   }
@@ -180,7 +179,15 @@ class PlayAgeRangeDeclaration : HybridPlayAgeRangeDeclarationSpec() {
   // MOCK: Use setMockUser for testing.
   // https://developer.android.com/google/play/age-signals/test-age-signals-api
   companion object {
-    var mockUser: AgeSignalsResult? = null
+    /**
+     * Store detection precedence: most specific stores first. Google Play is
+     * last because it is also the JS-side fallback when no store matches.
+     */
+    val providers = listOf(
+      AmazonGetUserAgeDataProvider,
+      SamsungGetAgeSignalsProvider,
+      GooglePlayAgeSignalsProvider,
+    )
 
     fun getManager(context: Context): AgeSignalsManager {
       return mockUser?.let {

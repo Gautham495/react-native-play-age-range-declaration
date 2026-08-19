@@ -8,27 +8,48 @@
 #pragma once
 
 // Forward declarations of C++ defined types
+// Forward declaration of `AmazonGetUserAgeDataResponseStatus` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class AmazonGetUserAgeDataResponseStatus; }
+// Forward declaration of `AmazonGetUserAgeDataResult` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { struct AmazonGetUserAgeDataResult; }
+// Forward declaration of `AmazonGetUserAgeDataUserStatus` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class AmazonGetUserAgeDataUserStatus; }
+// Forward declaration of `AppStore` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class AppStore; }
 // Forward declaration of `AppleAgeRangeDeclarationUserStatusValues` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { enum class AppleAgeRangeDeclarationUserStatusValues; }
 // Forward declaration of `DeclaredAgeRangeResult` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { struct DeclaredAgeRangeResult; }
 // Forward declaration of `HybridPlayAgeRangeDeclarationSpec` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { class HybridPlayAgeRangeDeclarationSpec; }
-// Forward declaration of `PlayAgeRangeDeclarationResult` to properly resolve imports.
-namespace margelo::nitro::playagerangedeclaration { struct PlayAgeRangeDeclarationResult; }
-// Forward declaration of `PlayAgeRangeDeclarationUserStatus` to properly resolve imports.
-namespace margelo::nitro::playagerangedeclaration { enum class PlayAgeRangeDeclarationUserStatus; }
+// Forward declaration of `PlayAgeSignalsMockConfig` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { struct PlayAgeSignalsMockConfig; }
+// Forward declaration of `PlayAgeSignalsResult` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { struct PlayAgeSignalsResult; }
+// Forward declaration of `PlayAgeSignalsUserStatus` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class PlayAgeSignalsUserStatus; }
+// Forward declaration of `SamsungGetAgeSignalsResult` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { struct SamsungGetAgeSignalsResult; }
+// Forward declaration of `SamsungGetAgeSignalsUserStatus` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class SamsungGetAgeSignalsUserStatus; }
 
 // Forward declarations of Swift defined types
 // Forward declaration of `HybridPlayAgeRangeDeclarationSpec_cxx` to properly resolve imports.
 namespace PlayAgeRangeDeclaration { class HybridPlayAgeRangeDeclarationSpec_cxx; }
 
 // Include C++ defined types
+#include "AmazonGetUserAgeDataResponseStatus.hpp"
+#include "AmazonGetUserAgeDataResult.hpp"
+#include "AmazonGetUserAgeDataUserStatus.hpp"
+#include "AppStore.hpp"
 #include "AppleAgeRangeDeclarationUserStatusValues.hpp"
 #include "DeclaredAgeRangeResult.hpp"
 #include "HybridPlayAgeRangeDeclarationSpec.hpp"
-#include "PlayAgeRangeDeclarationResult.hpp"
-#include "PlayAgeRangeDeclarationUserStatus.hpp"
+#include "PlayAgeSignalsMockConfig.hpp"
+#include "PlayAgeSignalsResult.hpp"
+#include "PlayAgeSignalsUserStatus.hpp"
+#include "SamsungGetAgeSignalsResult.hpp"
+#include "SamsungGetAgeSignalsUserStatus.hpp"
 #include <NitroModules/Promise.hpp>
 #include <NitroModules/PromiseHolder.hpp>
 #include <NitroModules/Result.hpp>
@@ -59,18 +80,18 @@ namespace margelo::nitro::playagerangedeclaration::bridge::swift {
     return optional.value();
   }
   
-  // pragma MARK: std::optional<PlayAgeRangeDeclarationUserStatus>
+  // pragma MARK: std::optional<PlayAgeSignalsUserStatus>
   /**
-   * Specialized version of `std::optional<PlayAgeRangeDeclarationUserStatus>`.
+   * Specialized version of `std::optional<PlayAgeSignalsUserStatus>`.
    */
-  using std__optional_PlayAgeRangeDeclarationUserStatus_ = std::optional<PlayAgeRangeDeclarationUserStatus>;
-  inline std::optional<PlayAgeRangeDeclarationUserStatus> create_std__optional_PlayAgeRangeDeclarationUserStatus_(const PlayAgeRangeDeclarationUserStatus& value) noexcept {
-    return std::optional<PlayAgeRangeDeclarationUserStatus>(value);
+  using std__optional_PlayAgeSignalsUserStatus_ = std::optional<PlayAgeSignalsUserStatus>;
+  inline std::optional<PlayAgeSignalsUserStatus> create_std__optional_PlayAgeSignalsUserStatus_(const PlayAgeSignalsUserStatus& value) noexcept {
+    return std::optional<PlayAgeSignalsUserStatus>(value);
   }
-  inline bool has_value_std__optional_PlayAgeRangeDeclarationUserStatus_(const std::optional<PlayAgeRangeDeclarationUserStatus>& optional) noexcept {
+  inline bool has_value_std__optional_PlayAgeSignalsUserStatus_(const std::optional<PlayAgeSignalsUserStatus>& optional) noexcept {
     return optional.has_value();
   }
-  inline PlayAgeRangeDeclarationUserStatus get_std__optional_PlayAgeRangeDeclarationUserStatus_(const std::optional<PlayAgeRangeDeclarationUserStatus>& optional) noexcept {
+  inline PlayAgeSignalsUserStatus get_std__optional_PlayAgeSignalsUserStatus_(const std::optional<PlayAgeSignalsUserStatus>& optional) noexcept {
     return optional.value();
   }
   
@@ -89,38 +110,38 @@ namespace margelo::nitro::playagerangedeclaration::bridge::swift {
     return optional.value();
   }
   
-  // pragma MARK: std::shared_ptr<Promise<PlayAgeRangeDeclarationResult>>
+  // pragma MARK: std::shared_ptr<Promise<PlayAgeSignalsResult>>
   /**
-   * Specialized version of `std::shared_ptr<Promise<PlayAgeRangeDeclarationResult>>`.
+   * Specialized version of `std::shared_ptr<Promise<PlayAgeSignalsResult>>`.
    */
-  using std__shared_ptr_Promise_PlayAgeRangeDeclarationResult__ = std::shared_ptr<Promise<PlayAgeRangeDeclarationResult>>;
-  inline std::shared_ptr<Promise<PlayAgeRangeDeclarationResult>> create_std__shared_ptr_Promise_PlayAgeRangeDeclarationResult__() noexcept {
-    return Promise<PlayAgeRangeDeclarationResult>::create();
+  using std__shared_ptr_Promise_PlayAgeSignalsResult__ = std::shared_ptr<Promise<PlayAgeSignalsResult>>;
+  inline std::shared_ptr<Promise<PlayAgeSignalsResult>> create_std__shared_ptr_Promise_PlayAgeSignalsResult__() noexcept {
+    return Promise<PlayAgeSignalsResult>::create();
   }
-  inline PromiseHolder<PlayAgeRangeDeclarationResult> wrap_std__shared_ptr_Promise_PlayAgeRangeDeclarationResult__(std::shared_ptr<Promise<PlayAgeRangeDeclarationResult>> promise) noexcept {
-    return PromiseHolder<PlayAgeRangeDeclarationResult>(std::move(promise));
+  inline PromiseHolder<PlayAgeSignalsResult> wrap_std__shared_ptr_Promise_PlayAgeSignalsResult__(std::shared_ptr<Promise<PlayAgeSignalsResult>> promise) noexcept {
+    return PromiseHolder<PlayAgeSignalsResult>(std::move(promise));
   }
   
-  // pragma MARK: std::function<void(const PlayAgeRangeDeclarationResult& /* result */)>
+  // pragma MARK: std::function<void(const PlayAgeSignalsResult& /* result */)>
   /**
-   * Specialized version of `std::function<void(const PlayAgeRangeDeclarationResult&)>`.
+   * Specialized version of `std::function<void(const PlayAgeSignalsResult&)>`.
    */
-  using Func_void_PlayAgeRangeDeclarationResult = std::function<void(const PlayAgeRangeDeclarationResult& /* result */)>;
+  using Func_void_PlayAgeSignalsResult = std::function<void(const PlayAgeSignalsResult& /* result */)>;
   /**
-   * Wrapper class for a `std::function<void(const PlayAgeRangeDeclarationResult& / * result * /)>`, this can be used from Swift.
+   * Wrapper class for a `std::function<void(const PlayAgeSignalsResult& / * result * /)>`, this can be used from Swift.
    */
-  class Func_void_PlayAgeRangeDeclarationResult_Wrapper final {
+  class Func_void_PlayAgeSignalsResult_Wrapper final {
   public:
-    explicit Func_void_PlayAgeRangeDeclarationResult_Wrapper(std::function<void(const PlayAgeRangeDeclarationResult& /* result */)>&& func): _function(std::make_unique<std::function<void(const PlayAgeRangeDeclarationResult& /* result */)>>(std::move(func))) {}
-    inline void call(PlayAgeRangeDeclarationResult result) const noexcept {
+    explicit Func_void_PlayAgeSignalsResult_Wrapper(std::function<void(const PlayAgeSignalsResult& /* result */)>&& func): _function(std::make_unique<std::function<void(const PlayAgeSignalsResult& /* result */)>>(std::move(func))) {}
+    inline void call(PlayAgeSignalsResult result) const noexcept {
       _function->operator()(result);
     }
   private:
-    std::unique_ptr<std::function<void(const PlayAgeRangeDeclarationResult& /* result */)>> _function;
+    std::unique_ptr<std::function<void(const PlayAgeSignalsResult& /* result */)>> _function;
   } SWIFT_NONCOPYABLE;
-  Func_void_PlayAgeRangeDeclarationResult create_Func_void_PlayAgeRangeDeclarationResult(void* NON_NULL swiftClosureWrapper) noexcept;
-  inline Func_void_PlayAgeRangeDeclarationResult_Wrapper wrap_Func_void_PlayAgeRangeDeclarationResult(Func_void_PlayAgeRangeDeclarationResult value) noexcept {
-    return Func_void_PlayAgeRangeDeclarationResult_Wrapper(std::move(value));
+  Func_void_PlayAgeSignalsResult create_Func_void_PlayAgeSignalsResult(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_PlayAgeSignalsResult_Wrapper wrap_Func_void_PlayAgeSignalsResult(Func_void_PlayAgeSignalsResult value) noexcept {
+    return Func_void_PlayAgeSignalsResult_Wrapper(std::move(value));
   }
   
   // pragma MARK: std::function<void(const std::exception_ptr& /* error */)>
@@ -143,6 +164,119 @@ namespace margelo::nitro::playagerangedeclaration::bridge::swift {
   Func_void_std__exception_ptr create_Func_void_std__exception_ptr(void* NON_NULL swiftClosureWrapper) noexcept;
   inline Func_void_std__exception_ptr_Wrapper wrap_Func_void_std__exception_ptr(Func_void_std__exception_ptr value) noexcept {
     return Func_void_std__exception_ptr_Wrapper(std::move(value));
+  }
+  
+  // pragma MARK: std::optional<AmazonGetUserAgeDataResponseStatus>
+  /**
+   * Specialized version of `std::optional<AmazonGetUserAgeDataResponseStatus>`.
+   */
+  using std__optional_AmazonGetUserAgeDataResponseStatus_ = std::optional<AmazonGetUserAgeDataResponseStatus>;
+  inline std::optional<AmazonGetUserAgeDataResponseStatus> create_std__optional_AmazonGetUserAgeDataResponseStatus_(const AmazonGetUserAgeDataResponseStatus& value) noexcept {
+    return std::optional<AmazonGetUserAgeDataResponseStatus>(value);
+  }
+  inline bool has_value_std__optional_AmazonGetUserAgeDataResponseStatus_(const std::optional<AmazonGetUserAgeDataResponseStatus>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline AmazonGetUserAgeDataResponseStatus get_std__optional_AmazonGetUserAgeDataResponseStatus_(const std::optional<AmazonGetUserAgeDataResponseStatus>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<AmazonGetUserAgeDataUserStatus>
+  /**
+   * Specialized version of `std::optional<AmazonGetUserAgeDataUserStatus>`.
+   */
+  using std__optional_AmazonGetUserAgeDataUserStatus_ = std::optional<AmazonGetUserAgeDataUserStatus>;
+  inline std::optional<AmazonGetUserAgeDataUserStatus> create_std__optional_AmazonGetUserAgeDataUserStatus_(const AmazonGetUserAgeDataUserStatus& value) noexcept {
+    return std::optional<AmazonGetUserAgeDataUserStatus>(value);
+  }
+  inline bool has_value_std__optional_AmazonGetUserAgeDataUserStatus_(const std::optional<AmazonGetUserAgeDataUserStatus>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline AmazonGetUserAgeDataUserStatus get_std__optional_AmazonGetUserAgeDataUserStatus_(const std::optional<AmazonGetUserAgeDataUserStatus>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::shared_ptr<Promise<AmazonGetUserAgeDataResult>>
+  /**
+   * Specialized version of `std::shared_ptr<Promise<AmazonGetUserAgeDataResult>>`.
+   */
+  using std__shared_ptr_Promise_AmazonGetUserAgeDataResult__ = std::shared_ptr<Promise<AmazonGetUserAgeDataResult>>;
+  inline std::shared_ptr<Promise<AmazonGetUserAgeDataResult>> create_std__shared_ptr_Promise_AmazonGetUserAgeDataResult__() noexcept {
+    return Promise<AmazonGetUserAgeDataResult>::create();
+  }
+  inline PromiseHolder<AmazonGetUserAgeDataResult> wrap_std__shared_ptr_Promise_AmazonGetUserAgeDataResult__(std::shared_ptr<Promise<AmazonGetUserAgeDataResult>> promise) noexcept {
+    return PromiseHolder<AmazonGetUserAgeDataResult>(std::move(promise));
+  }
+  
+  // pragma MARK: std::function<void(const AmazonGetUserAgeDataResult& /* result */)>
+  /**
+   * Specialized version of `std::function<void(const AmazonGetUserAgeDataResult&)>`.
+   */
+  using Func_void_AmazonGetUserAgeDataResult = std::function<void(const AmazonGetUserAgeDataResult& /* result */)>;
+  /**
+   * Wrapper class for a `std::function<void(const AmazonGetUserAgeDataResult& / * result * /)>`, this can be used from Swift.
+   */
+  class Func_void_AmazonGetUserAgeDataResult_Wrapper final {
+  public:
+    explicit Func_void_AmazonGetUserAgeDataResult_Wrapper(std::function<void(const AmazonGetUserAgeDataResult& /* result */)>&& func): _function(std::make_unique<std::function<void(const AmazonGetUserAgeDataResult& /* result */)>>(std::move(func))) {}
+    inline void call(AmazonGetUserAgeDataResult result) const noexcept {
+      _function->operator()(result);
+    }
+  private:
+    std::unique_ptr<std::function<void(const AmazonGetUserAgeDataResult& /* result */)>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_void_AmazonGetUserAgeDataResult create_Func_void_AmazonGetUserAgeDataResult(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_AmazonGetUserAgeDataResult_Wrapper wrap_Func_void_AmazonGetUserAgeDataResult(Func_void_AmazonGetUserAgeDataResult value) noexcept {
+    return Func_void_AmazonGetUserAgeDataResult_Wrapper(std::move(value));
+  }
+  
+  // pragma MARK: std::optional<SamsungGetAgeSignalsUserStatus>
+  /**
+   * Specialized version of `std::optional<SamsungGetAgeSignalsUserStatus>`.
+   */
+  using std__optional_SamsungGetAgeSignalsUserStatus_ = std::optional<SamsungGetAgeSignalsUserStatus>;
+  inline std::optional<SamsungGetAgeSignalsUserStatus> create_std__optional_SamsungGetAgeSignalsUserStatus_(const SamsungGetAgeSignalsUserStatus& value) noexcept {
+    return std::optional<SamsungGetAgeSignalsUserStatus>(value);
+  }
+  inline bool has_value_std__optional_SamsungGetAgeSignalsUserStatus_(const std::optional<SamsungGetAgeSignalsUserStatus>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline SamsungGetAgeSignalsUserStatus get_std__optional_SamsungGetAgeSignalsUserStatus_(const std::optional<SamsungGetAgeSignalsUserStatus>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::shared_ptr<Promise<SamsungGetAgeSignalsResult>>
+  /**
+   * Specialized version of `std::shared_ptr<Promise<SamsungGetAgeSignalsResult>>`.
+   */
+  using std__shared_ptr_Promise_SamsungGetAgeSignalsResult__ = std::shared_ptr<Promise<SamsungGetAgeSignalsResult>>;
+  inline std::shared_ptr<Promise<SamsungGetAgeSignalsResult>> create_std__shared_ptr_Promise_SamsungGetAgeSignalsResult__() noexcept {
+    return Promise<SamsungGetAgeSignalsResult>::create();
+  }
+  inline PromiseHolder<SamsungGetAgeSignalsResult> wrap_std__shared_ptr_Promise_SamsungGetAgeSignalsResult__(std::shared_ptr<Promise<SamsungGetAgeSignalsResult>> promise) noexcept {
+    return PromiseHolder<SamsungGetAgeSignalsResult>(std::move(promise));
+  }
+  
+  // pragma MARK: std::function<void(const SamsungGetAgeSignalsResult& /* result */)>
+  /**
+   * Specialized version of `std::function<void(const SamsungGetAgeSignalsResult&)>`.
+   */
+  using Func_void_SamsungGetAgeSignalsResult = std::function<void(const SamsungGetAgeSignalsResult& /* result */)>;
+  /**
+   * Wrapper class for a `std::function<void(const SamsungGetAgeSignalsResult& / * result * /)>`, this can be used from Swift.
+   */
+  class Func_void_SamsungGetAgeSignalsResult_Wrapper final {
+  public:
+    explicit Func_void_SamsungGetAgeSignalsResult_Wrapper(std::function<void(const SamsungGetAgeSignalsResult& /* result */)>&& func): _function(std::make_unique<std::function<void(const SamsungGetAgeSignalsResult& /* result */)>>(std::move(func))) {}
+    inline void call(SamsungGetAgeSignalsResult result) const noexcept {
+      _function->operator()(result);
+    }
+  private:
+    std::unique_ptr<std::function<void(const SamsungGetAgeSignalsResult& /* result */)>> _function;
+  } SWIFT_NONCOPYABLE;
+  Func_void_SamsungGetAgeSignalsResult create_Func_void_SamsungGetAgeSignalsResult(void* NON_NULL swiftClosureWrapper) noexcept;
+  inline Func_void_SamsungGetAgeSignalsResult_Wrapper wrap_Func_void_SamsungGetAgeSignalsResult(Func_void_SamsungGetAgeSignalsResult value) noexcept {
+    return Func_void_SamsungGetAgeSignalsResult_Wrapper(std::move(value));
   }
   
   // pragma MARK: std::optional<AppleAgeRangeDeclarationUserStatusValues>
@@ -194,6 +328,21 @@ namespace margelo::nitro::playagerangedeclaration::bridge::swift {
     return Func_void_DeclaredAgeRangeResult_Wrapper(std::move(value));
   }
   
+  // pragma MARK: std::optional<PlayAgeSignalsMockConfig>
+  /**
+   * Specialized version of `std::optional<PlayAgeSignalsMockConfig>`.
+   */
+  using std__optional_PlayAgeSignalsMockConfig_ = std::optional<PlayAgeSignalsMockConfig>;
+  inline std::optional<PlayAgeSignalsMockConfig> create_std__optional_PlayAgeSignalsMockConfig_(const PlayAgeSignalsMockConfig& value) noexcept {
+    return std::optional<PlayAgeSignalsMockConfig>(value);
+  }
+  inline bool has_value_std__optional_PlayAgeSignalsMockConfig_(const std::optional<PlayAgeSignalsMockConfig>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline PlayAgeSignalsMockConfig get_std__optional_PlayAgeSignalsMockConfig_(const std::optional<PlayAgeSignalsMockConfig>& optional) noexcept {
+    return optional.value();
+  }
+  
   // pragma MARK: std::shared_ptr<HybridPlayAgeRangeDeclarationSpec>
   /**
    * Specialized version of `std::shared_ptr<HybridPlayAgeRangeDeclarationSpec>`.
@@ -206,13 +355,40 @@ namespace margelo::nitro::playagerangedeclaration::bridge::swift {
   using std__weak_ptr_HybridPlayAgeRangeDeclarationSpec_ = std::weak_ptr<HybridPlayAgeRangeDeclarationSpec>;
   inline std__weak_ptr_HybridPlayAgeRangeDeclarationSpec_ weakify_std__shared_ptr_HybridPlayAgeRangeDeclarationSpec_(const std::shared_ptr<HybridPlayAgeRangeDeclarationSpec>& strong) noexcept { return strong; }
   
-  // pragma MARK: Result<std::shared_ptr<Promise<PlayAgeRangeDeclarationResult>>>
-  using Result_std__shared_ptr_Promise_PlayAgeRangeDeclarationResult___ = Result<std::shared_ptr<Promise<PlayAgeRangeDeclarationResult>>>;
-  inline Result_std__shared_ptr_Promise_PlayAgeRangeDeclarationResult___ create_Result_std__shared_ptr_Promise_PlayAgeRangeDeclarationResult___(const std::shared_ptr<Promise<PlayAgeRangeDeclarationResult>>& value) noexcept {
-    return Result<std::shared_ptr<Promise<PlayAgeRangeDeclarationResult>>>::withValue(value);
+  // pragma MARK: Result<AppStore>
+  using Result_AppStore_ = Result<AppStore>;
+  inline Result_AppStore_ create_Result_AppStore_(AppStore value) noexcept {
+    return Result<AppStore>::withValue(std::move(value));
   }
-  inline Result_std__shared_ptr_Promise_PlayAgeRangeDeclarationResult___ create_Result_std__shared_ptr_Promise_PlayAgeRangeDeclarationResult___(const std::exception_ptr& error) noexcept {
-    return Result<std::shared_ptr<Promise<PlayAgeRangeDeclarationResult>>>::withError(error);
+  inline Result_AppStore_ create_Result_AppStore_(const std::exception_ptr& error) noexcept {
+    return Result<AppStore>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::shared_ptr<Promise<PlayAgeSignalsResult>>>
+  using Result_std__shared_ptr_Promise_PlayAgeSignalsResult___ = Result<std::shared_ptr<Promise<PlayAgeSignalsResult>>>;
+  inline Result_std__shared_ptr_Promise_PlayAgeSignalsResult___ create_Result_std__shared_ptr_Promise_PlayAgeSignalsResult___(const std::shared_ptr<Promise<PlayAgeSignalsResult>>& value) noexcept {
+    return Result<std::shared_ptr<Promise<PlayAgeSignalsResult>>>::withValue(value);
+  }
+  inline Result_std__shared_ptr_Promise_PlayAgeSignalsResult___ create_Result_std__shared_ptr_Promise_PlayAgeSignalsResult___(const std::exception_ptr& error) noexcept {
+    return Result<std::shared_ptr<Promise<PlayAgeSignalsResult>>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::shared_ptr<Promise<AmazonGetUserAgeDataResult>>>
+  using Result_std__shared_ptr_Promise_AmazonGetUserAgeDataResult___ = Result<std::shared_ptr<Promise<AmazonGetUserAgeDataResult>>>;
+  inline Result_std__shared_ptr_Promise_AmazonGetUserAgeDataResult___ create_Result_std__shared_ptr_Promise_AmazonGetUserAgeDataResult___(const std::shared_ptr<Promise<AmazonGetUserAgeDataResult>>& value) noexcept {
+    return Result<std::shared_ptr<Promise<AmazonGetUserAgeDataResult>>>::withValue(value);
+  }
+  inline Result_std__shared_ptr_Promise_AmazonGetUserAgeDataResult___ create_Result_std__shared_ptr_Promise_AmazonGetUserAgeDataResult___(const std::exception_ptr& error) noexcept {
+    return Result<std::shared_ptr<Promise<AmazonGetUserAgeDataResult>>>::withError(error);
+  }
+  
+  // pragma MARK: Result<std::shared_ptr<Promise<SamsungGetAgeSignalsResult>>>
+  using Result_std__shared_ptr_Promise_SamsungGetAgeSignalsResult___ = Result<std::shared_ptr<Promise<SamsungGetAgeSignalsResult>>>;
+  inline Result_std__shared_ptr_Promise_SamsungGetAgeSignalsResult___ create_Result_std__shared_ptr_Promise_SamsungGetAgeSignalsResult___(const std::shared_ptr<Promise<SamsungGetAgeSignalsResult>>& value) noexcept {
+    return Result<std::shared_ptr<Promise<SamsungGetAgeSignalsResult>>>::withValue(value);
+  }
+  inline Result_std__shared_ptr_Promise_SamsungGetAgeSignalsResult___ create_Result_std__shared_ptr_Promise_SamsungGetAgeSignalsResult___(const std::exception_ptr& error) noexcept {
+    return Result<std::shared_ptr<Promise<SamsungGetAgeSignalsResult>>>::withError(error);
   }
   
   // pragma MARK: Result<std::shared_ptr<Promise<DeclaredAgeRangeResult>>>
@@ -222,6 +398,15 @@ namespace margelo::nitro::playagerangedeclaration::bridge::swift {
   }
   inline Result_std__shared_ptr_Promise_DeclaredAgeRangeResult___ create_Result_std__shared_ptr_Promise_DeclaredAgeRangeResult___(const std::exception_ptr& error) noexcept {
     return Result<std::shared_ptr<Promise<DeclaredAgeRangeResult>>>::withError(error);
+  }
+  
+  // pragma MARK: Result<void>
+  using Result_void_ = Result<void>;
+  inline Result_void_ create_Result_void_() noexcept {
+    return Result<void>::withValue();
+  }
+  inline Result_void_ create_Result_void_(const std::exception_ptr& error) noexcept {
+    return Result<void>::withError(error);
   }
 
 } // namespace margelo::nitro::playagerangedeclaration::bridge::swift

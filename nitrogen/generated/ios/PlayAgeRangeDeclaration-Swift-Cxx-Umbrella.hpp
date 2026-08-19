@@ -8,23 +8,44 @@
 #pragma once
 
 // Forward declarations of C++ defined types
+// Forward declaration of `AmazonGetUserAgeDataResponseStatus` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class AmazonGetUserAgeDataResponseStatus; }
+// Forward declaration of `AmazonGetUserAgeDataResult` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { struct AmazonGetUserAgeDataResult; }
+// Forward declaration of `AmazonGetUserAgeDataUserStatus` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class AmazonGetUserAgeDataUserStatus; }
+// Forward declaration of `AppStore` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class AppStore; }
 // Forward declaration of `AppleAgeRangeDeclarationUserStatusValues` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { enum class AppleAgeRangeDeclarationUserStatusValues; }
 // Forward declaration of `DeclaredAgeRangeResult` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { struct DeclaredAgeRangeResult; }
 // Forward declaration of `HybridPlayAgeRangeDeclarationSpec` to properly resolve imports.
 namespace margelo::nitro::playagerangedeclaration { class HybridPlayAgeRangeDeclarationSpec; }
-// Forward declaration of `PlayAgeRangeDeclarationResult` to properly resolve imports.
-namespace margelo::nitro::playagerangedeclaration { struct PlayAgeRangeDeclarationResult; }
-// Forward declaration of `PlayAgeRangeDeclarationUserStatus` to properly resolve imports.
-namespace margelo::nitro::playagerangedeclaration { enum class PlayAgeRangeDeclarationUserStatus; }
+// Forward declaration of `PlayAgeSignalsMockConfig` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { struct PlayAgeSignalsMockConfig; }
+// Forward declaration of `PlayAgeSignalsResult` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { struct PlayAgeSignalsResult; }
+// Forward declaration of `PlayAgeSignalsUserStatus` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class PlayAgeSignalsUserStatus; }
+// Forward declaration of `SamsungGetAgeSignalsResult` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { struct SamsungGetAgeSignalsResult; }
+// Forward declaration of `SamsungGetAgeSignalsUserStatus` to properly resolve imports.
+namespace margelo::nitro::playagerangedeclaration { enum class SamsungGetAgeSignalsUserStatus; }
 
 // Include C++ defined types
+#include "AmazonGetUserAgeDataResponseStatus.hpp"
+#include "AmazonGetUserAgeDataResult.hpp"
+#include "AmazonGetUserAgeDataUserStatus.hpp"
+#include "AppStore.hpp"
 #include "AppleAgeRangeDeclarationUserStatusValues.hpp"
 #include "DeclaredAgeRangeResult.hpp"
 #include "HybridPlayAgeRangeDeclarationSpec.hpp"
-#include "PlayAgeRangeDeclarationResult.hpp"
-#include "PlayAgeRangeDeclarationUserStatus.hpp"
+#include "PlayAgeSignalsMockConfig.hpp"
+#include "PlayAgeSignalsResult.hpp"
+#include "PlayAgeSignalsUserStatus.hpp"
+#include "SamsungGetAgeSignalsResult.hpp"
+#include "SamsungGetAgeSignalsUserStatus.hpp"
 #include <NitroModules/Promise.hpp>
 #include <NitroModules/Result.hpp>
 #include <exception>

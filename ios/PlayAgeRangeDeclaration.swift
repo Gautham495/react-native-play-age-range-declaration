@@ -90,11 +90,45 @@ class PlayAgeRangeDeclaration: HybridPlayAgeRangeDeclarationSpec {
     }
   }
 
-  func getPlayAgeRangeDeclaration() throws -> Promise<PlayAgeRangeDeclarationResult> {
-    return Promise<PlayAgeRangeDeclarationResult>.rejected(
+  func setGooglePlayMockUser(config: PlayAgeSignalsMockConfig?) throws {
+    // No-op on iOS — Google Play Age Signals API is Android-only
+  }
+
+  func setAmazonMockScenario(scenario: Double?) throws {
+    // No-op on iOS — Amazon Appstore Age API is Android-only
+  }
+
+  func setSamsungMockScenario(scenario: Double?) throws {
+    // No-op on iOS — Samsung Galaxy Store Age API is Android-only
+  }
+
+  func detectStore() -> AppStore {
+    return .appleAppstore
+  }
+
+  func getAmazonUserAgeData() throws -> Promise<AmazonGetUserAgeDataResult> {
+    return Promise<AmazonGetUserAgeDataResult>.rejected(
       withError: NSError(
         domain: "PlayAgeRangeDeclaration", code: -1,
-        userInfo: [NSLocalizedDescriptionKey: "Not implemented"]
+        userInfo: [NSLocalizedDescriptionKey: "Amazon Appstore age signals are not available on iOS"]
+      )
+    )
+  }
+
+  func getSamsungAgeSignals() throws -> Promise<SamsungGetAgeSignalsResult> {
+    return Promise<SamsungGetAgeSignalsResult>.rejected(
+      withError: NSError(
+        domain: "PlayAgeRangeDeclaration", code: -1,
+        userInfo: [NSLocalizedDescriptionKey: "Samsung Galaxy Store age signals are not available on iOS"]
+      )
+    )
+  }
+
+  func getGooglePlayAgeSignals() throws -> Promise<PlayAgeSignalsResult> {
+    return Promise<PlayAgeSignalsResult>.rejected(
+      withError: NSError(
+        domain: "PlayAgeRangeDeclaration", code: -1,
+        userInfo: [NSLocalizedDescriptionKey: "Google Play age signals are not available on iOS"]
       )
     )
   }

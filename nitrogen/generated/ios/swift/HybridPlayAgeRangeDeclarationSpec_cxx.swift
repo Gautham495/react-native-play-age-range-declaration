@@ -125,21 +125,71 @@ open class HybridPlayAgeRangeDeclarationSpec_cxx {
 
   // Methods
   @inline(__always)
-  public final func getPlayAgeRangeDeclaration() -> bridge.Result_std__shared_ptr_Promise_PlayAgeRangeDeclarationResult___ {
+  public final func detectStore() -> bridge.Result_AppStore_ {
     do {
-      let __result = try self.__implementation.getPlayAgeRangeDeclaration()
-      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_PlayAgeRangeDeclarationResult__ in
-        let __promise = bridge.create_std__shared_ptr_Promise_PlayAgeRangeDeclarationResult__()
-        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_PlayAgeRangeDeclarationResult__(__promise)
+      let __result = try self.__implementation.detectStore()
+      let __resultCpp = __result
+      return bridge.create_Result_AppStore_(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_AppStore_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func getGooglePlayAgeSignals() -> bridge.Result_std__shared_ptr_Promise_PlayAgeSignalsResult___ {
+    do {
+      let __result = try self.__implementation.getGooglePlayAgeSignals()
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_PlayAgeSignalsResult__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_PlayAgeSignalsResult__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_PlayAgeSignalsResult__(__promise)
         __result
           .then({ __result in __promiseHolder.resolve(__result) })
           .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
         return __promise
       }()
-      return bridge.create_Result_std__shared_ptr_Promise_PlayAgeRangeDeclarationResult___(__resultCpp)
+      return bridge.create_Result_std__shared_ptr_Promise_PlayAgeSignalsResult___(__resultCpp)
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
-      return bridge.create_Result_std__shared_ptr_Promise_PlayAgeRangeDeclarationResult___(__exceptionPtr)
+      return bridge.create_Result_std__shared_ptr_Promise_PlayAgeSignalsResult___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func getAmazonUserAgeData() -> bridge.Result_std__shared_ptr_Promise_AmazonGetUserAgeDataResult___ {
+    do {
+      let __result = try self.__implementation.getAmazonUserAgeData()
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_AmazonGetUserAgeDataResult__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_AmazonGetUserAgeDataResult__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_AmazonGetUserAgeDataResult__(__promise)
+        __result
+          .then({ __result in __promiseHolder.resolve(__result) })
+          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        return __promise
+      }()
+      return bridge.create_Result_std__shared_ptr_Promise_AmazonGetUserAgeDataResult___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_AmazonGetUserAgeDataResult___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func getSamsungAgeSignals() -> bridge.Result_std__shared_ptr_Promise_SamsungGetAgeSignalsResult___ {
+    do {
+      let __result = try self.__implementation.getSamsungAgeSignals()
+      let __resultCpp = { () -> bridge.std__shared_ptr_Promise_SamsungGetAgeSignalsResult__ in
+        let __promise = bridge.create_std__shared_ptr_Promise_SamsungGetAgeSignalsResult__()
+        let __promiseHolder = bridge.wrap_std__shared_ptr_Promise_SamsungGetAgeSignalsResult__(__promise)
+        __result
+          .then({ __result in __promiseHolder.resolve(__result) })
+          .catch({ __error in __promiseHolder.reject(__error.toCpp()) })
+        return __promise
+      }()
+      return bridge.create_Result_std__shared_ptr_Promise_SamsungGetAgeSignalsResult___(__resultCpp)
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_std__shared_ptr_Promise_SamsungGetAgeSignalsResult___(__exceptionPtr)
     }
   }
   
@@ -173,6 +223,53 @@ open class HybridPlayAgeRangeDeclarationSpec_cxx {
     } catch (let __error) {
       let __exceptionPtr = __error.toCpp()
       return bridge.create_Result_std__shared_ptr_Promise_DeclaredAgeRangeResult___(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func setGooglePlayMockUser(config: bridge.std__optional_PlayAgeSignalsMockConfig_) -> bridge.Result_void_ {
+    do {
+      try self.__implementation.setGooglePlayMockUser(config: config.value)
+      return bridge.create_Result_void_()
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_void_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func setAmazonMockScenario(scenario: bridge.std__optional_double_) -> bridge.Result_void_ {
+    do {
+      try self.__implementation.setAmazonMockScenario(scenario: { () -> Double? in
+        if bridge.has_value_std__optional_double_(scenario) {
+          let __unwrapped = bridge.get_std__optional_double_(scenario)
+          return __unwrapped
+        } else {
+          return nil
+        }
+      }())
+      return bridge.create_Result_void_()
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_void_(__exceptionPtr)
+    }
+  }
+  
+  @inline(__always)
+  public final func setSamsungMockScenario(scenario: bridge.std__optional_double_) -> bridge.Result_void_ {
+    do {
+      try self.__implementation.setSamsungMockScenario(scenario: { () -> Double? in
+        if bridge.has_value_std__optional_double_(scenario) {
+          let __unwrapped = bridge.get_std__optional_double_(scenario)
+          return __unwrapped
+        } else {
+          return nil
+        }
+      }())
+      return bridge.create_Result_void_()
+    } catch (let __error) {
+      let __exceptionPtr = __error.toCpp()
+      return bridge.create_Result_void_(__exceptionPtr)
     }
   }
 }

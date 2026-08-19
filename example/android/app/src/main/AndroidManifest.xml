@@ -22,5 +22,19 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
+
+      <!-- Amazon test ContentProvider. Activated by PlayAgeRangeDeclaration.setAmazonTestOption(1..11).
+            Not exported — only accessible within this app. Safe to ship in production builds. -->
+      <provider
+          android:name="com.margelo.nitro.playagerangedeclaration.AmazonTestContentProvider"
+          android:authorities="${applicationId}.amzn_test_appstore"
+          android:exported="false" />
+
+      <!-- Samsung test ContentProvider. Activated by PlayAgeRangeDeclaration.setSamsungTestOption(1..9).
+            Not exported — only accessible within this app. Safe to ship in production builds. -->
+      <provider
+          android:name="com.margelo.nitro.playagerangedeclaration.SamsungTestContentProvider"
+          android:authorities="${applicationId}.samsung_test_provider"
+          android:exported="false" />
     </application>
 </manifest>

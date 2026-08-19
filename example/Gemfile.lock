@@ -107,6 +107,7 @@ PLATFORMS
 
 DEPENDENCIES
   activesupport (>= 6.1.7.5, != 7.1.0)
+  base64
   benchmark
   bigdecimal
   cocoapods (>= 1.13, != 1.15.1, != 1.15.0)
