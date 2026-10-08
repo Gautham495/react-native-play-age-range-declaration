@@ -1,6 +1,7 @@
 // https://developer.apple.com/documentation/declaredagerange/agerangeservice/agerangedeclaration#Determining-the-age-set-method
 export type AppleAgeRangeDeclarationUserStatusValues =
   | 'checkedByOtherMethod'
+  | 'confirmed'
   | 'governmentIDChecked'
   | 'guardianCheckedByOtherMethod'
   | 'guardianDeclared'
